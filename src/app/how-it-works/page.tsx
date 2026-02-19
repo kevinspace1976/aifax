@@ -1,21 +1,25 @@
 import { PageHero } from "@/components/page-hero";
 
-const items = [
+const workflow = [
   {
-    title: "Connect your fax line",
-    description: "Start with a new number, keep your existing eFax number, or port your current line to AiFax."
+    step: "1",
+    title: "Onboard your fax channel",
+    description: "Select a new number, keep your eFax line, or port your current number with guided activation."
   },
   {
-    title: "Define your AI logic",
-    description: "Use custom prompts and extraction rules tailored to your business workflows and terminology."
+    step: "2",
+    title: "Configure AI instructions",
+    description: "Set custom prompts and extraction fields aligned to medical, legal, or operational requirements."
   },
   {
-    title: "Automate routing and summaries",
-    description: "Incoming faxes are summarized instantly and delivered to your preferred channels and systems."
+    step: "3",
+    title: "Automate delivery",
+    description: "Route summaries and extracted values to email, SMS, EHR/EMR/CRM, or internal systems instantly."
   },
   {
-    title: "Scale with analytics",
-    description: "Monitor activity from a dashboard and continuously optimize processing speed and quality."
+    step: "4",
+    title: "Scale with dashboard analytics",
+    description: "Track throughput, quality, and turnaround while refining prompts and rules over time."
   }
 ];
 
@@ -23,16 +27,17 @@ export default function HowItWorksPage() {
   return (
     <main>
       <PageHero
-        title="How AiFax Works"
-        description="A simple process that replaces repetitive manual fax handling with secure, AI-powered automation."
+        title="How It Works"
+        description="A practical, low-friction deployment model that modernizes fax operations without disrupting your current workflows."
       />
-      <section className="mx-auto max-w-7xl px-6 py-16 md:px-10">
-        <div className="grid gap-5 md:grid-cols-2">
-          {items.map((item, idx) => (
-            <article key={item.title} className="rounded-2xl border border-white/10 bg-slate-900 p-6">
-              <p className="text-sm font-semibold text-orange-400">Step {idx + 1}</p>
-              <h2 className="mt-2 text-2xl font-semibold">{item.title}</h2>
-              <p className="mt-3 text-slate-300">{item.description}</p>
+
+      <section className="section-shell py-14 sm:py-16">
+        <div className="grid gap-4 md:grid-cols-2">
+          {workflow.map((item) => (
+            <article key={item.step} className="card-surface p-6">
+              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-orange-300">Step {item.step}</p>
+              <h2 className="mt-2 text-xl font-semibold text-white">{item.title}</h2>
+              <p className="mt-2 text-slate-300">{item.description}</p>
             </article>
           ))}
         </div>

@@ -1,26 +1,36 @@
 import { PageHero } from "@/components/page-hero";
 
+const values = [
+  {
+    title: "Committed",
+    text: "Our leadership and engineering teams bring deep expertise across healthcare, SaaS, education, retail, legal, and real estate."
+  },
+  {
+    title: "Innovative",
+    text: "We connect isolated systems into cohesive workflows that reduce errors and unlock operational speed."
+  },
+  {
+    title: "Creative",
+    text: "We design custom AI and automation solutions around your goals, constraints, and growth trajectory."
+  }
+];
+
 export default function AboutPage() {
   return (
     <main>
       <PageHero
         title="About AiFax"
-        description="We blend SaaS engineering, AI innovation, and compliance-first thinking to modernize business operations."
+        description="We’re a consulting and development company helping organizations scale with secure automation and applied AI."
       />
-      <section className="mx-auto max-w-7xl px-6 py-16 md:px-10">
-        <div className="grid gap-6 md:grid-cols-3">
-          <article className="rounded-2xl border border-white/10 bg-slate-900 p-6">
-            <h2 className="text-xl font-semibold text-orange-400">Committed</h2>
-            <p className="mt-3 text-slate-300">Our team has real-world depth in healthcare, SaaS, retail, real estate, legal, and more.</p>
-          </article>
-          <article className="rounded-2xl border border-white/10 bg-slate-900 p-6">
-            <h2 className="text-xl font-semibold text-orange-400">Innovative</h2>
-            <p className="mt-3 text-slate-300">We unify disconnected systems into efficient, error-free workflows.</p>
-          </article>
-          <article className="rounded-2xl border border-white/10 bg-slate-900 p-6">
-            <h2 className="text-xl font-semibold text-orange-400">Creative</h2>
-            <p className="mt-3 text-slate-300">If you can imagine it, we can design and build it with automation and AI.</p>
-          </article>
+
+      <section className="section-shell py-14 sm:py-16">
+        <div className="grid gap-4 md:grid-cols-3">
+          {values.map((value) => (
+            <article key={value.title} className="card-surface p-6">
+              <h2 className="text-xl font-semibold text-orange-300">{value.title}</h2>
+              <p className="mt-3 text-slate-300">{value.text}</p>
+            </article>
+          ))}
         </div>
       </section>
     </main>

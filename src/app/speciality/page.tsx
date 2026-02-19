@@ -1,11 +1,11 @@
 import { PageHero } from "@/components/page-hero";
 
-const specialties = [
-  "Customized AI Solutions",
-  "Artificial Intelligence",
-  "Document Reader",
-  "Automation + API Integration",
-  "Data Analytics Optimization"
+const offerings = [
+  "Customized AI solutions and rule-based process automation",
+  "Document intelligence with OCR + NLP and conversational reading",
+  "API-first integration architecture across EHR/EMR/CRM ecosystems",
+  "Operational analytics for throughput, quality, and cost reduction",
+  "Scalable implementation from quick wins to enterprise transformation"
 ];
 
 export default function SpecialityPage() {
@@ -13,13 +13,14 @@ export default function SpecialityPage() {
     <main>
       <PageHero
         title="Speciality"
-        description="Customizable AI dashboards and integrations built to scale from quick wins to enterprise transformation."
+        description="From strategy to implementation, AiFax delivers practical AI capability that creates immediate business value."
       />
-      <section className="mx-auto max-w-7xl px-6 py-16 md:px-10">
-        <div className="grid gap-4 md:grid-cols-2">
-          {specialties.map((item) => (
-            <article key={item} className="rounded-2xl border border-white/10 bg-slate-900 p-5 text-lg">
-              {item}
+
+      <section className="section-shell py-14 sm:py-16">
+        <div className="grid gap-3">
+          {offerings.map((offering) => (
+            <article key={offering} className="card-surface p-5 text-slate-200">
+              {offering}
             </article>
           ))}
         </div>
