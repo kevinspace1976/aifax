@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { PageHero } from "@/components/page-hero";
 
 type Plan = {
@@ -96,16 +97,24 @@ export default function PricingPage() {
                 ))}
               </ul>
 
-              <a
-                href={plan.href}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-6 inline-flex rounded-full bg-orange-500 px-5 py-2 text-sm font-semibold text-white hover:bg-orange-400"
-              >
+              <a href={plan.href} target="_blank" rel="noreferrer" className="btn-primary mt-6">
                 {plan.cta}
               </a>
             </article>
           ))}
+        </div>
+
+        <div className="mt-8 card-surface p-6">
+          <h3 className="text-xl font-semibold text-white">Need implementation support?</h3>
+          <p className="mt-2 text-slate-300">Our team can help with migration, setup, integration mapping, and custom prompt strategy.</p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link href="/contact" className="btn-primary">
+              Talk to Sales
+            </Link>
+            <Link href="/how-it-works" className="btn-secondary">
+              View Onboarding Flow
+            </Link>
+          </div>
         </div>
       </section>
     </main>

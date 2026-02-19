@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { PageHero } from "@/components/page-hero";
 
 export default function ContactPage() {
@@ -19,17 +20,38 @@ export default function ContactPage() {
               <li>• Discovery + integration planning</li>
               <li>• Secure onboarding and migration support</li>
               <li>• Customized AI extraction and summarization</li>
+              <li>• KPI tracking for operational gains</li>
             </ul>
+            <div className="mt-5">
+              <Link href="/pricing" className="btn-secondary">
+                Review Pricing First
+              </Link>
+            </div>
           </article>
 
-          <form className="card-surface space-y-4 p-6">
+          <form className="card-surface space-y-4 p-6" aria-label="Contact form">
             <div className="grid gap-4 sm:grid-cols-2">
-              <input className="rounded-lg border border-white/15 bg-slate-950 px-4 py-3" placeholder="First Name" />
-              <input className="rounded-lg border border-white/15 bg-slate-950 px-4 py-3" placeholder="Last Name" />
+              <label className="text-sm text-slate-200">
+                First Name
+                <input className="mt-1 min-h-11 w-full rounded-lg border border-white/15 bg-slate-950 px-4" placeholder="First Name" />
+              </label>
+              <label className="text-sm text-slate-200">
+                Last Name
+                <input className="mt-1 min-h-11 w-full rounded-lg border border-white/15 bg-slate-950 px-4" placeholder="Last Name" />
+              </label>
             </div>
-            <input className="w-full rounded-lg border border-white/15 bg-slate-950 px-4 py-3" placeholder="Business Email" />
-            <textarea className="h-36 w-full rounded-lg border border-white/15 bg-slate-950 px-4 py-3" placeholder="Tell us about your current workflow and goals" />
-            <button type="button" className="rounded-full bg-orange-500 px-6 py-3 text-sm font-semibold text-white hover:bg-orange-400">
+            <label className="text-sm text-slate-200">
+              Business Email
+              <input className="mt-1 min-h-11 w-full rounded-lg border border-white/15 bg-slate-950 px-4" placeholder="name@company.com" />
+            </label>
+            <label className="text-sm text-slate-200">
+              Message
+              <textarea
+                className="mt-1 h-36 w-full rounded-lg border border-white/15 bg-slate-950 px-4 py-3"
+                placeholder="Tell us about your current workflow, systems, and goals"
+              />
+            </label>
+            <button type="button" className="btn-primary">
               Send Message
             </button>
           </form>

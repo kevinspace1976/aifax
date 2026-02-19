@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { PageHero } from "@/components/page-hero";
 
 const workflow = [
@@ -18,7 +19,7 @@ const workflow = [
   },
   {
     step: "4",
-    title: "Scale with dashboard analytics",
+    title: "Scale with analytics",
     description: "Track throughput, quality, and turnaround while refining prompts and rules over time."
   }
 ];
@@ -28,18 +29,26 @@ export default function HowItWorksPage() {
     <main>
       <PageHero
         title="How It Works"
-        description="A practical, low-friction deployment model that modernizes fax operations without disrupting your current workflows."
+        description="A practical deployment model that modernizes fax operations without disrupting your current teams or tools."
       />
 
       <section className="section-shell py-14 sm:py-16">
         <div className="grid gap-4 md:grid-cols-2">
           {workflow.map((item) => (
-            <article key={item.step} className="card-surface p-6">
+            <article key={item.step} className="card-surface interactive p-6">
               <p className="text-xs font-semibold uppercase tracking-[0.12em] text-orange-300">Step {item.step}</p>
               <h2 className="mt-2 text-xl font-semibold text-white">{item.title}</h2>
               <p className="mt-2 text-slate-300">{item.description}</p>
             </article>
           ))}
+        </div>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link href="/contact" className="btn-primary">
+            Start Implementation
+          </Link>
+          <Link href="/pricing" className="btn-secondary">
+            Compare Plans
+          </Link>
         </div>
       </section>
     </main>

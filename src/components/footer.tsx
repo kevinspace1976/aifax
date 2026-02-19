@@ -17,7 +17,7 @@ export function Footer() {
               href={item.href}
               target="_blank"
               rel="noreferrer"
-              className="rounded-full border border-white/20 px-3 py-1.5 text-xs text-slate-200 hover:border-orange-400 hover:text-orange-300"
+              className="inline-flex min-h-11 items-center rounded-full border border-white/20 px-4 text-xs text-slate-200 transition hover:border-orange-400 hover:text-orange-300"
             >
               {item.label}
             </Link>

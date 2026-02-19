@@ -12,27 +12,28 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/85 backdrop-blur-xl">
-      <div className="section-shell flex items-center justify-between py-4">
+      <div className="section-shell flex items-center justify-between py-3">
         <Link href="/" className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
           Ai<span className="text-orange-400">Fax</span>
         </Link>
 
         <button
-          aria-label="Toggle Menu"
-          className="rounded-lg border border-white/20 p-2 text-slate-200 md:hidden"
+          aria-label="Toggle navigation menu"
+          aria-expanded={open}
+          className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-white/20 text-slate-200 md:hidden"
           onClick={() => setOpen((v) => !v)}
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
 
-        <nav className="hidden items-center gap-5 md:flex">
+        <nav className="hidden items-center gap-5 md:flex" aria-label="Primary">
           {navItems.map((item) => {
             const active = pathname === item.href;
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`text-xs font-semibold uppercase tracking-[0.12em] transition ${
+                className={`inline-flex min-h-11 items-center text-xs font-semibold uppercase tracking-[0.12em] transition ${
                   active ? "text-orange-400" : "text-slate-300 hover:text-white"
                 }`}
               >
@@ -40,10 +41,7 @@ export function Header() {
               </Link>
             );
           })}
-          <Link
-            href={sharedCtas.primary.href}
-            className="rounded-full bg-orange-500 px-4 py-2 text-xs font-semibold text-white hover:bg-orange-400"
-          >
+          <Link href={sharedCtas.primary.href} className="btn-primary">
             {sharedCtas.primary.label}
           </Link>
         </nav>
@@ -51,22 +49,18 @@ export function Header() {
 
       {open ? (
         <div className="section-shell border-t border-white/10 pb-4 md:hidden">
-          <nav className="grid gap-2 pt-4">
+          <nav className="grid gap-2 pt-4" aria-label="Mobile Primary">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="rounded-lg border border-white/10 px-3 py-2 text-sm font-medium text-slate-200"
+                className="inline-flex min-h-11 items-center rounded-lg border border-white/10 px-3 text-sm font-medium text-slate-200"
                 onClick={() => setOpen(false)}
               >
                 {item.label}
               </Link>
             ))}
-            <Link
-              href={sharedCtas.primary.href}
-              className="mt-2 rounded-lg bg-orange-500 px-3 py-2 text-center text-sm font-semibold text-white"
-              onClick={() => setOpen(false)}
-            >
+            <Link href={sharedCtas.primary.href} className="btn-primary mt-2" onClick={() => setOpen(false)}>
               {sharedCtas.primary.label}
             </Link>
           </nav>
