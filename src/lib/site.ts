@@ -26,3 +26,30 @@ export const sharedCtas = {
   primary: { href: "/contact", label: "Get Started" },
   secondary: { href: "/pricing", label: "See Plans" }
 };
+
+export const footerNav = {
+  product: [
+    { href: "/how-it-works", label: "How It Works" },
+    { href: "/solutions", label: "Solutions" },
+    { href: "/pricing", label: "Pricing" },
+    { href: "/speciality", label: "Speciality" }
+  ],
+  company: [
+    { href: "/about", label: "About" },
+    { href: "/contact", label: "Contact" }
+  ]
+};
+
+export const stats = [
+  { value: "99.9%", label: "Uptime SLA" },
+  { value: "500K+", label: "Pages processed monthly" },
+  { value: "<3s", label: "Avg. AI summary time" },
+  { value: "50+", label: "Enterprise integrations" }
+];
+
+export const complianceBadges = [
+  "HIPAA",
+  "SOX",
+  "GLBA",
+  "PCI-DSS"
+];
