@@ -10,5 +10,10 @@
 
 body {
   margin: 0;
-  background: #020617;
+  background: #111827;
+  color: #f8fafc;
+}
+
+a {
+  text-decoration: none;
 }
