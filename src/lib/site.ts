@@ -47,9 +47,4 @@ export const stats = [
   { value: "50+", label: "Enterprise integrations" }
 ];
 
-export const complianceBadges = [
-  "HIPAA",
-  "SOX",
-  "GLBA",
-  "PCI-DSS"
-];
+export const complianceBadges = ["HIPAA", "SOX", "GLBA", "PCI-DSS"];
