@@ -43,6 +43,17 @@ const partners = [
   "South Florida Workers Compensation"
 ];
 
+
+const partnerColorClasses = [
+  "border-cyan-300/40 bg-cyan-400/10 text-cyan-100",
+  "border-blue-300/40 bg-blue-400/10 text-blue-100",
+  "border-emerald-300/40 bg-emerald-400/10 text-emerald-100",
+  "border-orange-300/40 bg-orange-400/10 text-orange-100",
+  "border-violet-300/40 bg-violet-400/10 text-violet-100",
+  "border-teal-300/40 bg-teal-400/10 text-teal-100",
+  "border-fuchsia-300/40 bg-fuchsia-400/10 text-fuchsia-100",
+  "border-amber-300/40 bg-amber-400/10 text-amber-100"
+];
 const skills = [
   { name: "AI Fax Solutions", score: 99 },
   { name: "Software Development", score: 96 },
@@ -182,11 +193,17 @@ export default function Home() {
         <p className="text-sm uppercase tracking-[0.15em] text-slate-400">Trusted by our partners</p>
         <div className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60">
           <div className="logo-marquee-track flex w-[200%] gap-3 p-3">
-            {marqueeItems.map((name, index) => (
-              <div key={`${name}-${index}`} className="inline-flex min-h-11 shrink-0 items-center rounded-lg border border-white/15 bg-slate-800/80 px-4 text-sm text-slate-200">
-                {name}
-              </div>
-            ))}
+            {marqueeItems.map((name, index) => {
+              const tone = partnerColorClasses[index % partnerColorClasses.length];
+              return (
+                <div
+                  key={`${name}-${index}`}
+                  className={`inline-flex min-h-11 shrink-0 items-center rounded-lg border px-4 text-sm font-medium ${tone}`}
+                >
+                  {name}
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>

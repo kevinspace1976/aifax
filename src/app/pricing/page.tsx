@@ -69,11 +69,11 @@ export default function PricingPage() {
       />
 
       <section className="section-shell py-14 sm:py-16">
-        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid items-stretch gap-5 sm:grid-cols-2 xl:grid-cols-4">
           {plans.map((plan) => (
             <article
               key={plan.name}
-              className={`relative rounded-2xl border p-6 ${
+              className={`relative flex h-full flex-col rounded-2xl border p-6 ${
                 plan.featured ? "border-orange-400 bg-slate-900" : "border-white/10 bg-slate-900/70"
               }`}
             >
@@ -89,7 +89,7 @@ export default function PricingPage() {
                 <span className="text-3xl font-semibold text-emerald-300">{plan.price}</span>
               </p>
 
-              <ul className="mt-5 space-y-2 text-sm text-slate-300">
+              <ul className="mt-5 flex-1 space-y-2 text-sm text-slate-300">
                 <li>• {plan.volume}</li>
                 <li>• {plan.summary}</li>
                 {features.map((feature) => (
