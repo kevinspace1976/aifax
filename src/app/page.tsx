@@ -33,26 +33,16 @@ const pillars = [
 ];
 
 const partners = [
-  "AWS",
-  "Healthcare Utilization Consultants",
-  "Med Care Outreach",
-  "eFax",
-  "Merge Health",
-  "The Peoples MD",
-  "Admit Logic",
-  "South Florida Workers Compensation"
-];
-
-
-const partnerColorClasses = [
-  "border-cyan-300/40 bg-cyan-400/10 text-cyan-100",
-  "border-blue-300/40 bg-blue-400/10 text-blue-100",
-  "border-emerald-300/40 bg-emerald-400/10 text-emerald-100",
-  "border-orange-300/40 bg-orange-400/10 text-orange-100",
-  "border-violet-300/40 bg-violet-400/10 text-violet-100",
-  "border-teal-300/40 bg-teal-400/10 text-teal-100",
-  "border-fuchsia-300/40 bg-fuchsia-400/10 text-fuchsia-100",
-  "border-amber-300/40 bg-amber-400/10 text-amber-100"
+  { name: "OpenAI", src: "/logos/partners/openai.svg" },
+  { name: "Telnyx", src: "/logos/partners/telnyx.svg" },
+  { name: "Stripe", src: "/logos/partners/stripe.svg" },
+  { name: "AWS", src: "/logos/partners/aws.svg" },
+  { name: "DigitalOcean", src: "/logos/partners/digitalocean.svg" },
+  { name: "Vercel", src: "/logos/partners/vercel.svg" },
+  { name: "GitHub", src: "/logos/partners/github.svg" },
+  { name: "Google", src: "/logos/partners/google.svg" },
+  { name: "Zoho", src: "/logos/partners/zoho.svg" },
+  { name: "Microsoft", src: "/logos/partners/microsoft.svg" }
 ];
 const skills = [
   { name: "AI Fax Solutions", score: 99 },
@@ -153,10 +143,10 @@ export default function Home() {
       <section className="border-b border-white/10">
         <div className="section-shell grid gap-10 py-16 sm:py-20 lg:grid-cols-2 lg:items-center">
           <div>
-            <p className="kicker">Proud Partner of eFax · Enterprise Ready</p>
             <h1 className="mt-5 text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">
               AI Fax Automation Built for <span className="brand-gradient">Modern Enterprise Teams</span>
             </h1>
+            <p className="kicker mt-5">Proud Partner of eFax · Enterprise Ready</p>
             <p className="mt-5 max-w-2xl text-base text-slate-300 sm:text-lg">
               AiFax transforms legacy fax operations into secure, intelligent workflows with instant summaries, extraction,
               and direct integration into your business stack.
@@ -181,7 +171,7 @@ export default function Home() {
                 </li>
               ))}
             </ul>
-            <div className="mt-6 rounded-xl border border-white/10 bg-white/5 p-4">
+            <div className="mt-6 inline-block rounded-xl border border-white/10 bg-white/5 p-4">
               <p className="mb-2 text-xs uppercase tracking-[0.12em] text-slate-400">Global Partner</p>
               <Image src="/logos/efax.svg" alt="eFax logo" width={180} height={56} className="h-10 w-auto" priority />
             </div>
@@ -193,17 +183,14 @@ export default function Home() {
         <p className="text-sm uppercase tracking-[0.15em] text-slate-400">Trusted by our partners</p>
         <div className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60">
           <div className="logo-marquee-track flex w-[200%] gap-3 p-3">
-            {marqueeItems.map((name, index) => {
-              const tone = partnerColorClasses[index % partnerColorClasses.length];
-              return (
-                <div
-                  key={`${name}-${index}`}
-                  className={`inline-flex min-h-11 shrink-0 items-center rounded-lg border px-4 text-sm font-medium ${tone}`}
-                >
-                  {name}
-                </div>
-              );
-            })}
+            {marqueeItems.map((item, index) => (
+              <div
+                key={`${item.name}-${index}`}
+                className="inline-flex min-h-11 shrink-0 items-center rounded-lg border border-white/15 bg-slate-900/80 px-4"
+              >
+                <Image src={item.src} alt={`${item.name} logo`} width={160} height={44} className="h-8 w-auto" />
+              </div>
+            ))}
           </div>
         </div>
       </section>
