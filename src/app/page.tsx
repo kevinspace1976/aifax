@@ -1,6 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Check, Cpu, FileText, ShieldCheck, Star, Workflow, Zap, BarChart3, Globe, Lock } from "lucide-react";
-import { stats, complianceBadges } from "@/lib/site";
+import { ArrowRight, CheckCircle2, ChevronDown, Cpu, FileText, ShieldCheck, Star, Workflow } from "lucide-react";
 
 const trustPoints = [
   "HIPAA-compliant architecture and secure transmission",
@@ -10,205 +10,279 @@ const trustPoints = [
 ];
 
 const pillars = [
-  { icon: ShieldCheck, title: "Compliance-First", text: "Privacy, auditing, and data security as first-class requirements for regulated teams." },
-  { icon: Workflow, title: "Automation + Integration", text: "Connect intake, routing, and communication for fewer handoffs and faster outcomes." },
-  { icon: FileText, title: "Document Intelligence", text: "Convert faxes into concise summaries and structured data using OCR + NLP workflows." },
-  { icon: Cpu, title: "Enterprise-Scale AI", text: "Custom prompt logic by department, case type, or workflow stage — no rigid templates." }
+  {
+    icon: ShieldCheck,
+    title: "Compliance-First Operations",
+    text: "Built for regulated teams with privacy, auditing, and data security as first-class requirements."
+  },
+  {
+    icon: Workflow,
+    title: "Automation + Integration",
+    text: "Connect tools across intake, routing, communication, and care coordination for fewer handoffs and faster outcomes."
+  },
+  {
+    icon: FileText,
+    title: "Document Intelligence",
+    text: "Convert incoming faxes into concise summaries and structured data using OCR + NLP workflows."
+  },
+  {
+    icon: Cpu,
+    title: "Hospital + EMR Data Integration",
+    text: "Integrate faxing with hospital data and AI workflows for admission screening, provider practice support, and prior authorization."
+  }
 ];
 
-const testimonials = [
-  { quote: "AiFax helped our operations team cut intake turnaround time dramatically while improving consistency across all locations.", author: "Director of Operations", company: "Multi-site Healthcare Group" },
-  { quote: "We finally have a fax workflow that feels modern, measurable, and integrated with our CRM stack.", author: "COO", company: "Regional Legal Services Firm" },
-  { quote: "The AI summarization alone saved our team hours each day. Claims processing went from days to minutes.", author: "VP of Claims", company: "National Insurance Provider" }
+const partners = [
+  "AWS",
+  "Healthcare Utilization Consultants",
+  "Med Care Outreach",
+  "eFax",
+  "Merge Health",
+  "The Peoples MD",
+  "Admit Logic",
+  "South Florida Workers Compensation"
 ];
 
-const integrations = ["Epic", "Cerner", "Salesforce", "HubSpot", "Slack", "Microsoft Teams", "Google Workspace", "Zapier"];
+const skills = [
+  { name: "AI Fax Solutions", score: 99 },
+  { name: "Software Development", score: 96 },
+  { name: "Artificial Intelligence", score: 97 },
+  { name: "Document Reader", score: 95 },
+  { name: "Web Development", score: 95 },
+  { name: "App Development", score: 95 }
+];
 
-const advantages = [
-  { icon: Zap, title: "Instant Processing", text: "Documents summarized and routed in under 3 seconds." },
-  { icon: Lock, title: "Enterprise Security", text: "End-to-end encryption with HIPAA, SOX, and PCI-DSS." },
-  { icon: Globe, title: "50+ Integrations", text: "Connect to EHR, CRM, and messaging tools seamlessly." },
-  { icon: BarChart3, title: "Real-Time Analytics", text: "Dashboards for throughput, quality, and cost tracking." }
+const faqs = [
+  {
+    q: "What is AiFax and how does it benefit my business?",
+    a: "AiFax is a HIPAA-compliant AI-powered faxing solution for businesses of all sizes. It summarizes incoming faxes instantly and sends synopsis content to email, text, and optionally EHR/EMR/CRM systems. With AI, NLP, OCR, and API integrations, AiFax saves time, reduces errors, and minimizes patient or client delays."
+  },
+  {
+    q: "How does AiFax ensure the security and compliance of my data?",
+    a: "AiFax is compliance-first with HIPAA, GLBA, SOX, and GDPR-aligned workflows. We apply end-to-end encryption for data in transit and storage so sensitive information remains protected for healthcare, legal, and enterprise use cases."
+  },
+  {
+    q: "Can AiFax integrate with my existing fax service or business software?",
+    a: "Yes. AiFax supports new numbers, number porting, and integrations with existing tools including EHR, EMR, and CRM environments. We also support integration with major fax providers such as eFax for smooth implementation."
+  },
+  {
+    q: "What types of businesses can benefit from AiFax?",
+    a: "AiFax supports small businesses through large enterprises, especially healthcare, legal, finance, real estate, education, and operations teams handling high document volume."
+  },
+  {
+    q: "How customizable is AiFax for my specific business needs?",
+    a: "AiFax includes customizable dashboards and prompt logic so each team can define exactly how summaries, extraction rules, and comparisons should run for their specialty workflows."
+  },
+  {
+    q: "How does AiFax handle the summarization of complex documents?",
+    a: "Using advanced NLP + OCR, AiFax interprets complex files including tables, embedded images, and clear handwriting to produce concise, high-value summaries."
+  },
+  {
+    q: "Can AiFax help my business scale as it grows?",
+    a: "Yes. AiFax is built to scale from lower-volume teams to enterprise-level document operations while maintaining speed, consistency, and compliance."
+  },
+  {
+    q: "How does AiFax contribute to improving operational efficiency?",
+    a: "AiFax automates repetitive intake and review steps, provides instant summaries, and accelerates turnaround time for patient care and client requests while reducing avoidable delays."
+  },
+  {
+    q: "What kind of customer support does AiFax offer?",
+    a: "AiFax provides 24/7 customer support and guided onboarding so your team can keep operations smooth and uninterrupted."
+  },
+  {
+    q: "Is AiFax suitable for small businesses as well as large enterprises?",
+    a: "Absolutely. AiFax is flexible and scalable, designed to fit startups, clinics, practices, and enterprise organizations alike."
+  },
+  {
+    q: "How does AiFax interact with my business documents in real-time?",
+    a: "AiFax uses your configured prompts to process each incoming fax in real-time, answer specific extraction needs, and route actionable summaries instantly."
+  },
+  {
+    q: "What makes AiFax different from other fax solutions?",
+    a: "AiFax combines compliance-first architecture with advanced AI automation and integrations. Unlike legacy faxing, AiFax automates processing, summarizes instantly, and connects into operational systems."
+  },
+  {
+    q: "Can AiFax generate and deliver summaries to multiple platforms simultaneously?",
+    a: "Yes. Summaries can be delivered to email and SMS in real-time, and we support integration pathways for EHR/EMR and CRM channels."
+  },
+  {
+    q: "How does AiFax ensure accuracy in document interpretation?",
+    a: "AiFax applies NLP and OCR models designed to understand context and extract relevant details with high accuracy in seconds."
+  },
+  {
+    q: "How quickly can AiFax be implemented into my business?",
+    a: "New numbers can be provisioned quickly with immediate service access. Number porting can take up to 5 days depending on carrier workflows, with AiFax summaries available once porting is complete."
+  }
 ];
 
 function toEmbedUrl(link?: string): string | null {
   if (!link) return null;
   try {
     const url = new URL(link);
-    if (url.hostname.includes("youtu.be")) { const id = url.pathname.replace("/", ""); return id ? `https://www.youtube.com/embed/${id}` : null; }
-    if (url.hostname.includes("youtube.com")) { const id = url.searchParams.get("v"); return id ? `https://www.youtube.com/embed/${id}` : null; }
+    if (url.hostname.includes("youtu.be")) {
+      const id = url.pathname.replace("/", "");
+      return id ? `https://www.youtube.com/embed/${id}` : null;
+    }
+    if (url.hostname.includes("youtube.com")) {
+      const id = url.searchParams.get("v");
+      return id ? `https://www.youtube.com/embed/${id}` : null;
+    }
     return null;
-  } catch { return null; }
+  } catch {
+    return null;
+  }
 }
 
 export default function Home() {
   const youtubeEmbedUrl = toEmbedUrl(process.env.YOUTUBE_VIDEO_LINK);
+  const marqueeItems = [...partners, ...partners];
 
   return (
     <main>
-      {/* ═══ HERO ═══ */}
-      <section className="relative overflow-hidden">
-        <div className="glow-orb" style={{ width: 700, height: 500, top: -200, left: "40%", background: "rgba(212,165,60,0.06)" }} aria-hidden="true" />
-        <div className="glow-orb" style={{ width: 400, height: 400, top: 100, right: -100, background: "rgba(212,165,60,0.04)" }} aria-hidden="true" />
-
-        <div className="section-shell relative grid gap-10 py-20 sm:py-24 lg:grid-cols-2 lg:items-center lg:gap-16 lg:py-32">
+      <section className="border-b border-white/10">
+        <div className="section-shell grid gap-10 py-16 sm:py-20 lg:grid-cols-2 lg:items-center">
           <div>
-            <p className="kicker">Proud Partner of eFax &middot; Enterprise Ready</p>
-            <h1 className="heading-display mt-6 text-[2.5rem] leading-[1.08] sm:text-5xl lg:text-[3.75rem]">
-              AI Fax Automation Built for <span className="brand-gradient">Modern Enterprise</span>
+            <p className="kicker">Proud Partner of eFax · Enterprise Ready</p>
+            <h1 className="mt-5 text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">
+              AI Fax Automation Built for <span className="brand-gradient">Modern Enterprise Teams</span>
             </h1>
-            <p className="mt-6 max-w-xl text-base leading-relaxed sm:text-lg" style={{ color: "var(--warm-gray)" }}>
-              Transform legacy fax operations into secure, intelligent workflows — instant summaries, smart extraction, and direct integration into your business stack.
+            <p className="mt-5 max-w-2xl text-base text-slate-300 sm:text-lg">
+              AiFax transforms legacy fax operations into secure, intelligent workflows with instant summaries, extraction,
+              and direct integration into your business stack.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/contact" className="btn-primary">Get Started <ArrowRight className="h-4 w-4" /></Link>
-              <Link href="/pricing" className="btn-secondary">See Plans</Link>
-            </div>
-            <div className="mt-8 flex flex-wrap items-center gap-2">
-              {complianceBadges.map((b) => <span key={b} className="badge-compliance"><ShieldCheck className="h-3 w-3" />{b}</span>)}
+              <Link href="/contact" className="btn-primary">
+                Get Started <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+              <Link href="/pricing" className="btn-secondary">
+                See Plans
+              </Link>
             </div>
           </div>
 
-          <aside className="card card-hover p-7 sm:p-8" aria-label="Trust points">
-            <div className="gold-line" />
-            <h2 className="heading-display mt-5 text-2xl sm:text-[1.75rem]">Why enterprises choose AiFax</h2>
-            <ul className="mt-6 space-y-4">
-              {trustPoints.map((p) => (
-                <li key={p} className="flex items-start gap-3 text-sm sm:text-base" style={{ color: "var(--warm-white)" }}>
-                  <span className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full" style={{ background: "rgba(52,211,153,0.1)", border: "1px solid rgba(52,211,153,0.2)" }}>
-                    <Check className="h-3 w-3" style={{ color: "#6ee7b7" }} />
-                  </span>
-                  <span>{p}</span>
+          <aside className="card-surface interactive p-6 sm:p-8" aria-label="Trust points">
+            <h2 className="text-xl font-semibold text-white sm:text-2xl">Why enterprises choose AiFax</h2>
+            <ul className="mt-5 space-y-4">
+              {trustPoints.map((point) => (
+                <li key={point} className="flex items-start gap-3 text-sm text-slate-200 sm:text-base">
+                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-300" />
+                  <span>{point}</span>
                 </li>
               ))}
             </ul>
-            <div className="mt-6" style={{ borderTop: "1px solid rgba(245,240,232,0.06)" }}>
-              <p className="mt-5 text-xs font-medium uppercase tracking-wider" style={{ color: "var(--warm-muted)" }}>
-                Trusted by healthcare, legal, and insurance teams
-              </p>
+            <div className="mt-6 rounded-xl border border-white/10 bg-white/5 p-4">
+              <p className="mb-2 text-xs uppercase tracking-[0.12em] text-slate-400">Global Partner</p>
+              <Image src="/logos/efax.svg" alt="eFax logo" width={180} height={56} className="h-10 w-auto" priority />
             </div>
           </aside>
         </div>
-        <div className="gold-divider" />
       </section>
 
-      {/* ═══ STATS ═══ */}
-      <section style={{ background: "rgba(18,22,42,0.5)" }}>
-        <div className="section-shell grid grid-cols-2 gap-8 py-12 sm:py-14 md:grid-cols-4">
-          {stats.map((s) => (
-            <div key={s.label} className="text-center">
-              <p className="stat-value">{s.value}</p>
-              <p className="stat-label">{s.label}</p>
-            </div>
-          ))}
-        </div>
-        <div className="gold-divider" />
-      </section>
-
-      {/* ═══ VIDEO ═══ */}
-      {youtubeEmbedUrl && (
-        <section className="section-shell py-20 sm:py-24">
-          <div className="text-center">
-            <p className="section-label">Product Demo</p>
-            <h2 className="heading-display mt-3 text-3xl sm:text-4xl">See AiFax in Action</h2>
-            <p className="mx-auto mt-4 max-w-2xl" style={{ color: "var(--warm-gray)" }}>Watch how our platform summarizes documents and automates delivery in real time.</p>
+      <section className="section-shell py-12 sm:py-14">
+        <p className="text-sm uppercase tracking-[0.15em] text-slate-400">Trusted by our partners</p>
+        <div className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60">
+          <div className="logo-marquee-track flex w-[200%] gap-3 p-3">
+            {marqueeItems.map((name, index) => (
+              <div key={`${name}-${index}`} className="inline-flex min-h-11 shrink-0 items-center rounded-lg border border-white/15 bg-slate-800/80 px-4 text-sm text-slate-200">
+                {name}
+              </div>
+            ))}
           </div>
-          <div className="card mt-10 overflow-hidden !p-0">
+        </div>
+      </section>
+
+      {youtubeEmbedUrl ? (
+        <section className="section-shell py-14 sm:py-16">
+          <h2 className="text-2xl font-semibold text-white sm:text-3xl">See AiFax in Action</h2>
+          <p className="mt-2 max-w-3xl text-slate-300">Watch how our AI fax platform summarizes documents and automates delivery workflows in real time.</p>
+          <div className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-slate-900 shadow-lg shadow-slate-950/40">
             <div className="aspect-video w-full">
-              <iframe className="h-full w-full" src={youtubeEmbedUrl} title="AiFax Product Demo" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen />
+              <iframe
+                className="h-full w-full"
+                src={youtubeEmbedUrl}
+                title="AiFax Product Demo"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+              />
             </div>
           </div>
         </section>
-      )}
+      ) : null}
 
-      {/* ═══ CAPABILITIES — cards with left accent ═══ */}
-      <section className="section-shell py-20 sm:py-24">
-        <div className="text-center">
-          <p className="section-label">Platform</p>
-          <h2 className="heading-display mt-3 text-3xl sm:text-4xl">Core Capabilities</h2>
-          <p className="mx-auto mt-4 max-w-2xl" style={{ color: "var(--warm-gray)" }}>Everything you need to modernize fax operations, from intake to analytics.</p>
-        </div>
-        <div className="mt-12 grid gap-5 sm:grid-cols-2">
+      <section className="section-shell py-14 sm:py-16">
+        <h2 className="text-2xl font-semibold text-white sm:text-3xl">Core Platform Capabilities</h2>
+        <div className="mt-6 grid gap-4 sm:gap-5 md:grid-cols-2">
           {pillars.map(({ icon: Icon, title, text }) => (
-            <article key={title} className="card card-hover card-accent-left p-6 sm:p-7">
-              <div className="icon-circle"><Icon className="h-5 w-5" style={{ color: "var(--gold-300)" }} /></div>
-              <h3 className="heading-sans mt-4 text-lg">{title}</h3>
-              <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--warm-gray)" }}>{text}</p>
+            <article key={title} className="card-surface interactive p-6">
+              <Icon className="h-7 w-7 text-cyan-300" />
+              <h3 className="mt-3 text-lg font-semibold text-white">{title}</h3>
+              <p className="mt-2 text-sm text-slate-300 sm:text-base">{text}</p>
             </article>
           ))}
         </div>
       </section>
 
-      {/* ═══ ADVANTAGES — centered grid, different style ═══ */}
-      <section className="relative overflow-hidden" style={{ background: "rgba(18,22,42,0.4)" }}>
-        <div className="gold-divider" />
-        <div className="section-shell py-20 sm:py-24">
-          <div className="text-center">
-            <p className="section-label">Advantages</p>
-            <h2 className="heading-display mt-3 text-3xl sm:text-4xl">Why Leading Teams Choose AiFax</h2>
-          </div>
-          <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {advantages.map(({ icon: Icon, title, text }) => (
-              <div key={title} className="text-center">
-                <div className="icon-circle mx-auto"><Icon className="h-5 w-5" style={{ color: "var(--gold-300)" }} /></div>
-                <h3 className="heading-sans mt-4 text-base">{title}</h3>
-                <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--warm-muted)" }}>{text}</p>
+      <section className="border-y border-white/10 bg-slate-900/50">
+        <div className="section-shell py-14 sm:py-16">
+          <h2 className="text-3xl font-semibold text-white sm:text-4xl">Business <span className="text-orange-400">Success</span> With Technology</h2>
+          <p className="mt-2 text-slate-300">Our skills</p>
+          <div className="mt-6 space-y-4">
+            {skills.map((skill) => (
+              <div key={skill.name}>
+                <div className="mb-1 flex items-center justify-between text-sm text-slate-200">
+                  <span>{skill.name}</span>
+                  <span>{skill.score}%</span>
+                </div>
+                <div className="h-3 rounded-full bg-slate-700">
+                  <div className="h-3 rounded-full bg-orange-500" style={{ width: `${skill.score}%` }} />
+                </div>
               </div>
             ))}
           </div>
+          <p className="mt-6 text-slate-300">
+            We are a robust technology partner that integrates faxing with EMRs and hospital data pipelines while applying artificial intelligence for admission screening, provider practice support, prior authorization workflows, and high-volume document operations.
+          </p>
         </div>
-        <div className="gold-divider" />
       </section>
 
-      {/* ═══ INTEGRATIONS ═══ */}
-      <section className="section-shell py-20 sm:py-24">
-        <div className="text-center">
-          <p className="section-label">Integrations</p>
-          <h2 className="heading-display mt-3 text-3xl sm:text-4xl">Connects With Your Stack</h2>
-          <p className="mx-auto mt-4 max-w-2xl" style={{ color: "var(--warm-gray)" }}>No rip and replace — AiFax works with the tools your team already uses.</p>
-        </div>
-        <div className="mt-10 flex flex-wrap justify-center gap-3">
-          {integrations.map((n) => (
-            <span key={n} className="inline-flex min-h-[44px] items-center rounded-full px-5 text-sm font-medium transition-colors" style={{ border: "1px solid rgba(245,240,232,0.08)", color: "var(--warm-gray)", background: "rgba(18,22,42,0.5)" }}>
-              {n}
-            </span>
+      <section className="section-shell py-14 sm:py-16">
+        <h2 className="text-2xl font-semibold text-white sm:text-3xl">Frequently Asked Questions</h2>
+        <div className="mt-6 space-y-3">
+          {faqs.map((item) => (
+            <details key={item.q} className="card-surface p-4">
+              <summary className="flex cursor-pointer items-center justify-between gap-4 text-left text-sm font-semibold text-white sm:text-base">
+                {item.q}
+                <ChevronDown className="h-4 w-4 shrink-0 text-slate-300" />
+              </summary>
+              <p className="pt-3 text-sm text-slate-300 sm:text-base">{item.a}</p>
+            </details>
           ))}
         </div>
-        <p className="mt-5 text-center text-sm" style={{ color: "var(--warm-muted)" }}>
-          Plus 40+ more via API and Zapier. <Link href="/solutions" style={{ color: "var(--gold-400)" }} className="hover:underline">See all integrations</Link>
-        </p>
       </section>
 
-      {/* ═══ TESTIMONIALS — pull-quote style ═══ */}
-      <section className="relative overflow-hidden" style={{ background: "rgba(18,22,42,0.5)" }}>
-        <div className="gold-divider" />
-        <div className="section-shell py-20 sm:py-24">
-          <div className="text-center">
-            <p className="section-label">Testimonials</p>
-            <h2 className="heading-display mt-3 text-3xl sm:text-4xl">Trusted by Enterprise Teams</h2>
-          </div>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {testimonials.map((t) => (
-              <article key={t.author} className="card flex flex-col p-6 sm:p-7">
-                <div className="flex gap-0.5">
-                  {[1,2,3,4,5].map((i) => <Star key={i} className="h-4 w-4" style={{ fill: "var(--gold-400)", color: "var(--gold-400)" }} />)}
-                </div>
-                <blockquote className="pull-quote mt-2 flex-1 text-sm leading-relaxed sm:text-base" style={{ color: "var(--warm-white)" }}>
-                  {t.quote}
-                </blockquote>
-                <div className="mt-5" style={{ borderTop: "1px solid rgba(245,240,232,0.06)" }}>
-                  <p className="mt-4 text-sm font-medium" style={{ color: "var(--warm-white)" }}>{t.author}</p>
-                  <p className="text-xs" style={{ color: "var(--warm-muted)" }}>{t.company}</p>
-                </div>
+      <section className="border-y border-white/10 bg-slate-900/50">
+        <div className="section-shell py-14 sm:py-16">
+          <h2 className="text-2xl font-semibold text-white sm:text-3xl">Customer confidence</h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            {["AiFax helped our operations team cut intake turnaround time dramatically while improving consistency.", "We finally have a fax workflow that feels modern, measurable, and integrated with our CRM stack."].map((quote, i) => (
+              <article key={quote} className="card-surface p-6">
+                <Star className="h-5 w-5 text-orange-300" />
+                <p className="mt-3 text-slate-200">“{quote}”</p>
+                <p className="mt-3 text-sm text-slate-400">{i === 0 ? "Director of Operations, Multi-site Healthcare Group" : "COO, Regional Legal Services Firm"}</p>
               </article>
             ))}
           </div>
-          <div className="mt-12 flex flex-wrap justify-center gap-3">
-            <Link href="/solutions" className="btn-light">Explore Solutions <ArrowRight className="h-4 w-4" /></Link>
-            <Link href="/how-it-works" className="btn-secondary">See How It Works</Link>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link href="/solutions" className="btn-light">
+              Explore Industry Solutions <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+            <Link href="/how-it-works" className="btn-secondary">
+              See How It Works
+            </Link>
           </div>
         </div>
-        <div className="gold-divider" />
       </section>
     </main>
   );
