@@ -192,10 +192,10 @@ export default function Home() {
                   alt={item.name === "OpenAI" ? "OpenAI" : `${item.name} logo`}
                   width={160}
                   height={44}
-                  className={item.name === "OpenAI" ? "w-auto" : "h-8 w-auto"}
+                  className={item.name === "OpenAI" ? "mx-auto w-auto" : "h-8 w-auto"}
                   style={
                     item.name === "OpenAI"
-                      ? { height: "28px", width: "auto", objectFit: "contain", imageRendering: "auto" }
+                      ? { height: "24px", width: "auto", objectFit: "contain", imageRendering: "auto" }
                       : undefined
                   }
                 />
