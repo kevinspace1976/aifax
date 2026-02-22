@@ -50,7 +50,7 @@ const plans: Plan[] = [
     cta: "Subscribe",
     href: process.env.PRO_STRIPE_CHECKOUT_LINK ?? "#",
     features: [
-      "Send & receive 4,000 pages/month",
+      "Send & receive 3,000 pages/month",
       "AI summaries, document extraction & smart alerts",
       "Secure HIPAA-aligned workflows & dashboard access",
       "Chat assistant: compare up to 40 documents",
@@ -80,7 +80,7 @@ const plans: Plan[] = [
     name: "Corporate",
     price: "Contact Sales",
     cta: "Contact Us",
-    href: process.env.CORPORATE_STRIPE_CHECKOUT_LINK ?? "#",
+    href: process.env.NEXT_PUBLIC_CONTACT_US_CHECKOUT_LINK || "mailto:info@aifax.net",
     features: [
       "Custom enterprise page volumes",
       "Enterprise scaling",
@@ -128,7 +128,7 @@ export default function PricingPage() {
                 ))}
               </ul>
 
-              <a href={plan.href} target="_blank" rel="noreferrer" className="btn-primary mt-6">
+              <a href={plan.href} target={plan.name === "Corporate" ? undefined : "_blank"} rel={plan.name === "Corporate" ? undefined : "noreferrer"} className="btn-primary mt-6">
                 {plan.cta}
               </a>
             </article>

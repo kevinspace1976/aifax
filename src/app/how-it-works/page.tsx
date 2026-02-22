@@ -43,7 +43,7 @@ export default function HowItWorksPage() {
           ))}
         </div>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Link href="/contact" className="btn-primary">
+          <Link href="/pricing" className="btn-primary">
             Start Implementation
           </Link>
           <Link href="/pricing" className="btn-secondary">

@@ -151,7 +151,7 @@ export default function Home() {
               and direct integration into your business stack.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/contact" className="btn-primary">
+              <Link href="/pricing" className="btn-primary">
                 Get Started <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
               <Link href="/pricing" className="btn-secondary">

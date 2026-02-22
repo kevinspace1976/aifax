@@ -23,6 +23,6 @@ export const socialItems = [
 ];
 
 export const sharedCtas = {
-  primary: { href: "/contact", label: "Get Started" },
+  primary: { href: "/pricing", label: "Get Started" },
   secondary: { href: "/pricing", label: "See Plans" }
 };
