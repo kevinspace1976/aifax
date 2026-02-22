@@ -10,6 +10,14 @@ type Plan = {
   features: string[];
 };
 
+const corporateContactHref = (() => {
+  const value =
+    process.env.NEXT_PUBLIC_CONTACT_US_CHECKOUT_LINK ??
+    process.env.CONTACT_US_CHECKOUT_LINK ??
+    "mailto:info@aifax.net";
+  return value.startsWith("mailto:") ? value : `mailto:${value}`;
+})();
+
 const plans: Plan[] = [
   {
     name: "Lite",
@@ -80,7 +88,7 @@ const plans: Plan[] = [
     name: "Corporate",
     price: "Contact Sales",
     cta: "Contact Us",
-    href: process.env.NEXT_PUBLIC_CONTACT_US_CHECKOUT_LINK || "mailto:info@aifax.net",
+    href: corporateContactHref,
     features: [
       "Custom enterprise page volumes",
       "Enterprise scaling",
