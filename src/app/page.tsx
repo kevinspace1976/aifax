@@ -179,7 +179,7 @@ export default function Home() {
       </section>
 
       <section className="section-shell py-12 sm:py-14">
-        <p className="text-sm uppercase tracking-[0.15em] text-slate-400">Trusted by our partners</p>
+        <p className="text-sm uppercase tracking-[0.15em] text-slate-400">Trusted Technology Providers</p>
         <div className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60">
           <div className="logo-marquee-track flex w-[200%] gap-3 p-3">
             {marqueeItems.map((item, index) => (
