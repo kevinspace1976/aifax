@@ -5,11 +5,10 @@ type Plan = {
   name: string;
   oldPrice?: string;
   price: string;
-  volume: string;
-  summary: string;
-  featured?: boolean;
   cta: string;
   href: string;
+  featured?: boolean;
+  features: string[];
 };
 
 const plans: Plan[] = [
@@ -17,47 +16,101 @@ const plans: Plan[] = [
     name: "Lite",
     oldPrice: "$36.99",
     price: "$18.99/mo",
-    volume: "Send 170 pages/month",
-    summary: "Receive 170 AI summarized pages/month",
     cta: "Subscribe",
-    href: process.env.LITE_STRIPE_CHECKOUT_LINK ?? "#"
+    href: process.env.LITE_STRIPE_CHECKOUT_LINK ?? "#",
+    features: [
+      "Send & Receive 1000 pages/month",
+      "Customized AI summarization and extraction",
+      "Instant dashboard summary and email summary notifications (dashboard option)",
+      "HIPAA aligned workflows",
+      "Chat bot - Compare up to 10 uploaded documents. Feature included at no additional charge",
+      "Customizable extraction and prompt logic to fit your specialty",
+      "Free API setup ($500 value)",
+      "Instant fax, ai and dashboard access after signup",
+      "Port your current fax number",
+      "OCR and NLP document intelligence",
+      "24/7 ticket support"
+    ]
   },
   {
     name: "Plus",
     oldPrice: "$44.99",
     price: "$24.99/mo",
-    volume: "Send 275 pages/month",
-    summary: "Receive 275 AI summarized pages/month",
     featured: true,
     cta: "Subscribe",
-    href: process.env.PLUS_STRIPE_CHECKOUT_LINK ?? "#"
+    href: process.env.PLUS_STRIPE_CHECKOUT_LINK ?? "#",
+    features: [
+      "Send & Receive 2000 pages/month",
+      "Customized AI summarization and extraction",
+      "Instant dashboard summary and email summary notifications (dashboard option)",
+      "HIPAA aligned workflows",
+      "Chat bot - Compare up to 20 uploaded documents. Feature included at no additional charge",
+      "Customizable extraction and prompt logic to fit your specialty",
+      "Free API setup ($500 value)",
+      "Instant fax, ai and dashboard access after signup",
+      "Port your current fax number",
+      "OCR and NLP document intelligence",
+      "24/7 ticket support"
+    ]
   },
   {
     name: "Pro",
     oldPrice: "$69.99",
     price: "$49.99/mo",
-    volume: "Send 500 pages/month",
-    summary: "Receive 500 AI summarized pages/month",
     cta: "Subscribe",
-    href: process.env.PRO_STRIPE_CHECKOUT_LINK ?? "#"
+    href: process.env.PRO_STRIPE_CHECKOUT_LINK ?? "#",
+    features: [
+      "Send & Receive 4000 pages/month",
+      "Customized AI summarization and extraction",
+      "Instant dashboard summary and email summary notifications (dashboard option)",
+      "HIPAA aligned workflows",
+      "Chat bot - Compare up to 40 uploaded documents. Feature included at no additional charge",
+      "Customizable extraction and prompt logic to fit your specialty",
+      "Free API setup ($500 value)",
+      "Instant fax, ai and dashboard access after signup",
+      "Port your current fax number",
+      "OCR and NLP document intelligence",
+      "24/7 ticket support"
+    ]
+  },
+  {
+    name: "Enterprise",
+    price: "$99.00/mo",
+    cta: "Subscribe",
+    href: process.env.ENTERPRISE_STRIPE_CHECKOUT_LINK ?? "#",
+    features: [
+      "Send & Receive 4000 pages/month",
+      "Customized AI summarization and extraction",
+      "Instant dashboard summary and email summary notifications (dashboard option)",
+      "HIPAA aligned workflows",
+      "Chat bot - Compare up to 50 uploaded documents. Feature included at no additional charge",
+      "Customizable extraction and prompt logic to fit your specialty",
+      "Free API setup ($500 value)",
+      "Instant fax, ai and dashboard access after signup",
+      "Port your current fax number",
+      "OCR and NLP document intelligence",
+      "24/7 ticket support"
+    ]
   },
   {
     name: "Corporate",
     price: "Contact Sales",
-    volume: "Customized monthly page volumes",
-    summary: "Customized AI summarization and extraction",
     cta: "Contact Us",
-    href: process.env.CORPORATE_STRIPE_CHECKOUT_LINK ?? "#"
+    href: process.env.CORPORATE_STRIPE_CHECKOUT_LINK ?? "#",
+    features: [
+      "Customized monthly page volumes",
+      "Customized AI summarization and extraction",
+      "Instant dashboard summary and email summary notifications (dashboard option)",
+      "Customized monthly page volumes",
+      "Chat bot - Customized need for uploaded documents. Feature included at no additional charge",
+      "HIPAA aligned workflows",
+      "Instant summary notifications via email or text",
+      "Customizable extraction and prompt logic",
+      "Free API setup ($500 value)",
+      "OCR and NLP document intelligence",
+      "24/7 ticket support"
+    ]
   }
-];
-
-const features = [
-  "HIPAA, GLBA, SOX & PCI-DSS aligned workflows",
-  "Instant summary notifications via email or text",
-  "Customizable extraction and prompt logic",
-  "Free API setup ($500 value)",
-  "OCR and NLP document intelligence",
-  "24/7 support"
 ];
 
 export default function PricingPage() {
@@ -69,7 +122,7 @@ export default function PricingPage() {
       />
 
       <section className="section-shell py-14 sm:py-16">
-        <div className="grid items-stretch gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
           {plans.map((plan) => (
             <article
               key={plan.name}
@@ -90,9 +143,7 @@ export default function PricingPage() {
               </p>
 
               <ul className="mt-5 flex-1 space-y-2 text-sm text-slate-300">
-                <li>• {plan.volume}</li>
-                <li>• {plan.summary}</li>
-                {features.map((feature) => (
+                {plan.features.map((feature) => (
                   <li key={feature}>• {feature}</li>
                 ))}
               </ul>
