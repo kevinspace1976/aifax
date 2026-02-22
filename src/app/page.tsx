@@ -181,21 +181,21 @@ export default function Home() {
       <section className="section-shell py-12 sm:py-14">
         <p className="text-sm uppercase tracking-[0.15em] text-slate-400">Trusted Technology Providers</p>
         <div className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60">
-          <div className="logo-marquee-track flex w-[200%] gap-3 p-3">
+          <div className="logo-marquee-track flex w-[200%] gap-6 p-6">
             {marqueeItems.map((item, index) => (
               <div
                 key={`${item.name}-${index}`}
-                className="inline-flex min-h-11 shrink-0 items-center rounded-lg border border-white/15 bg-slate-900/80 px-4"
+                className="inline-flex min-h-[88px] shrink-0 items-center rounded-lg border border-white/15 bg-slate-900/80 px-8"
               >
                 <Image
                   src={item.src}
                   alt={item.name === "OpenAI" ? "OpenAI" : `${item.name} logo`}
                   width={160}
                   height={44}
-                  className={item.name === "OpenAI" ? "mx-auto w-auto" : "h-8 w-auto"}
+                  className={item.name === "OpenAI" ? "mx-auto w-auto" : "h-16 w-auto"}
                   style={
                     item.name === "OpenAI"
-                      ? { height: "24px", width: "auto", objectFit: "contain", imageRendering: "auto" }
+                      ? { height: "48px", width: "auto", objectFit: "contain", imageRendering: "auto" }
                       : undefined
                   }
                 />
