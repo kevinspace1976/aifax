@@ -3,7 +3,6 @@ import { PageHero } from "@/components/page-hero";
 
 type Plan = {
   name: string;
-  oldPrice?: string;
   price: string;
   cta: string;
   href: string;
@@ -14,81 +13,66 @@ type Plan = {
 const plans: Plan[] = [
   {
     name: "Lite",
-    oldPrice: "$36.99",
-    price: "$18.99/mo",
+    price: "$19.99",
     cta: "Subscribe",
     href: process.env.LITE_STRIPE_CHECKOUT_LINK ?? "#",
     features: [
-      "Send & Receive 1000 pages/month",
-      "Customized AI summarization and extraction",
-      "Instant dashboard summary and email summary notifications (dashboard option)",
-      "HIPAA aligned workflows",
-      "Chat bot - Compare up to 10 uploaded documents. Feature included at no additional charge",
-      "Customizable extraction and prompt logic to fit your specialty",
+      "Send & receive 1,000 pages/month",
+      "AI summaries, document extraction & smart alerts",
+      "Secure HIPAA-aligned workflows & dashboard access",
+      "Chat assistant: compare up to 10 documents",
+      "Port your fax number & get instant setup",
+      "OCR/NLP document intelligence",
       "Free API setup ($500 value)",
-      "Instant fax, ai and dashboard access after signup",
-      "Port your current fax number",
-      "OCR and NLP document intelligence",
       "24/7 ticket support"
     ]
   },
   {
     name: "Plus",
-    oldPrice: "$44.99",
-    price: "$24.99/mo",
+    price: "$34.99",
     featured: true,
     cta: "Subscribe",
     href: process.env.PLUS_STRIPE_CHECKOUT_LINK ?? "#",
     features: [
-      "Send & Receive 2000 pages/month",
-      "Customized AI summarization and extraction",
-      "Instant dashboard summary and email summary notifications (dashboard option)",
-      "HIPAA aligned workflows",
-      "Chat bot - Compare up to 20 uploaded documents. Feature included at no additional charge",
-      "Customizable extraction and prompt logic to fit your specialty",
+      "Send & receive 2,000 pages/month",
+      "AI summaries, document extraction & smart alerts",
+      "Secure HIPAA-aligned workflows & dashboard access",
+      "Chat assistant: compare up to 20 documents",
+      "Port your fax number & get instant setup",
+      "OCR/NLP document intelligence",
       "Free API setup ($500 value)",
-      "Instant fax, ai and dashboard access after signup",
-      "Port your current fax number",
-      "OCR and NLP document intelligence",
       "24/7 ticket support"
     ]
   },
   {
     name: "Pro",
-    oldPrice: "$69.99",
-    price: "$49.99/mo",
+    price: "$59.99",
     cta: "Subscribe",
     href: process.env.PRO_STRIPE_CHECKOUT_LINK ?? "#",
     features: [
-      "Send & Receive 4000 pages/month",
-      "Customized AI summarization and extraction",
-      "Instant dashboard summary and email summary notifications (dashboard option)",
-      "HIPAA aligned workflows",
-      "Chat bot - Compare up to 40 uploaded documents. Feature included at no additional charge",
-      "Customizable extraction and prompt logic to fit your specialty",
+      "Send & receive 4,000 pages/month",
+      "AI summaries, document extraction & smart alerts",
+      "Secure HIPAA-aligned workflows & dashboard access",
+      "Chat assistant: compare up to 40 documents",
+      "Port your fax number & get instant setup",
+      "OCR/NLP document intelligence",
       "Free API setup ($500 value)",
-      "Instant fax, ai and dashboard access after signup",
-      "Port your current fax number",
-      "OCR and NLP document intelligence",
       "24/7 ticket support"
     ]
   },
   {
     name: "Enterprise",
-    price: "$99.00/mo",
+    price: "$99.00",
     cta: "Subscribe",
     href: process.env.ENTERPRISE_STRIPE_CHECKOUT_LINK ?? "#",
     features: [
-      "Send & Receive 4000 pages/month",
-      "Customized AI summarization and extraction",
-      "Instant dashboard summary and email summary notifications (dashboard option)",
-      "HIPAA aligned workflows",
-      "Chat bot - Compare up to 50 uploaded documents. Feature included at no additional charge",
-      "Customizable extraction and prompt logic to fit your specialty",
+      "Send & receive 4,000 pages/month",
+      "AI summaries, document extraction & smart alerts",
+      "Secure HIPAA-aligned workflows & dashboard access",
+      "Chat assistant: compare up to 50 documents",
+      "Port your fax number & get instant setup",
+      "OCR/NLP document intelligence",
       "Free API setup ($500 value)",
-      "Instant fax, ai and dashboard access after signup",
-      "Port your current fax number",
-      "OCR and NLP document intelligence",
       "24/7 ticket support"
     ]
   },
@@ -98,17 +82,14 @@ const plans: Plan[] = [
     cta: "Contact Us",
     href: process.env.CORPORATE_STRIPE_CHECKOUT_LINK ?? "#",
     features: [
-      "Customized monthly page volumes",
-      "Customized AI summarization and extraction",
-      "Instant dashboard summary and email summary notifications (dashboard option)",
-      "Customized monthly page volumes",
-      "Chat bot - Customized need for uploaded documents. Feature included at no additional charge",
-      "HIPAA aligned workflows",
-      "Instant summary notifications via email or text",
-      "Customizable extraction and prompt logic",
-      "Free API setup ($500 value)",
-      "OCR and NLP document intelligence",
-      "24/7 ticket support"
+      "Custom enterprise page volumes",
+      "Enterprise scaling",
+      "AI summaries, extraction & smart workflow automation",
+      "Secure HIPAA-aligned workflows & dashboard access",
+      "Chat assistant tailored to your needs",
+      "API integration & advanced automation support",
+      "OCR/NLP document intelligence",
+      "Dedicated onboarding & priority support"
     ]
   }
 ];
@@ -138,8 +119,7 @@ export default function PricingPage() {
 
               <h2 className="text-2xl font-semibold text-white">{plan.name}</h2>
               <p className="mt-3 text-slate-300">
-                {plan.oldPrice ? <span className="mr-2 line-through">{plan.oldPrice}</span> : null}
-                <span className="text-3xl font-semibold text-emerald-300">{plan.price}</span>
+                                <span className="text-3xl font-semibold text-emerald-300">{plan.price}</span>
               </p>
 
               <ul className="mt-5 flex-1 space-y-2 text-sm text-slate-300">

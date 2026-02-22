@@ -38,7 +38,6 @@ const partners = [
   { name: "Stripe", src: "/logos/partners/stripe.svg" },
   { name: "AWS", src: "/logos/partners/aws.svg" },
   { name: "DigitalOcean", src: "/logos/partners/digitalocean.svg" },
-  { name: "Vercel", src: "/logos/partners/vercel.svg" },
   { name: "GitHub", src: "/logos/partners/github.svg" },
   { name: "Google", src: "/logos/partners/google.svg" },
   { name: "Zoho", src: "/logos/partners/zoho.svg" },
