@@ -12,6 +12,7 @@ html,
 body {
   margin: 0;
   padding: 0;
+  font-family: system-ui, sans-serif;
   background: radial-gradient(circle at top, #1e293b 0%, #0f172a 42%, #020617 100%);
   color: #e2e8f0;
 }

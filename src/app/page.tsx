@@ -187,7 +187,18 @@ export default function Home() {
                 key={`${item.name}-${index}`}
                 className="inline-flex min-h-11 shrink-0 items-center rounded-lg border border-white/15 bg-slate-900/80 px-4"
               >
-                <Image src={item.src} alt={item.name === "OpenAI" ? "OpenAI" : `${item.name} logo`} width={160} height={44} className="h-8 w-auto" />
+                <Image
+                  src={item.src}
+                  alt={item.name === "OpenAI" ? "OpenAI" : `${item.name} logo`}
+                  width={160}
+                  height={44}
+                  className={item.name === "OpenAI" ? "w-auto" : "h-8 w-auto"}
+                  style={
+                    item.name === "OpenAI"
+                      ? { height: "28px", width: "auto", objectFit: "contain", imageRendering: "auto" }
+                      : undefined
+                  }
+                />
               </div>
             ))}
           </div>
