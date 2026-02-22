@@ -80,7 +80,7 @@ const plans: Plan[] = [
     name: "Corporate",
     price: "Contact Sales",
     cta: "Contact Us",
-    href: "mailto:info@aifax.net",
+    href: process.env.NEXT_PUBLIC_CONTACT_US_CHECKOUT_LINK || "mailto:info@aifax.net",
     features: [
       "Custom enterprise page volumes",
       "Enterprise scaling",
