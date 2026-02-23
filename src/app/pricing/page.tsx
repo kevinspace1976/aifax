@@ -20,16 +20,16 @@ const plans: Plan[] = [
     href: process.env.LITE_STRIPE_CHECKOUT_LINK ?? "#",
     features: [
       "200 pages/month (send & receive)",
+      "AI document summaries & smart extraction (customizable)",
       "Secure HIPAA-aligned workflows",
       "No contract, cancel anytime",
-      "Instant setup & access after signup",
-      "Dashboard access + email summaries",
-      "Port your existing fax number",
-      "AI document summaries & smart extraction (customizable)",
-      "OCR & NLP document intelligence",
-      "Specialty-specific automation & prompt logic",
       "AI chatbot to compare up to 10 documents",
-      "Free API setup ($500 value)",
+      "Instant access after signup",
+      "Dashboard access + email summaries",
+      "Practice-specific automation & prompt logic",
+      "Port your existing fax number",
+      "OCR & NLP document intelligence",
+      "Complete setup & onboarding including fax routing, user access, automation rules, number porting, and delivery configuration",
       "24/7 support",
       "Additional pages: $0.05 each"
     ]
@@ -42,16 +42,16 @@ const plans: Plan[] = [
     href: process.env.PLUS_STRIPE_CHECKOUT_LINK ?? "#",
     features: [
       "500 pages/month (send & receive)",
+      "AI document summaries & smart extraction (customizable)",
       "Secure HIPAA-aligned workflows",
       "No contract, cancel anytime",
-      "Instant setup & access after signup",
-      "Dashboard access + email summaries",
-      "Port your existing fax number",
-      "AI document summaries & smart extraction (customizable)",
-      "OCR & NLP document intelligence",
-      "Specialty-specific automation & prompt logic",
       "AI chatbot to compare up to 10 documents",
-      "Free API setup ($500 value)",
+      "Instant access after signup",
+      "Dashboard access + email summaries",
+      "Practice-specific automation & prompt logic",
+      "Port your existing fax number",
+      "OCR & NLP document intelligence",
+      "Complete setup & onboarding including fax routing, user access, automation rules, number porting, and delivery configuration",
       "24/7 support",
       "Additional pages: $0.05 each"
     ]
@@ -63,16 +63,16 @@ const plans: Plan[] = [
     href: process.env.PRO_STRIPE_CHECKOUT_LINK ?? "#",
     features: [
       "1000 pages/month (send & receive)",
+      "AI document summaries & smart extraction (customizable)",
       "Secure HIPAA-aligned workflows",
       "No contract, cancel anytime",
-      "Instant setup & access after signup",
-      "Dashboard access + email summaries",
-      "Port your existing fax number",
-      "AI document summaries & smart extraction (customizable)",
-      "OCR & NLP document intelligence",
-      "Specialty-specific automation & prompt logic",
       "AI chatbot to compare up to 10 documents",
-      "Free API setup ($500 value)",
+      "Instant access after signup",
+      "Dashboard access + email summaries",
+      "Practice-specific automation & prompt logic",
+      "Port your existing fax number",
+      "OCR & NLP document intelligence",
+      "Complete setup & onboarding including fax routing, user access, automation rules, number porting, and delivery configuration",
       "24/7 support",
       "Additional pages: $0.05 each"
     ]
@@ -84,16 +84,16 @@ const plans: Plan[] = [
     href: process.env.ENTERPRISE_STRIPE_CHECKOUT_LINK ?? "#",
     features: [
       "1500 pages/month (send & receive)",
+      "AI document summaries & smart extraction (customizable)",
       "Secure HIPAA-aligned workflows",
       "No contract, cancel anytime",
-      "Instant setup & access after signup",
-      "Dashboard access + email summaries",
-      "Port your existing fax number",
-      "AI document summaries & smart extraction (customizable)",
-      "OCR & NLP document intelligence",
-      "Specialty-specific automation & prompt logic",
       "AI chatbot to compare up to 10 documents",
-      "Free API setup ($500 value)",
+      "Instant access after signup",
+      "Dashboard access + email summaries",
+      "Practice-specific automation & prompt logic",
+      "Port your existing fax number",
+      "OCR & NLP document intelligence",
+      "Complete setup & onboarding including fax routing, user access, automation rules, number porting, and delivery configuration",
       "24/7 support",
       "Additional pages: $0.05 each"
     ]
@@ -125,7 +125,7 @@ export default function PricingPage() {
       />
 
       <section className="section-shell py-14 sm:py-16">
-        <div className="mb-3 flex justify-center">
+        <div className="-mt-4 mb-3 flex justify-center">
           <p className="kicker">MODERNIZE YOUR FAX WORKFLOW WITH AI AUTOMATION. SAVE TIME, REDUCE COSTS, AND STAY COMPLIANT.</p>
         </div>
         <div className="grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
