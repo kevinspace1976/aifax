@@ -101,9 +101,9 @@ export default function PricingPage() {
       />
 
       <section className="section-shell py-14 sm:py-16">
-        <p className="mx-auto mb-8 max-w-4xl text-center text-base text-slate-300 sm:text-lg">
-          Modernize your fax workflow with AI automation. Save time, reduce costs, and stay compliant.
-        </p>
+        <div className="mb-3 flex justify-center">
+          <p className="kicker">MODERNIZE YOUR FAX WORKFLOW WITH AI AUTOMATION. SAVE TIME, REDUCE COSTS, AND STAY COMPLIANT.</p>
+        </div>
         <div className="grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
           {plans.map((plan) => (
             <article
