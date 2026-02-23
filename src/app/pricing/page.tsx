@@ -14,36 +14,24 @@ type Plan = {
 
 const plans: Plan[] = [
   {
-    name: "Lite",
-    price: "$19.99",
-    cta: "Subscribe",
-    href: process.env.LITE_STRIPE_CHECKOUT_LINK ?? "#",
-    features: [
-      "Send & receive 1,000 pages/month",
-      "AI summaries, document extraction & smart alerts",
-      "Secure HIPAA-aligned workflows & dashboard access",
-      "Chat assistant: compare up to 10 documents",
-      "Port your fax number & get instant setup",
-      "OCR/NLP document intelligence",
-      "Free API setup ($500 value)",
-      "24/7 ticket support"
-    ]
-  },
-  {
     name: "Plus",
-    price: "$34.99",
+    price: "$29.99",
     featured: true,
     cta: "Subscribe",
     href: process.env.PLUS_STRIPE_CHECKOUT_LINK ?? "#",
     features: [
-      "Send & receive 2,000 pages/month",
-      "AI summaries, document extraction & smart alerts",
-      "Secure HIPAA-aligned workflows & dashboard access",
-      "Chat assistant: compare up to 20 documents",
-      "Port your fax number & get instant setup",
-      "OCR/NLP document intelligence",
+      "500 pages/month (send & receive)",
+      "Secure HIPAA-aligned workflows",
+      "Instant setup & access after signup",
+      "Dashboard access + email summaries",
+      "Port your existing fax number",
+      "AI document summaries & smart extraction (customizable)",
+      "OCR & NLP document intelligence",
+      "Specialty-specific automation & prompt logic",
+      "AI chatbot to compare up to 10 documents",
       "Free API setup ($500 value)",
-      "24/7 ticket support"
+      "24/7 support",
+      "Additional pages: $0.05 each"
     ]
   },
   {
@@ -52,30 +40,38 @@ const plans: Plan[] = [
     cta: "Subscribe",
     href: process.env.PRO_STRIPE_CHECKOUT_LINK ?? "#",
     features: [
-      "Send & receive 3,000 pages/month",
-      "AI summaries, document extraction & smart alerts",
-      "Secure HIPAA-aligned workflows & dashboard access",
-      "Chat assistant: compare up to 40 documents",
-      "Port your fax number & get instant setup",
-      "OCR/NLP document intelligence",
+      "1000 pages/month (send & receive)",
+      "Secure HIPAA-aligned workflows",
+      "Instant setup & access after signup",
+      "Dashboard access + email summaries",
+      "Port your existing fax number",
+      "AI document summaries & smart extraction (customizable)",
+      "OCR & NLP document intelligence",
+      "Specialty-specific automation & prompt logic",
+      "AI chatbot to compare up to 10 documents",
       "Free API setup ($500 value)",
-      "24/7 ticket support"
+      "24/7 support",
+      "Additional pages: $0.05 each"
     ]
   },
   {
     name: "Enterprise",
-    price: "$99.00",
+    price: "$89.99",
     cta: "Subscribe",
     href: process.env.ENTERPRISE_STRIPE_CHECKOUT_LINK ?? "#",
     features: [
-      "Send & receive 4,000 pages/month",
-      "AI summaries, document extraction & smart alerts",
-      "Secure HIPAA-aligned workflows & dashboard access",
-      "Chat assistant: compare up to 50 documents",
-      "Port your fax number & get instant setup",
-      "OCR/NLP document intelligence",
+      "1500 pages/month (send & receive)",
+      "Secure HIPAA-aligned workflows",
+      "Instant setup & access after signup",
+      "Dashboard access + email summaries",
+      "Port your existing fax number",
+      "AI document summaries & smart extraction (customizable)",
+      "OCR & NLP document intelligence",
+      "Specialty-specific automation & prompt logic",
+      "AI chatbot to compare up to 10 documents",
       "Free API setup ($500 value)",
-      "24/7 ticket support"
+      "24/7 support",
+      "Additional pages: $0.05 each"
     ]
   },
   {
