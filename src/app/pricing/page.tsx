@@ -125,7 +125,7 @@ export default function PricingPage() {
       />
 
       <section className="section-shell py-14 sm:py-16">
-        <div className="-mt-4 mb-3 flex justify-center">
+        <div className="-mt-8 mb-3 flex justify-center">
           <p className="kicker">MODERNIZE YOUR FAX WORKFLOW WITH AI AUTOMATION. SAVE TIME, REDUCE COSTS, AND STAY COMPLIANT.</p>
         </div>
         <div className="grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
