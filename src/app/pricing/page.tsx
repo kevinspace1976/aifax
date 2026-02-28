@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { PageHero } from "@/components/page-hero";
+import { PricingPlansGrid } from "@/components/pricing-plans-grid";
 
 type Plan = {
   name: string;
   price: string;
+  annualPrice?: string;
   cta: string;
   href: string;
   featured?: boolean;
@@ -16,6 +18,7 @@ const plans: Plan[] = [
   {
     name: "Lite",
     price: "$9.99",
+    annualPrice: "$8.29",
     cta: "Subscribe",
     href: process.env.LITE_STRIPE_CHECKOUT_LINK ?? "#",
     features: [
@@ -32,6 +35,7 @@ const plans: Plan[] = [
   {
     name: "Plus",
     price: "$29.99",
+    annualPrice: "$24.89",
     featured: true,
     cta: "Subscribe",
     href: process.env.PLUS_STRIPE_CHECKOUT_LINK ?? "#",
@@ -54,6 +58,7 @@ const plans: Plan[] = [
   {
     name: "Pro",
     price: "$59.99",
+    annualPrice: "$49.79",
     cta: "Subscribe",
     href: process.env.PRO_STRIPE_CHECKOUT_LINK ?? "#",
     features: [
@@ -75,6 +80,7 @@ const plans: Plan[] = [
   {
     name: "Enterprise",
     price: "$89.99",
+    annualPrice: "$74.69",
     cta: "Subscribe",
     href: process.env.ENTERPRISE_STRIPE_CHECKOUT_LINK ?? "#",
     features: [
@@ -123,37 +129,7 @@ export default function PricingPage() {
         <div className="-mt-8 mb-3 flex justify-center">
           <p className="kicker">MODERNIZE YOUR FAX WORKFLOW WITH AI AUTOMATION. SAVE TIME, REDUCE COSTS, AND STAY COMPLIANT.</p>
         </div>
-        <div className="grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
-          {plans.map((plan) => (
-            <article
-              key={plan.name}
-              className={`relative flex h-full flex-col rounded-2xl border p-6 ${
-                plan.featured ? "border-orange-400 bg-slate-900" : "border-white/10 bg-slate-900/70"
-              }`}
-            >
-              {plan.featured ? (
-                <span className="absolute right-4 top-4 rounded-full bg-orange-500 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
-                  Featured
-                </span>
-              ) : null}
-
-              <h2 className="text-2xl font-semibold text-white">{plan.name}</h2>
-              <p className="mt-3 text-slate-300">
-                                <span className="text-3xl font-semibold text-emerald-300">{plan.price}</span>
-              </p>
-
-              <ul className="mt-5 flex-1 space-y-2 text-sm text-slate-300">
-                {plan.features.map((feature) => (
-                  <li key={feature}>• {feature}</li>
-                ))}
-              </ul>
-
-              <a href={plan.href} target={plan.name === "Corporate" ? undefined : "_blank"} rel={plan.name === "Corporate" ? undefined : "noreferrer"} className="btn-primary mt-6">
-                {plan.cta}
-              </a>
-            </article>
-          ))}
-        </div>
+        <PricingPlansGrid plans={plans} />
 
         <div className="mt-8 card-surface p-6">
           <h3 className="text-xl font-semibold text-white">Need implementation support?</h3>
