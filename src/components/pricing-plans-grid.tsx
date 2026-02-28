@@ -17,7 +17,7 @@ type PricingPlansGridProps = {
 };
 
 export function PricingPlansGrid({ plans }: PricingPlansGridProps) {
-  const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annually">("monthly");
+  const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annually">("annually");
 
   return (
     <>
