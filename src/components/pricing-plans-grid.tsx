@@ -21,7 +21,7 @@ export function PricingPlansGrid({ plans }: PricingPlansGridProps) {
 
   return (
     <>
-      <div className="mb-6 flex flex-col items-center gap-3">
+      <div className="mb-6 flex flex-wrap items-center justify-center gap-3">
         <p className="text-base font-semibold text-white">Billing Period</p>
         <div className="flex flex-wrap items-center justify-center gap-3">
           <div className="inline-flex rounded-lg border border-white/10 bg-slate-900/70 p-1">
@@ -44,7 +44,7 @@ export function PricingPlansGrid({ plans }: PricingPlansGridProps) {
               Annually
             </button>
           </div>
-          <div className="flex items-center gap-1 text-xs font-semibold uppercase tracking-[0.08em] text-orange-300">
+          <div className="flex items-center gap-1 text-base font-semibold uppercase tracking-[0.08em] text-orange-300">
             <span aria-hidden>↗</span>
             <span>Save 17%</span>
           </div>

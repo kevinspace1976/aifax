@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { PageHero } from "@/components/page-hero";
 import { PricingPlansGrid } from "@/components/pricing-plans-grid";
 
 type Plan = {
@@ -120,15 +119,26 @@ const plans: Plan[] = [
 export default function PricingPage() {
   return (
     <main>
-      <PageHero
-        title="AI Plans & Pricing"
-        description="Choose the plan that fits your document volume and scale confidently with enterprise-grade AI fax operations."
-      />
+      <section className="border-b border-white/10 bg-slate-900/60">
+        <div className="section-shell py-14 sm:py-16">
+          <p className="kicker">Enterprise AI Fax Platform</p>
+          <h1 className="mt-3 text-3xl font-semibold text-white sm:text-4xl md:text-5xl">AI Plans & Pricing</h1>
+          <p className="mt-4 max-w-3xl text-base text-slate-300 sm:text-lg">
+            Choose the plan that fits your document volume and scale confidently with enterprise-grade AI fax operations.
+          </p>
+          <div className="mt-7 flex flex-wrap items-center gap-3">
+            <Link href="/pricing" className="btn-primary">
+              Get Started
+            </Link>
+            <Link href="/pricing" className="btn-secondary">
+              See Plans
+            </Link>
+            <p className="kicker">MODERNIZE YOUR FAX WORKFLOW WITH AI AUTOMATION. SAVE TIME, REDUCE COSTS, AND STAY COMPLIANT.</p>
+          </div>
+        </div>
+      </section>
 
       <section className="section-shell py-14 sm:py-16">
-        <div className="-mt-8 mb-3 flex justify-center">
-          <p className="kicker">MODERNIZE YOUR FAX WORKFLOW WITH AI AUTOMATION. SAVE TIME, REDUCE COSTS, AND STAY COMPLIANT.</p>
-        </div>
         <PricingPlansGrid plans={plans} />
 
         <div className="mt-8 card-surface p-6">
