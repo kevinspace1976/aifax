@@ -26,3 +26,8 @@ export const sharedCtas = {
   primary: { href: "/pricing", label: "Get Started" },
   secondary: { href: "/pricing", label: "See Plans" }
 };
+
+export const loginCta = {
+  href: "https://app.aifax.net/#/auth",
+  label: "Login"
+};
