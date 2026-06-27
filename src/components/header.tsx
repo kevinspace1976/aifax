@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
-import { brand, navItems, sharedCtas } from "@/lib/site";
+import { brand, loginCta, navItems, sharedCtas } from "@/lib/site";
 
 export function Header() {
   const pathname = usePathname();
@@ -44,6 +44,9 @@ export function Header() {
           <Link href={sharedCtas.primary.href} className="btn-primary">
             {sharedCtas.primary.label}
           </Link>
+          <a href={loginCta.href} className="btn-secondary">
+            {loginCta.label}
+          </a>
         </nav>
       </div>
 
@@ -63,6 +66,9 @@ export function Header() {
             <Link href={sharedCtas.primary.href} className="btn-primary mt-2" onClick={() => setOpen(false)}>
               {sharedCtas.primary.label}
             </Link>
+            <a href={loginCta.href} className="btn-secondary mt-2" onClick={() => setOpen(false)}>
+              {loginCta.label}
+            </a>
           </nav>
         </div>
       ) : null}
