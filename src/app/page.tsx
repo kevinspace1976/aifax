@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, ChevronDown, Cpu, FileText, ShieldCheck, Star, Workflow } from "lucide-react";
+import { VideoCard } from "@/components/video-card";
 
 const trustPoints = [
   "HIPAA-compliant architecture and secure transmission",
@@ -140,7 +141,7 @@ export default function Home() {
   return (
     <main>
       <section className="border-b border-white/10">
-        <div className="section-shell grid gap-10 py-16 sm:py-20 lg:grid-cols-2 lg:items-center">
+        <div className="section-shell grid gap-10 py-16 sm:py-20 lg:grid-cols-2 lg:items-start">
           <div>
             <h1 className="mt-5 text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">
               AI Fax Automation Built for <span className="brand-gradient">Modern Enterprise Teams</span>
@@ -160,17 +161,20 @@ export default function Home() {
             </div>
           </div>
 
-          <aside className="card-surface interactive p-6 sm:p-8" aria-label="Trust points">
-            <h2 className="text-xl font-semibold text-white sm:text-2xl">Why enterprises choose AiFax</h2>
-            <ul className="mt-5 space-y-4">
-              {trustPoints.map((point) => (
-                <li key={point} className="flex items-start gap-3 text-sm text-slate-200 sm:text-base">
-                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-300" />
-                  <span>{point}</span>
-                </li>
-              ))}
-            </ul>
-          </aside>
+          <div className="space-y-6">
+            <aside className="card-surface interactive p-6 sm:p-8" aria-label="Trust points">
+              <h2 className="text-xl font-semibold text-white sm:text-2xl">Why enterprises choose AiFax</h2>
+              <ul className="mt-5 space-y-4">
+                {trustPoints.map((point) => (
+                  <li key={point} className="flex items-start gap-3 text-sm text-slate-200 sm:text-base">
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-300" />
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </aside>
+            {youtubeEmbedUrl ? <VideoCard embedUrl={youtubeEmbedUrl} /> : null}
+          </div>
         </div>
       </section>
 
