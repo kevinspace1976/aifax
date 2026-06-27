@@ -31,3 +31,8 @@ export const loginCta = {
   href: "https://app.aifax.net/#/auth",
   label: "Login"
 };
+
+export const headerCta = {
+  href: "https://portal.aifax.net/index.php?rp=/store/cloud-faxing",
+  label: "Get Your Fax Number"
+};
