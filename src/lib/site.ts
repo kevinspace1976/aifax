@@ -23,7 +23,7 @@ export const socialItems = [
 ];
 
 export const sharedCtas = {
-  primary: { href: "/pricing", label: "Get Started" },
+  primary: { href: "https://portal.aifax.net/index.php?rp=/store/cloud-faxing", label: "Get Your Fax Number" },
   secondary: { href: "/pricing", label: "See Plans" }
 };
 

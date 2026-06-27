@@ -127,8 +127,8 @@ export default function PricingPage() {
             Choose the plan that fits your document volume and scale confidently with enterprise-grade AI fax operations.
           </p>
           <div className="mt-7 flex flex-wrap items-center gap-3">
-            <Link href="/pricing" className="btn-primary">
-              Get Started
+            <Link href="https://portal.aifax.net/index.php?rp=/store/cloud-faxing" className="btn-primary">
+              Get Your Fax Number
             </Link>
             <Link href="/pricing" className="btn-secondary">
               See Plans
