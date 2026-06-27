@@ -5,7 +5,7 @@ const workflow = [
   {
     step: "1",
     title: "Onboard your fax channel",
-    description: "Select a new number, keep your eFax line, or port your current number with guided activation."
+    description: "Select a new number, keep your existing line, or port your current number with guided activation."
   },
   {
     step: "2",

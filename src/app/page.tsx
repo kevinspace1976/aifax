@@ -63,7 +63,7 @@ const faqs = [
   },
   {
     q: "Can AiFax integrate with my existing fax service or business software?",
-    a: "Yes. AiFax supports new numbers, number porting, and integrations with existing tools including EHR, EMR, and CRM environments. We also support integration with major fax providers such as eFax for smooth implementation."
+    a: "Yes. AiFax supports new numbers, number porting, and integrations with existing tools including EHR, EMR, and CRM environments. We also support integration with major fax providers for smooth implementation."
   },
   {
     q: "What types of businesses can benefit from AiFax?",
@@ -145,14 +145,14 @@ export default function Home() {
             <h1 className="mt-5 text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">
               AI Fax Automation Built for <span className="brand-gradient">Modern Enterprise Teams</span>
             </h1>
-            <p className="kicker mt-5">Proud Partner of eFax · Enterprise Ready</p>
+            <p className="kicker mt-5">Enterprise Ready</p>
             <p className="mt-5 max-w-2xl text-base text-slate-300 sm:text-lg">
               AiFax transforms legacy fax operations into secure, intelligent workflows with instant summaries, extraction,
               and direct integration into your business stack.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/pricing" className="btn-primary">
-                Get Started <ArrowRight className="ml-2 h-4 w-4" />
+              <Link href="https://portal.aifax.net/index.php?rp=/store/cloud-faxing" className="btn-primary">
+                Get Your Fax Number <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
               <Link href="/pricing" className="btn-secondary">
                 See Plans
@@ -170,10 +170,6 @@ export default function Home() {
                 </li>
               ))}
             </ul>
-            <div className="mt-6 inline-block rounded-xl border border-white/10 bg-white/5 p-4">
-              <p className="mb-2 text-xs uppercase tracking-[0.12em] text-slate-400">Global Partner</p>
-              <Image src="/logos/efax.svg" alt="eFax logo" width={180} height={56} className="h-10 w-auto" priority />
-            </div>
           </aside>
         </div>
       </section>
