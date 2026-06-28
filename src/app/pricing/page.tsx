@@ -56,8 +56,8 @@ const plans: Plan[] = [
   },
   {
     name: "Pro",
-    price: "$59.99",
-    annualPrice: "$49.79",
+    price: "$44.99",
+    annualPrice: "$37.34",
     cta: "Subscribe",
     href: process.env.PRO_STRIPE_CHECKOUT_LINK ?? "#",
     features: [
@@ -78,8 +78,8 @@ const plans: Plan[] = [
   },
   {
     name: "Enterprise",
-    price: "$89.99",
-    annualPrice: "$74.69",
+    price: "$69.99",
+    annualPrice: "$58.09",
     cta: "Subscribe",
     href: process.env.ENTERPRISE_STRIPE_CHECKOUT_LINK ?? "#",
     features: [
