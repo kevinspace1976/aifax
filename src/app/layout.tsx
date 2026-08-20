@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ChatWidget } from "@/components/chat-widget";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { brand } from "@/lib/site";
@@ -21,6 +22,7 @@ export default function RootLayout({
         <Header />
         {children}
         <Footer />
+        <ChatWidget />
       </body>
     </html>
   );
