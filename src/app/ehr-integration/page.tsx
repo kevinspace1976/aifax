@@ -23,7 +23,7 @@ const capabilities = [
   {
     icon: UserCheck,
     title: "Matched to the right patient",
-    text: "Every fax is auto-labeled with the patient's name and date of birth so it files to the correct chart - not a shared inbox, not the wrong record."
+    text: "When a fax arrives with the patient's name and date of birth, the AI reads them and files it to the correct chart automatically. When a fax arrives without them - and some do - it is never guessed into a record: it's flagged for your staff to review and route, so the wrong chart never gets someone else's document."
   },
   {
     icon: Sparkles,
