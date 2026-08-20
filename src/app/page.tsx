@@ -4,10 +4,10 @@ import { ArrowRight, CheckCircle2, ChevronDown, Cpu, FileText, ShieldCheck, Star
 import { VideoCard } from "@/components/video-card";
 
 const trustPoints = [
-  "HIPAA-compliant architecture and secure transmission",
-  "AI summaries distributed to email, SMS, EHR/EMR/CRM",
-  "Free API setup and guided onboarding support",
-  "Custom AI prompts and extraction logic per workflow"
+  "EHR integration available - AI summaries delivered into email, SMS, EHR/EMR, or CRM, scoped to your workflow",
+  "Scales with you - one provider or fifty, same platform, no new staff to hire",
+  "HIPAA-compliant architecture, secure transmission, BAA executed at signup",
+  "Custom AI prompts and extraction logic per workflow - your practice, your rules"
 ];
 
 const pillars = [
@@ -143,15 +143,43 @@ export default function Home() {
       <section className="border-b border-white/10">
         <div className="section-shell grid gap-10 py-16 sm:py-20 lg:grid-cols-2 lg:items-start">
           <div>
-            <h1 className="mt-5 text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">
-              AI Fax Automation Built for <span className="brand-gradient">Modern Enterprise Teams</span>
+            <h1 className="mt-5 text-4xl font-semibold leading-tight text-white sm:text-5xl">
+              Stop Paying Staff to Read Faxes All Day.{" "}
+              <span className="block text-sky-400">Every Fax, Read by AI -</span>
+              <span className="block text-orange-400">Filed Into Your EHR Workflow.</span>
             </h1>
-            <p className="kicker mt-5">Enterprise Ready</p>
-            <p className="mt-5 max-w-2xl text-base text-slate-300 sm:text-lg">
-              AiFax transforms legacy fax operations into secure, intelligent workflows with instant summaries, extraction,
-              and direct integration into your business stack.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <p className="kicker mt-5">EHR Integration Available &middot; Built to Scale</p>
+            <ul className="mt-6 max-w-2xl space-y-3 text-base text-slate-300 sm:text-lg">
+              <li className="flex items-start gap-3">
+                <span aria-hidden="true" className="mt-0.5 font-bold text-orange-400">&#10007;</span>
+                <span>Hours of payroll burned every day opening, re-typing, and hand-filing faxes</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span aria-hidden="true" className="mt-0.5 font-bold text-orange-400">&#10007;</span>
+                <span>Referrals, records requests, and billing windows quietly slipping through the cracks</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span aria-hidden="true" className="mt-0.5 font-bold text-emerald-300">&#10003;</span>
+                <span>
+                  <strong className="text-white">AiFax reads every inbound fax the moment it lands</strong> - summarized,
+                  patient name and DOB labeled
+                </span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span aria-hidden="true" className="mt-0.5 font-bold text-emerald-300">&#10003;</span>
+                <span>
+                  Routed into the workflow you already run - <strong className="text-white">EHR integration available</strong>
+                </span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span aria-hidden="true" className="mt-0.5 font-bold text-emerald-300">&#10003;</span>
+                <span>
+                  Solo practice or multi-site group - same platform, same speed,{" "}
+                  <strong className="text-white">no new headcount</strong>
+                </span>
+              </li>
+            </ul>
+            <div className="mt-11 flex flex-wrap gap-3">
               <Link href="https://portal.aifax.net/index.php?rp=/store/cloud-faxing" className="btn-primary">
                 Get Your Fax Number <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
@@ -163,7 +191,7 @@ export default function Home() {
 
           <div className="space-y-6">
             <aside className="card-surface interactive p-6 sm:p-8" aria-label="Trust points">
-              <h2 className="text-xl font-semibold text-white sm:text-2xl">Why enterprises choose AiFax</h2>
+              <h2 className="text-xl font-semibold text-white sm:text-2xl">Why practices switch to AiFax</h2>
               <ul className="mt-5 space-y-4">
                 {trustPoints.map((point) => (
                   <li key={point} className="flex items-start gap-3 text-sm text-slate-200 sm:text-base">
@@ -208,7 +236,12 @@ export default function Home() {
       {youtubeEmbedUrl ? (
         <section className="section-shell py-14 sm:py-16">
           <h2 className="text-2xl font-semibold text-white sm:text-3xl">See AiFax in Action</h2>
-          <p className="mt-2 max-w-3xl text-slate-300">Watch how our AI fax platform summarizes documents and automates delivery workflows in real time.</p>
+          <p className="mt-2 max-w-3xl text-slate-300">
+            Watch an inbound fax become a{" "}
+            <strong className="text-white">summarized, patient-labeled record that&apos;s ready for your EHR</strong> - in
+            seconds, not staff-hours. This is the daily grind your front desk does by hand today, done automatically, every
+            time, at any volume.
+          </p>
           <div className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-slate-900 shadow-lg shadow-slate-950/40">
             <div className="aspect-video w-full">
               <iframe
