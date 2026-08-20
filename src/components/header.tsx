@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Menu, Phone, X } from "lucide-react";
 import { useState } from "react";
 import { brand, headerCta, loginCta, navItems } from "@/lib/site";
 
@@ -33,7 +33,7 @@ export function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`inline-flex min-h-11 items-center text-xs font-semibold uppercase tracking-[0.12em] transition ${
+                className={`inline-flex min-h-11 items-center whitespace-nowrap text-xs font-semibold uppercase tracking-[0.12em] transition ${
                   active ? "text-orange-400" : "text-slate-300 hover:text-white"
                 }`}
               >
@@ -41,6 +41,14 @@ export function Header() {
               </Link>
             );
           })}
+          <a
+            href="tel:+19548721918"
+            className="hidden min-h-11 items-center gap-1.5 whitespace-nowrap text-sm font-bold text-slate-100 transition hover:text-orange-400 lg:inline-flex"
+            aria-label="Call AiFax at 954-872-1918"
+          >
+            <Phone className="h-4 w-4 text-orange-400" aria-hidden="true" />
+            954-872-1918
+          </a>
           <a href={headerCta.href} className="btn-primary">
             {headerCta.label}
           </a>
@@ -63,6 +71,14 @@ export function Header() {
                 {item.label}
               </Link>
             ))}
+            <a
+              href="tel:+19548721918"
+              className="mt-2 inline-flex min-h-11 items-center gap-2 rounded-lg border border-white/10 px-3 text-sm font-bold text-slate-100"
+              onClick={() => setOpen(false)}
+            >
+              <Phone className="h-4 w-4 text-orange-400" aria-hidden="true" />
+              Call 954-872-1918
+            </a>
             <a href={headerCta.href} className="btn-primary mt-2" onClick={() => setOpen(false)}>
               {headerCta.label}
             </a>
