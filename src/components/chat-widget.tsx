@@ -183,29 +183,52 @@ export function ChatWidget() {
 
           <div ref={logRef} className="relative flex-1 space-y-3 overflow-y-auto px-4 py-4">
             {msgs.map((m, i) => (
-              <div
-                key={i}
-                data-from={m.from}
-                className={
-                  m.from === "bot"
-                    ? "max-w-[88%] whitespace-pre-line rounded-xl rounded-tl-sm bg-slate-100 px-3 py-2 text-sm text-slate-800"
-                    : "ml-auto max-w-[88%] whitespace-pre-line rounded-xl rounded-tr-sm bg-orange-500/90 px-3 py-2 text-sm text-white"
-                }
-              >
-                {m.text}
+              <div key={i}>
+                <div
+                  data-from={m.from}
+                  className={
+                    m.from === "bot"
+                      ? "max-w-[88%] whitespace-pre-line rounded-xl rounded-tl-sm bg-slate-100 px-3 py-2 text-sm text-slate-800"
+                      : "ml-auto max-w-[88%] whitespace-pre-line rounded-xl rounded-tr-sm bg-orange-500/90 px-3 py-2 text-sm text-white"
+                  }
+                >
+                  {m.text}
+                </div>
+                {m.from === "bot" && i > 0 ? (
+                  <div className="mt-2 max-w-[88%] text-xs text-slate-500">
+                    Did that answer your question? If not, we&apos;re happy to help directly:
+                    <span className="mt-1.5 flex flex-wrap gap-2">
+                      <a
+                        href={"mailto:" + EMAIL}
+                        className="inline-flex items-center rounded-full border border-orange-300 px-3 py-1 font-semibold text-orange-600 transition hover:bg-orange-50"
+                      >
+                        Email {EMAIL}
+                      </a>
+                      <a
+                        href="tel:+19548721918"
+                        className="inline-flex items-center rounded-full border border-slate-300 px-3 py-1 font-semibold text-slate-700 transition hover:bg-slate-50"
+                      >
+                        Call {PHONE}
+                      </a>
+                    </span>
+                  </div>
+                ) : null}
               </div>
             ))}
-            <div className="flex flex-wrap gap-2 pt-1">
-              {DEFAULT_CHIPS.map((k) => (
-                <button
-                  key={k}
-                  className="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:border-orange-500 hover:text-orange-600"
-                  onClick={() => onChip(k)}
-                >
-                  {FAQ[k].chip}
-                </button>
-              ))}
-            </div>
+          </div>
+
+          {/* Topic chips pinned below the log so all six stay visible no
+              matter how far the conversation scrolls. */}
+          <div className="flex flex-wrap gap-2 border-t border-slate-200 bg-white px-4 py-3">
+            {DEFAULT_CHIPS.map((k) => (
+              <button
+                key={k}
+                className="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:border-orange-500 hover:text-orange-600"
+                onClick={() => onChip(k)}
+              >
+                {FAQ[k].chip}
+              </button>
+            ))}
           </div>
 
           <div className="flex items-center gap-2 border-t border-slate-200 bg-slate-50 px-3 py-3">
