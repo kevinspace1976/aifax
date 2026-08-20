@@ -13,7 +13,7 @@ const capabilities = [
   {
     icon: FileStack,
     title: "The entire fax, filed into the chart - automatically",
-    text: "Not just a summary: the complete original fax, every page, is delivered into the patient's chart the moment it arrives. The source document the doctor needs is already where it belongs."
+    text: "Not just a summary: the complete original fax, every page, is delivered into the patient's chart the moment it arrives - as directly as your EHR's interfaces allow. We maximize every capability your system exposes to get the source document where it belongs."
   },
   {
     icon: Zap,
@@ -77,14 +77,15 @@ export default function EhrIntegrationPage() {
     <main>
       <PageHero
         title="EHR Integration"
-        description="The entire fax - every page - filed into the patient's chart automatically, the moment it arrives. No printing, no scanning, no one uploading PDFs. The doctor sees the result sooner, the patient gets safer care, and the practice carries less liability."
+        description="The entire fax - every page - filed into the patient's chart automatically, the moment it arrives, using every capability your EHR makes available. No printing, no scanning, no one uploading PDFs. The doctor sees the result sooner, the patient gets safer care, and the practice carries less liability."
       />
 
       <section className="section-shell py-14 sm:py-16">
         <h2 className="text-2xl font-semibold text-white sm:text-3xl">Fax in. Chart updated. Automatically.</h2>
         <p className="mt-2 max-w-3xl text-slate-300">
           The point of the integration is simple: get the whole fax into the patient&apos;s chart with no human in the
-          middle - and put an AI summary on top so the doctor knows what arrived.
+          middle - and put an AI summary on top so the doctor knows what arrived. How direct that filing can be depends
+          on what your EHR supports - and whatever it supports, we use to the fullest.
         </p>
         <div className="mt-6 grid gap-4 md:grid-cols-2">
           {capabilities.map(({ icon: Icon, title, text }) => (
