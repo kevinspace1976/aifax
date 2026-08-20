@@ -9,6 +9,7 @@ export const navItems = [
   { href: "/", label: "Home" },
   { href: "/how-it-works", label: "How It Works" },
   { href: "/solutions", label: "Solutions" },
+  { href: "/ehr-integration", label: "EHR Integration" },
   { href: "/pricing", label: "Pricing" },
   { href: "/about", label: "About" },
   { href: "/speciality", label: "Speciality" },

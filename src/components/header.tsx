@@ -26,7 +26,7 @@ export function Header() {
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
 
-        <nav className="hidden items-center gap-5 md:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-4 md:flex" aria-label="Primary">
           {navItems.map((item) => {
             const active = pathname === item.href;
             return (
@@ -43,16 +43,16 @@ export function Header() {
           })}
           <a
             href="tel:+19548721918"
-            className="hidden min-h-11 items-center gap-1.5 whitespace-nowrap text-sm font-bold text-slate-100 transition hover:text-orange-400 lg:inline-flex"
+            className="hidden min-h-11 items-center gap-1.5 whitespace-nowrap text-sm font-bold text-slate-100 transition hover:text-orange-400 xl:inline-flex"
             aria-label="Call AiFax at 954-872-1918"
           >
             <Phone className="h-4 w-4 text-orange-400" aria-hidden="true" />
             954-872-1918
           </a>
-          <a href={headerCta.href} className="btn-primary">
+          <a href={headerCta.href} className="btn-primary whitespace-nowrap">
             {headerCta.label}
           </a>
-          <a href={loginCta.href} className="btn-secondary">
+          <a href={loginCta.href} className="btn-secondary whitespace-nowrap">
             {loginCta.label}
           </a>
         </nav>
