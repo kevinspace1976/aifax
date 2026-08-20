@@ -96,7 +96,15 @@ export function ChatWidget() {
   }, [open]);
 
   useEffect(() => {
-    logRef.current?.scrollTo({ top: logRef.current.scrollHeight });
+    const log = logRef.current;
+    if (!log) return;
+    // Scroll so the most recent USER message sits at the top of the window -
+    // long answers (like pricing) then read from their first line instead of
+    // landing mid-answer with the top cut off.
+    const users = log.querySelectorAll<HTMLElement>('[data-from="user"]');
+    const last = users[users.length - 1];
+    if (last) log.scrollTo({ top: Math.max(0, last.offsetTop - 12) });
+    else log.scrollTo({ top: log.scrollHeight });
   }, [msgs]);
 
   useEffect(() => {
@@ -162,24 +170,25 @@ export function ChatWidget() {
           role="dialog"
           aria-modal="false"
           aria-label="AiFax chat assistant"
-          className="fixed bottom-24 right-5 z-50 flex max-h-[min(78vh,640px)] w-[min(94vw,390px)] flex-col overflow-hidden rounded-2xl border border-white/10 bg-slate-950 shadow-2xl shadow-slate-950/60"
+          className="fixed bottom-24 right-5 z-50 flex h-[min(85vh,760px)] w-[min(94vw,400px)] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl shadow-slate-950/40"
         >
-          <div className="border-b border-white/10 bg-slate-900 px-4 py-3">
-            <p className="text-sm font-semibold text-white">
+          <div className="border-b border-slate-200 bg-slate-50 px-4 py-3">
+            <p className="text-sm font-semibold text-slate-900">
               Chat with Ai<span className="text-orange-400">Fax</span>
             </p>
-            <p className="mt-0.5 text-[11px] leading-snug text-slate-400">
+            <p className="mt-0.5 text-[11px] leading-snug text-slate-500">
               Automated assistant with preset answers. Please do not share patient information (PHI) here.
             </p>
           </div>
 
-          <div ref={logRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
+          <div ref={logRef} className="relative flex-1 space-y-3 overflow-y-auto px-4 py-4">
             {msgs.map((m, i) => (
               <div
                 key={i}
+                data-from={m.from}
                 className={
                   m.from === "bot"
-                    ? "max-w-[88%] whitespace-pre-line rounded-xl rounded-tl-sm bg-slate-800 px-3 py-2 text-sm text-slate-100"
+                    ? "max-w-[88%] whitespace-pre-line rounded-xl rounded-tl-sm bg-slate-100 px-3 py-2 text-sm text-slate-800"
                     : "ml-auto max-w-[88%] whitespace-pre-line rounded-xl rounded-tr-sm bg-orange-500/90 px-3 py-2 text-sm text-white"
                 }
               >
@@ -190,7 +199,7 @@ export function ChatWidget() {
               {DEFAULT_CHIPS.map((k) => (
                 <button
                   key={k}
-                  className="rounded-full border border-white/20 px-3 py-1.5 text-xs font-medium text-slate-200 transition hover:border-orange-400 hover:text-orange-300"
+                  className="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:border-orange-500 hover:text-orange-600"
                   onClick={() => onChip(k)}
                 >
                   {FAQ[k].chip}
@@ -199,7 +208,7 @@ export function ChatWidget() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 border-t border-white/10 bg-slate-900 px-3 py-3">
+          <div className="flex items-center gap-2 border-t border-slate-200 bg-slate-50 px-3 py-3">
             <input
               ref={inputRef}
               value={input}
@@ -209,7 +218,7 @@ export function ChatWidget() {
               }}
               placeholder="Type a question..."
               aria-label="Type a question for the AiFax assistant"
-              className="min-h-11 flex-1 rounded-lg border border-white/15 bg-slate-950 px-3 text-sm text-white placeholder:text-slate-500 focus:border-orange-400 focus:outline-none"
+              className="min-h-11 flex-1 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-orange-500 focus:outline-none"
             />
             <button
               aria-label="Send message"
