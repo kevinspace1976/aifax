@@ -144,19 +144,23 @@ export default function Home() {
         <div className="section-shell grid gap-10 py-16 sm:py-20 lg:grid-cols-2 lg:items-start">
           <div>
             <h1 className="mt-5 text-4xl font-semibold leading-tight text-white sm:text-5xl">
-              Stop Paying Staff to Read Faxes All Day.{" "}
+              Your Team Opens Every Fax Just to Find Out Who It&apos;s For.{" "}
               <span className="block text-sky-400">Every Fax, Read by AI -</span>
               <span className="block text-orange-400">Filed Into Your EHR Workflow.</span>
             </h1>
             <p className="kicker mt-5">EHR Integration Available &middot; Built to Scale</p>
+            <p className="mt-5 max-w-2xl text-base leading-relaxed text-slate-200 sm:text-lg">
+              <strong className="text-white">A fax that never reaches the chart is a finding the doctor never sees.</strong>{" "}
+              The patient pays the clinical price - and the practice carries the compliance and liability risk.
+            </p>
             <ul className="mt-6 max-w-2xl space-y-3 text-base text-slate-300 sm:text-lg">
               <li className="flex items-start gap-3">
                 <span aria-hidden="true" className="mt-0.5 font-bold text-orange-400">&#10007;</span>
-                <span>Hours of payroll burned every day opening, re-typing, and hand-filing faxes</span>
+                <span>Hours of payroll burned every day opening, reading, and filing faxes</span>
               </li>
               <li className="flex items-start gap-3">
                 <span aria-hidden="true" className="mt-0.5 font-bold text-orange-400">&#10007;</span>
-                <span>Referrals, records requests, and billing windows quietly slipping through the cracks</span>
+                <span>Results and referrals slipping through the cracks - quality gaps your quality scores remember</span>
               </li>
               <li className="flex items-start gap-3">
                 <span aria-hidden="true" className="mt-0.5 font-bold text-emerald-300">&#10003;</span>
