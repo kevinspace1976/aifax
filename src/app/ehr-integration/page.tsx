@@ -1,24 +1,34 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CheckCircle2, ClipboardList, Mail, Search, Settings2, ShieldCheck, Workflow } from "lucide-react";
+import { CheckCircle2, FileStack, Mail, Search, Settings2, ShieldCheck, Sparkles, UserCheck, Zap } from "lucide-react";
 import { PageHero } from "@/components/page-hero";
 
 export const metadata: Metadata = {
   title: "AiFax | EHR Integration",
   description:
-    "Get inbound faxes summarized, patient-labeled, and delivered into your EHR workflow. Scoped to your practice, starting with a written discovery by email."
+    "The entire fax filed into the patient's chart automatically, with an AI summary on top. Zero-touch fax-to-EHR automation, scoped to your practice via a written discovery by email."
 };
 
 const capabilities = [
   {
-    icon: Workflow,
-    title: "Summaries delivered where you work",
-    text: "AI summaries of every inbound fax can be delivered into email, SMS, and EHR/EMR or CRM channels - scoped to the workflow your team already runs."
+    icon: FileStack,
+    title: "The entire fax, filed into the chart - automatically",
+    text: "Not just a summary: the complete original fax, every page, is delivered into the patient's chart the moment it arrives. The source document the doctor needs is already where it belongs."
   },
   {
-    icon: ClipboardList,
-    title: "Chart-ready labeling",
-    text: "Every fax arrives summarized and auto-labeled with the patient's name and date of birth, so it can be matched to the right chart instead of sitting unread in a queue."
+    icon: Zap,
+    title: "Zero-touch, 24/7 automation",
+    text: "No one opens the fax, figures out who it's for, or uploads it by hand. The fax-to-chart step runs automatically around the clock - weekends, nights, and Monday-morning pileups included."
+  },
+  {
+    icon: UserCheck,
+    title: "Matched to the right patient",
+    text: "Every fax is auto-labeled with the patient's name and date of birth so it files to the correct chart - not a shared inbox, not the wrong record."
+  },
+  {
+    icon: Sparkles,
+    title: "AI summary rides along",
+    text: "On top of the original document, the doctor gets an instant AI summary of what's inside - results, referrals, follow-ups - so nothing waits to be read. The full fax is always attached."
   },
   {
     icon: Settings2,
@@ -67,11 +77,15 @@ export default function EhrIntegrationPage() {
     <main>
       <PageHero
         title="EHR Integration"
-        description="A fax that never reaches the chart is a finding the doctor never sees. AiFax reads every inbound fax, labels the patient, and delivers it into your EHR workflow - scoped to your practice, documented in writing."
+        description="The entire fax - every page - filed into the patient's chart automatically, the moment it arrives. No printing, no scanning, no one uploading PDFs. The doctor sees the result sooner, the patient gets safer care, and the practice carries less liability."
       />
 
       <section className="section-shell py-14 sm:py-16">
-        <h2 className="text-2xl font-semibold text-white sm:text-3xl">What the integration does</h2>
+        <h2 className="text-2xl font-semibold text-white sm:text-3xl">Fax in. Chart updated. Automatically.</h2>
+        <p className="mt-2 max-w-3xl text-slate-300">
+          The point of the integration is simple: get the whole fax into the patient&apos;s chart with no human in the
+          middle - and put an AI summary on top so the doctor knows what arrived.
+        </p>
         <div className="mt-6 grid gap-4 md:grid-cols-2">
           {capabilities.map(({ icon: Icon, title, text }) => (
             <article key={title} className="card-surface interactive p-6">
@@ -80,6 +94,30 @@ export default function EhrIntegrationPage() {
               <p className="mt-2 text-sm text-slate-300 sm:text-base">{text}</p>
             </article>
           ))}
+        </div>
+      </section>
+
+      <section className="section-shell pb-14 sm:pb-16">
+        <div className="card-surface p-6 sm:p-8">
+          <h2 className="text-2xl font-semibold text-white">Why less human involvement is the whole point</h2>
+          <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div>
+              <h3 className="font-semibold text-orange-400">Fewer errors</h3>
+              <p className="mt-1 text-sm text-slate-300">Every manual touch is a chance to misfile, mistype, or miss a page. Automation removes the touches.</p>
+            </div>
+            <div>
+              <h3 className="font-semibold text-orange-400">Less liability</h3>
+              <p className="mt-1 text-sm text-slate-300">A fax that files itself cannot sit unread in a pile. The compliance and malpractice exposure of a missed result shrinks with it.</p>
+            </div>
+            <div>
+              <h3 className="font-semibold text-orange-400">Faster results</h3>
+              <p className="mt-1 text-sm text-slate-300">The document and its summary are in front of the physician the moment they open the chart - not after someone processes a queue.</p>
+            </div>
+            <div>
+              <h3 className="font-semibold text-orange-400">Better care</h3>
+              <p className="mt-1 text-sm text-slate-300">When findings reach the doctor sooner and nothing slips, the patient gets safer, faster follow-up. That is the outcome that matters.</p>
+            </div>
+          </div>
         </div>
       </section>
 
