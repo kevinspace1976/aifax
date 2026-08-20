@@ -62,12 +62,21 @@ function route(input: string): string | "fallback" | "guard" {
   const t = input.toLowerCase();
   if (/(ssn|social security|credit card|card number|password|patient (record|chart)|medical record|diagnos)/.test(t))
     return "guard";
-  if (/(price|pricing|cost|how much|plan|monthly|fee|cheap|rate)/.test(t)) return "pricing";
+  if (/\b(price|pricing|cost|how much|plans?|monthly|fees?|cheap|rates?)\b/.test(t)) return "pricing";
   if (/(ehr|emr|epic|cerner|athena|office ally|practice fusion|integrat|api|crm)/.test(t)) return "ehr";
   if (/(port|switch|transfer|move|keep my number|existing number|efax|current provider)/.test(t)) return "switching";
   if (/(hipaa|baa|secur|complian|encrypt|privacy|phi)/.test(t)) return "hipaa";
   if (/(contact|email|phone|call|reach|talk|human|person|sales)/.test(t)) return "contact";
-  if (/(what|how (do|does)|about|explain|tell me|overview|fax)/.test(t)) return "whatis";
+  // Only a question genuinely about what AiFax is / how it works lands here.
+  // Deliberately narrow: a greedy what/about/fax catch-all previously matched
+  // unrelated questions (e.g. "what state is the company based in") and gave
+  // an irrelevant answer instead of the honest fallback.
+  if (
+    /(what (is|'s) (aifax|ai fax|this|it)\b|what do(es)? (aifax|you) do|how (does|do) (aifax|it|this) work|tell me about (aifax|the service)|explain aifax|overview of aifax)/.test(
+      t
+    )
+  )
+    return "whatis";
   return "fallback";
 }
 
