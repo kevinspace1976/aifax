@@ -13,7 +13,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/85 backdrop-blur-xl">
       <div className="section-shell flex items-center justify-between py-3">
-        <Link href="/" className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
+        <Link href="/" className="mr-8 text-xl font-semibold tracking-tight text-white sm:text-2xl">
           Ai<span className="text-orange-400">Fax</span>
         </Link>
 

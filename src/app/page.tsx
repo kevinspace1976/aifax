@@ -33,6 +33,44 @@ const pillars = [
   }
 ];
 
+const manualSteps = [
+  "Open and read every fax",
+  "Identify the patient and document type",
+  "Download and rename the file",
+  "Create or locate the patient chart",
+  "Upload or route the document",
+  "Notify the appropriate provider",
+  "Remember which items still require follow-up"
+];
+
+const automationSteps = [
+  {
+    step: "1",
+    title: "Receive",
+    text: "Your incoming fax arrives through your existing or new fax number."
+  },
+  {
+    step: "2",
+    title: "Read",
+    text: "AI reads the document and extracts patient identifiers, sender information, document type, and relevant clinical details."
+  },
+  {
+    step: "3",
+    title: "Summarize",
+    text: "A custom summary is created using instructions designed around your practice and specialty."
+  },
+  {
+    step: "4",
+    title: "Route",
+    text: "The fax and summary are delivered through the best workflow supported by your EHR - such as an available API, interface, secure inbox, email, or assisted charting process."
+  },
+  {
+    step: "5",
+    title: "Verify",
+    text: "Documents that cannot be confidently identified can be flagged for review instead of being silently misfiled."
+  }
+];
+
 const partners = [
   { name: "OpenAI", src: "/logos/partners/openai.svg" },
   { name: "Telnyx", src: "/logos/partners/telnyx.svg" },
@@ -143,15 +181,16 @@ export default function Home() {
       <section className="border-b border-white/10">
         <div className="section-shell grid gap-10 py-16 sm:py-20 lg:grid-cols-2 lg:items-start">
           <div>
+            <p className="kicker">Fax-to-EHR Automation for Independent Practices</p>
             <h1 className="mt-5 text-4xl font-semibold leading-tight text-white sm:text-5xl">
-              Your Team Opens Every Fax Just to Find Out Who It&apos;s For.{" "}
-              <span className="block text-sky-400">Every Fax, Read by AI -</span>
-              <span className="block text-orange-400">Filed Into Your EHR Workflow.</span>
+              Stop Manually Moving Faxes Into Your EHR.{" "}
+              <span className="block text-sky-400">Every Fax, Read by AI.</span>
+              <span className="block text-orange-400">Every Document Routed With Purpose.</span>
             </h1>
-            <p className="kicker mt-5">EHR Integration Available &middot; Built to Scale</p>
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-slate-200 sm:text-lg">
-              <strong className="text-white">A fax that never reaches the chart is a finding the doctor never sees.</strong>{" "}
-              The patient pays the clinical price - and the practice carries the compliance and liability risk.
+              AiFax identifies the patient, recognizes the document type, creates your practice-specific summary, and
+              routes the fax through the best available EHR workflow -{" "}
+              <strong className="text-white">reducing manual review, filing delays, and avoidable errors.</strong>
             </p>
             <ul className="mt-6 max-w-2xl space-y-3 text-base text-slate-300 sm:text-lg">
               <li className="flex items-start gap-3">
@@ -184,13 +223,19 @@ export default function Home() {
               </li>
             </ul>
             <div className="mt-11 flex flex-wrap gap-3">
-              <Link href="https://portal.aifax.net/index.php?rp=/store/cloud-faxing" className="btn-primary">
-                Get Your Fax Number <ArrowRight className="ml-2 h-4 w-4" />
+              <Link href="/ehr-integration" className="btn-primary">
+                See My EHR Integration Options <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+              <Link href="/contact" className="btn-accent">
+                Schedule a Workflow Review
               </Link>
               <Link href="/pricing" className="btn-secondary">
                 See Plans
               </Link>
             </div>
+            <p className="mt-5 text-sm text-slate-400">
+              Keep your current fax number &middot; Practice-specific AI summaries &middot; HIPAA-compliant architecture
+            </p>
           </div>
 
           <div className="space-y-6">
@@ -237,30 +282,68 @@ export default function Home() {
         </div>
       </section>
 
-      {youtubeEmbedUrl ? (
-        <section className="section-shell py-14 sm:py-16">
-          <h2 className="text-2xl font-semibold text-white sm:text-3xl">See AiFax in Action</h2>
-          <p className="mt-2 max-w-3xl text-slate-300">
-            Watch an inbound fax become a{" "}
-            <strong className="text-white">summarized, patient-labeled record that&apos;s ready for your EHR</strong> - in
-            seconds, not staff-hours. This is the daily grind your front desk does by hand today, done automatically, every
-            time, at any volume.
-          </p>
-          <div className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-slate-900 shadow-lg shadow-slate-950/40">
-            <div className="aspect-video w-full">
-              <iframe
-                className="h-full w-full"
-                src={youtubeEmbedUrl}
-                title="AiFax Product Demo"
-                loading="lazy"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerPolicy="strict-origin-when-cross-origin"
-                allowFullScreen
-              />
-            </div>
+      <section className="section-shell py-14 sm:py-16">
+        <h2 className="text-2xl font-semibold text-white sm:text-3xl">
+          Your Fax Inbox Should Not Be a <span className="text-orange-400">Second Medical-Record System.</span>
+        </h2>
+        <p className="mt-3 max-w-3xl text-slate-300">
+          Every incoming result, referral, medical record, authorization, and clinical document must eventually reach the
+          correct patient workflow. Without automation, your staff must:
+        </p>
+        <ul className="mt-5 grid max-w-4xl gap-2 text-slate-300 sm:grid-cols-2">
+          {manualSteps.map((step) => (
+            <li key={step} className="flex items-start gap-3">
+              <span aria-hidden="true" className="mt-0.5 font-bold text-orange-400">&#10007;</span>
+              <span>{step}</span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-5 max-w-3xl text-slate-300">
+          Every manual handoff adds time, delay, and the possibility of an overlooked result, incorrect patient match, or
+          filing error.
+        </p>
+        <p className="mt-3 max-w-3xl text-lg font-semibold text-white">
+          AiFax turns incoming faxes into organized, summarized, EHR-ready documents - before they become another task for
+          your staff.
+        </p>
+      </section>
+
+      <section className="border-y border-white/10 bg-slate-900/50">
+        <div className="section-shell py-14 sm:py-16">
+          <h2 className="text-2xl font-semibold text-white sm:text-3xl">What AiFax Automates</h2>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+            {automationSteps.map(({ step, title, text }) => (
+              <article key={title} className="card-surface interactive p-5">
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-sky-500 text-sm font-bold text-white">
+                  {step}
+                </span>
+                <h3 className="mt-3 text-lg font-semibold text-white">{title}</h3>
+                <p className="mt-2 text-sm text-slate-300">{text}</p>
+              </article>
+            ))}
           </div>
-        </section>
-      ) : null}
+        </div>
+      </section>
+
+      <section className="section-shell py-14 sm:py-16">
+        <h2 className="text-2xl font-semibold text-white sm:text-3xl">Built Around the EHR You Already Use</h2>
+        <p className="mt-3 max-w-3xl text-slate-300">
+          AiFax works with independent practices using Practice Fusion, Office Ally, and other EHR platforms.
+        </p>
+        <p className="mt-3 max-w-3xl text-slate-300">
+          Because every EHR provides different integration capabilities, we evaluate the interfaces and workflow options
+          available to your practice, then automate the most effective path for receiving, identifying, summarizing, and
+          routing faxed documents.
+        </p>
+        <p className="mt-4 max-w-3xl font-semibold text-white">
+          You do not have to replace your EHR - or abandon your existing fax number - to improve the workflow.
+        </p>
+        <div className="mt-6">
+          <Link href="/ehr-integration" className="btn-primary">
+            See My EHR Integration Options <ArrowRight className="ml-2 h-4 w-4" />
+          </Link>
+        </div>
+      </section>
 
       <section className="section-shell py-14 sm:py-16">
         <h2 className="text-2xl font-semibold text-white sm:text-3xl">Core Platform Capabilities</h2>
