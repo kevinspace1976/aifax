@@ -42,13 +42,27 @@ const FIELD =
   "placeholder:text-slate-500 focus:border-cyan-300 focus:outline-none focus:ring-1 focus:ring-cyan-300";
 const LABEL = "block text-sm font-medium text-slate-200";
 
+function makeChallenge() {
+  return { a: 2 + Math.floor(Math.random() * 8), b: 1 + Math.floor(Math.random() * 8) };
+}
+
 export function WorkflowReviewForm() {
   const [sent, setSent] = useState(false);
+  const [challenge, setChallenge] = useState(() => makeChallenge());
+  const [challengeError, setChallengeError] = useState(false);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const value = (key: string) => String(data.get(key) ?? "").trim() || "Not provided";
+
+    if (Number(String(data.get("humanCheck") ?? "").trim()) !== challenge.a + challenge.b) {
+      setChallengeError(true);
+      setSent(false);
+      setChallenge(makeChallenge());
+      return;
+    }
+    setChallengeError(false);
 
     const body = [
       `Name: ${value("name")}`,
@@ -141,6 +155,26 @@ export function WorkflowReviewForm() {
             placeholder="For example: faxed results have to be downloaded and filed into the chart by hand every day."
           />
         </div>
+      </div>
+
+      <div className="mt-5 max-w-xs">
+        <label className={LABEL} htmlFor="humanCheck">
+          Quick check: what is {challenge.a} + {challenge.b}?
+        </label>
+        <input
+          id="humanCheck"
+          name="humanCheck"
+          inputMode="numeric"
+          required
+          className={FIELD}
+          placeholder="Type the answer"
+          aria-describedby={challengeError ? "humanCheckError" : undefined}
+        />
+        {challengeError ? (
+          <p id="humanCheckError" className="mt-1 text-sm text-orange-300">
+            That answer was not right. Here is a new one - please try again.
+          </p>
+        ) : null}
       </div>
 
       <p className="mt-4 text-xs text-slate-400">
