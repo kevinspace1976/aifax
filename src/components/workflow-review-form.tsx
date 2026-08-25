@@ -4,15 +4,26 @@ import { useState } from "react";
 import { Send } from "lucide-react";
 
 const EHR_OPTIONS = [
-  "Practice Fusion",
-  "Office Ally",
-  "athenahealth",
-  "eClinicalWorks",
-  "Kareo / Tebra",
-  "NextGen",
   "Epic",
-  "Cerner / Oracle Health",
+  "eClinicalWorks",
+  "athenahealth",
+  "Oracle Health / Cerner",
+  "NextGen Healthcare",
+  "ModMed / Modernizing Medicine",
+  "Veradigm / Allscripts",
+  "Practice Fusion",
+  "Nextech Systems",
+  "Greenway Health",
+  "MEDITECH",
+  "Tebra / Kareo",
+  "Office Ally",
+  "AdvancedMD",
+  "CareCloud",
+  "Elation Health",
+  "CureMD",
+  "RXNT",
   "DrChrono",
+  "Amazing Charts",
   "Other / not sure"
 ];
 
