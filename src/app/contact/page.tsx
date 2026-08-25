@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PageHero } from "@/components/page-hero";
+import { WorkflowReviewForm } from "@/components/workflow-review-form";
 import { sharedCtas } from "@/lib/site";
 
 export default function ContactPage() {
@@ -21,7 +22,8 @@ export default function ContactPage() {
       />
 
       <section className="section-shell py-14 sm:py-16">
-        <div className="flex flex-wrap gap-3">
+        <WorkflowReviewForm />
+        <div className="mt-8 flex flex-wrap gap-3">
           <Link href={sharedCtas.primary.href} className="btn-primary">
             {sharedCtas.primary.label}
           </Link>
