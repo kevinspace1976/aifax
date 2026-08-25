@@ -187,11 +187,6 @@ export default function Home() {
               <span className="block text-sky-400">Every Fax, Read by AI.</span>
               <span className="block text-orange-400">Every Document Routed With Purpose.</span>
             </h1>
-            <p className="mt-5 max-w-2xl text-base leading-relaxed text-slate-200 sm:text-lg">
-              AiFax identifies the patient, recognizes the document type, creates your practice-specific summary, and
-              routes the fax through the best available EHR workflow -{" "}
-              <strong className="text-white">reducing manual review, filing delays, and avoidable errors.</strong>
-            </p>
             <ul className="mt-6 max-w-2xl space-y-3 text-base text-slate-300 sm:text-lg">
               <li className="flex items-start gap-3">
                 <span aria-hidden="true" className="mt-0.5 font-bold text-orange-400">&#10007;</span>
@@ -239,19 +234,34 @@ export default function Home() {
           </div>
 
           <div className="space-y-6">
-            <aside className="card-surface interactive p-6 sm:p-8" aria-label="Trust points">
-              <h2 className="text-xl font-semibold text-white sm:text-2xl">Why practices switch to AiFax</h2>
-              <ul className="mt-5 space-y-4">
-                {trustPoints.map((point) => (
-                  <li key={point} className="flex items-start gap-3 text-sm text-slate-200 sm:text-base">
-                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-300" />
-                    <span>{point}</span>
-                  </li>
-                ))}
-              </ul>
-            </aside>
             {youtubeEmbedUrl ? <VideoCard embedUrl={youtubeEmbedUrl} /> : null}
           </div>
+        </div>
+
+        <div className="section-shell pb-16 sm:pb-20">
+          <h2 className="text-2xl font-semibold text-white sm:text-3xl">
+            Your Fax Inbox Should Not Be a <span className="text-orange-400">Second Medical-Record System.</span>
+          </h2>
+          <p className="mt-3 text-slate-300">
+            Every incoming result, referral, medical record, authorization, and clinical document must eventually reach
+            the correct patient workflow. Without automation, your staff must:
+          </p>
+          <ul className="mt-5 grid gap-2 text-slate-300 sm:grid-cols-2 lg:grid-cols-4">
+            {manualSteps.map((step) => (
+              <li key={step} className="flex items-start gap-3">
+                <span aria-hidden="true" className="mt-0.5 font-bold text-orange-400">&#10007;</span>
+                <span>{step}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-5 text-slate-300">
+            Every manual handoff adds time, delay, and the possibility of an overlooked result, incorrect patient match,
+            or filing error.
+          </p>
+          <p className="mt-3 text-lg font-semibold text-white">
+            AiFax turns incoming faxes into organized, summarized, EHR-ready documents - before they become another task
+            for your staff.
+          </p>
         </div>
       </section>
 
@@ -283,29 +293,22 @@ export default function Home() {
       </section>
 
       <section className="section-shell py-14 sm:py-16">
-        <h2 className="text-2xl font-semibold text-white sm:text-3xl">
-          Your Fax Inbox Should Not Be a <span className="text-orange-400">Second Medical-Record System.</span>
-        </h2>
-        <p className="mt-3 max-w-3xl text-slate-300">
-          Every incoming result, referral, medical record, authorization, and clinical document must eventually reach the
-          correct patient workflow. Without automation, your staff must:
+        <p className="max-w-4xl text-lg leading-relaxed text-slate-200 sm:text-xl">
+          AiFax identifies the patient, recognizes the document type, creates your practice-specific summary, and routes
+          the fax through the best available EHR workflow -{" "}
+          <strong className="text-white">reducing manual review, filing delays, and avoidable errors.</strong>
         </p>
-        <ul className="mt-5 grid max-w-4xl gap-2 text-slate-300 sm:grid-cols-2">
-          {manualSteps.map((step) => (
-            <li key={step} className="flex items-start gap-3">
-              <span aria-hidden="true" className="mt-0.5 font-bold text-orange-400">&#10007;</span>
-              <span>{step}</span>
-            </li>
-          ))}
-        </ul>
-        <p className="mt-5 max-w-3xl text-slate-300">
-          Every manual handoff adds time, delay, and the possibility of an overlooked result, incorrect patient match, or
-          filing error.
-        </p>
-        <p className="mt-3 max-w-3xl text-lg font-semibold text-white">
-          AiFax turns incoming faxes into organized, summarized, EHR-ready documents - before they become another task for
-          your staff.
-        </p>
+        <aside className="card-surface interactive mt-8 p-6 sm:p-8" aria-label="Trust points">
+          <h2 className="text-xl font-semibold text-white sm:text-2xl">Why practices switch to AiFax</h2>
+          <ul className="mt-5 grid gap-4 md:grid-cols-2">
+            {trustPoints.map((point) => (
+              <li key={point} className="flex items-start gap-3 text-sm text-slate-200 sm:text-base">
+                <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-300" />
+                <span>{point}</span>
+              </li>
+            ))}
+          </ul>
+        </aside>
       </section>
 
       <section className="border-y border-white/10 bg-slate-900/50">
