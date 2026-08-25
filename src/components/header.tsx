@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, Phone, X } from "lucide-react";
 import { useState } from "react";
-import { brand, headerCta, loginCta, navItems } from "@/lib/site";
+import { brand, headerCtas, loginCta, navItems } from "@/lib/site";
 
 export function Header() {
   const pathname = usePathname();
@@ -49,9 +49,15 @@ export function Header() {
             <Phone className="h-4 w-4 text-orange-400" aria-hidden="true" />
             954-872-1918
           </a>
-          <a href={headerCta.href} className="btn-primary whitespace-nowrap">
-            {headerCta.label}
-          </a>
+          {headerCtas.map((cta, index) => (
+            <a
+              key={cta.href}
+              href={cta.href}
+              className={`${index === 0 ? "btn-primary" : "btn-secondary"} whitespace-nowrap`}
+            >
+              {cta.label}
+            </a>
+          ))}
           <a href={loginCta.href} className="btn-secondary whitespace-nowrap">
             {loginCta.label}
           </a>
@@ -79,9 +85,16 @@ export function Header() {
               <Phone className="h-4 w-4 text-orange-400" aria-hidden="true" />
               Call 954-872-1918
             </a>
-            <a href={headerCta.href} className="btn-primary mt-2" onClick={() => setOpen(false)}>
-              {headerCta.label}
-            </a>
+            {headerCtas.map((cta, index) => (
+              <a
+                key={cta.href}
+                href={cta.href}
+                className={`${index === 0 ? "btn-primary" : "btn-secondary"} mt-2`}
+                onClick={() => setOpen(false)}
+              >
+                {cta.label}
+              </a>
+            ))}
             <a href={loginCta.href} className="btn-secondary mt-2" onClick={() => setOpen(false)}>
               {loginCta.label}
             </a>
