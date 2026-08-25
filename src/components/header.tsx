@@ -53,7 +53,7 @@ export function Header() {
             <a
               key={cta.href}
               href={cta.href}
-              className={`${index === 0 ? "btn-primary" : "btn-secondary"} whitespace-nowrap`}
+              className={`${index === 0 ? "btn-primary" : "btn-accent"} whitespace-nowrap`}
             >
               {cta.label}
             </a>
@@ -89,7 +89,7 @@ export function Header() {
               <a
                 key={cta.href}
                 href={cta.href}
-                className={`${index === 0 ? "btn-primary" : "btn-secondary"} mt-2`}
+                className={`${index === 0 ? "btn-primary" : "btn-accent"} mt-2`}
                 onClick={() => setOpen(false)}
               >
                 {cta.label}
