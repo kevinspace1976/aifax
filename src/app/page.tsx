@@ -179,10 +179,10 @@ export default function Home() {
   return (
     <main>
       <section className="border-b border-white/10">
-        <div className="section-shell grid gap-10 py-16 sm:py-20 lg:grid-cols-2 lg:items-start">
+        <div className="section-shell grid gap-8 pt-8 pb-4 sm:pt-10 sm:pb-6 lg:grid-cols-2 lg:items-center">
           <div>
             <p className="kicker">Fax-to-EHR Automation for Independent Practices</p>
-            <h1 className="mt-5 text-4xl font-semibold leading-tight text-white sm:text-5xl">
+            <h1 className="mt-4 text-3xl font-semibold leading-tight text-white sm:text-4xl lg:text-5xl">
               Stop Manually Moving Faxes Into Your EHR.{" "}
               <span className="block text-sky-400">Every Fax, Read by AI.</span>
               <span className="block text-orange-400">Every Document Routed With Purpose.</span>
@@ -194,15 +194,15 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="section-shell pb-16 sm:pb-20">
+        <div className="section-shell pb-10 sm:pb-12">
           <h2 className="text-2xl font-semibold text-white sm:text-3xl">
             Your Fax Inbox Should Not Be a <span className="text-orange-400">Second Medical-Record System.</span>
           </h2>
-          <p className="mt-3 text-slate-300">
+          <p className="mt-2 text-slate-300">
             Every incoming result, referral, medical record, authorization, and clinical document must eventually reach
             the correct patient workflow. Without automation, your staff must:
           </p>
-          <ul className="mt-5 grid gap-2 text-slate-300 sm:grid-cols-2 lg:grid-cols-4">
+          <ul className="mt-3 grid gap-1.5 text-slate-300 sm:grid-cols-2 lg:grid-cols-4">
             {manualSteps.map((step) => (
               <li key={step} className="flex items-start gap-3">
                 <span aria-hidden="true" className="mt-0.5 font-bold text-orange-400">&#10007;</span>
@@ -210,7 +210,7 @@ export default function Home() {
               </li>
             ))}
           </ul>
-          <p className="mt-5 text-slate-300">
+          <p className="mt-4 text-slate-300">
             Every manual handoff adds time, delay, and the possibility of an overlooked result, incorrect patient match,
             or filing error.
           </p>
@@ -218,7 +218,7 @@ export default function Home() {
             AiFax turns incoming faxes into organized, summarized, EHR-ready documents - before they become another task
             for your staff.
           </p>
-          <div className="mt-11 flex flex-wrap gap-3">
+          <div className="mt-6 flex flex-wrap gap-3">
             <Link href="/ehr-integration" className="btn-primary">
               See My EHR Integration Options <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
@@ -229,7 +229,7 @@ export default function Home() {
               See Plans
             </Link>
           </div>
-          <p className="mt-5 text-sm text-slate-400">
+          <p className="mt-4 text-sm text-slate-400">
             Keep your current fax number &middot; Practice-specific AI summaries &middot; HIPAA-compliant architecture
           </p>
         </div>
