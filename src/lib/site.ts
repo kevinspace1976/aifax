@@ -33,7 +33,13 @@ export const loginCta = {
   label: "Login"
 };
 
-export const headerCta = {
-  href: "https://portal.aifax.net/index.php?rp=/store/cloud-faxing",
-  label: "Get Your Fax Number"
-};
+export const headerCtas = [
+  {
+    href: "https://portal.aifax.net/index.php?rp=/store/cloud-faxing&path=new",
+    label: "Get New Number"
+  },
+  {
+    href: "https://portal.aifax.net/index.php?rp=/store/cloud-faxing&path=port",
+    label: "Port My Number"
+  }
+];
