@@ -187,50 +187,6 @@ export default function Home() {
               <span className="block text-sky-400">Every Fax, Read by AI.</span>
               <span className="block text-orange-400">Every Document Routed With Purpose.</span>
             </h1>
-            <ul className="mt-6 max-w-2xl space-y-3 text-base text-slate-300 sm:text-lg">
-              <li className="flex items-start gap-3">
-                <span aria-hidden="true" className="mt-0.5 font-bold text-orange-400">&#10007;</span>
-                <span>Hours of payroll burned every day opening, reading, and filing faxes</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span aria-hidden="true" className="mt-0.5 font-bold text-orange-400">&#10007;</span>
-                <span>Results and referrals slipping through the cracks - quality gaps your quality scores remember</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span aria-hidden="true" className="mt-0.5 font-bold text-emerald-300">&#10003;</span>
-                <span>
-                  <strong className="text-white">AiFax reads every inbound fax the moment it lands</strong> - summarized,
-                  patient name and DOB labeled
-                </span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span aria-hidden="true" className="mt-0.5 font-bold text-emerald-300">&#10003;</span>
-                <span>
-                  Routed into the workflow you already run - <strong className="text-white">EHR integration available</strong>
-                </span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span aria-hidden="true" className="mt-0.5 font-bold text-emerald-300">&#10003;</span>
-                <span>
-                  Solo practice or multi-site group - same platform, same speed,{" "}
-                  <strong className="text-white">no new headcount</strong>
-                </span>
-              </li>
-            </ul>
-            <div className="mt-11 flex flex-wrap gap-3">
-              <Link href="/ehr-integration" className="btn-primary">
-                See My EHR Integration Options <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-              <Link href="/contact" className="btn-accent">
-                Schedule a Workflow Review
-              </Link>
-              <Link href="/pricing" className="btn-secondary">
-                See Plans
-              </Link>
-            </div>
-            <p className="mt-5 text-sm text-slate-400">
-              Keep your current fax number &middot; Practice-specific AI summaries &middot; HIPAA-compliant architecture
-            </p>
           </div>
 
           <div className="space-y-6">
@@ -261,6 +217,20 @@ export default function Home() {
           <p className="mt-3 text-lg font-semibold text-white">
             AiFax turns incoming faxes into organized, summarized, EHR-ready documents - before they become another task
             for your staff.
+          </p>
+          <div className="mt-11 flex flex-wrap gap-3">
+            <Link href="/ehr-integration" className="btn-primary">
+              See My EHR Integration Options <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+            <Link href="/contact" className="btn-accent">
+              Schedule a Workflow Review
+            </Link>
+            <Link href="/pricing" className="btn-secondary">
+              See Plans
+            </Link>
+          </div>
+          <p className="mt-5 text-sm text-slate-400">
+            Keep your current fax number &middot; Practice-specific AI summaries &middot; HIPAA-compliant architecture
           </p>
         </div>
       </section>
@@ -298,6 +268,39 @@ export default function Home() {
           the fax through the best available EHR workflow -{" "}
           <strong className="text-white">reducing manual review, filing delays, and avoidable errors.</strong>
         </p>
+        <div className="card-surface mt-8 p-6 sm:p-8">
+          <ul className="grid gap-3 md:grid-cols-2 text-base text-slate-300 sm:text-lg">
+            <li className="flex items-start gap-3">
+              <span aria-hidden="true" className="mt-0.5 font-bold text-orange-400">&#10007;</span>
+              <span>Hours of payroll burned every day opening, reading, and filing faxes</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span aria-hidden="true" className="mt-0.5 font-bold text-orange-400">&#10007;</span>
+              <span>Results and referrals slipping through the cracks - quality gaps your quality scores remember</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span aria-hidden="true" className="mt-0.5 font-bold text-emerald-300">&#10003;</span>
+              <span>
+                <strong className="text-white">AiFax reads every inbound fax the moment it lands</strong> - summarized,
+                patient name and DOB labeled
+              </span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span aria-hidden="true" className="mt-0.5 font-bold text-emerald-300">&#10003;</span>
+              <span>
+                Routed into the workflow you already run - <strong className="text-white">EHR integration available</strong>
+              </span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span aria-hidden="true" className="mt-0.5 font-bold text-emerald-300">&#10003;</span>
+              <span>
+                Solo practice or multi-site group - same platform, same speed,{" "}
+                <strong className="text-white">no new headcount</strong>
+              </span>
+            </li>
+          </ul>
+        </div>
+
         <aside className="card-surface interactive mt-8 p-6 sm:p-8" aria-label="Trust points">
           <h2 className="text-xl font-semibold text-white sm:text-2xl">Why practices switch to AiFax</h2>
           <ul className="mt-5 grid gap-4 md:grid-cols-2">
