@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, ChevronDown, Cpu, FileText, ShieldCheck, Star, Workflow } from "lucide-react";
 import { VideoCard } from "@/components/video-card";
+import { headerCtas } from "@/lib/site";
 
 const trustPoints = [
   "EHR integration available - AI summaries delivered into email, SMS, EHR/EMR, or CRM, scoped to your workflow",
@@ -182,11 +183,23 @@ export default function Home() {
         <div className="section-shell grid gap-8 pt-8 pb-4 sm:pt-10 sm:pb-6 lg:grid-cols-2 lg:items-center">
           <div>
             <p className="kicker">Fax-to-EHR Automation for Independent Practices</p>
-            <h1 className="mt-4 text-3xl font-semibold leading-tight text-white sm:text-4xl lg:text-5xl">
+            <h1 className="mt-3 text-2xl font-semibold leading-tight text-white sm:mt-4 sm:text-4xl lg:text-5xl">
               Stop Manually Moving Faxes Into Your EHR.{" "}
               <span className="block text-sky-400">Every Fax, Read by AI.</span>
               <span className="block text-orange-400">Every Document Routed With Purpose.</span>
             </h1>
+            {/* Signup is the point of this page - on mobile the header's CTAs
+                are hidden inside the hamburger menu, so a visitor landing
+                here needs them reachable without opening it or scrolling.
+                Desktop already shows these in the header, so hidden there. */}
+            <div className="mt-4 flex gap-2 md:hidden">
+              <a href={headerCtas[0].href} className="btn-primary flex-1 whitespace-nowrap px-2 py-2.5 text-[13px]">
+                {headerCtas[0].label}
+              </a>
+              <a href={headerCtas[1].href} className="btn-accent flex-1 whitespace-nowrap px-2 py-2.5 text-[13px]">
+                {headerCtas[1].label}
+              </a>
+            </div>
           </div>
 
           <div className="space-y-6">
