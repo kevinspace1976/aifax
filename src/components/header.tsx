@@ -17,14 +17,22 @@ export function Header() {
           Ai<span className="text-orange-400">Fax</span>
         </Link>
 
-        <button
-          aria-label="Toggle navigation menu"
-          aria-expanded={open}
-          className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-white/20 text-slate-200 md:hidden"
-          onClick={() => setOpen((v) => !v)}
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <a
+            href={loginCta.href}
+            className="inline-flex min-h-11 items-center rounded-lg px-3 text-sm font-semibold text-slate-100 transition hover:text-orange-400"
+          >
+            {loginCta.label}
+          </a>
+          <button
+            aria-label="Toggle navigation menu"
+            aria-expanded={open}
+            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-white/20 text-slate-200"
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
 
         <nav className="hidden items-center gap-4 md:flex" aria-label="Primary">
           {navItems.map((item) => {
@@ -95,9 +103,6 @@ export function Header() {
                 {cta.label}
               </a>
             ))}
-            <a href={loginCta.href} className="btn-secondary mt-2" onClick={() => setOpen(false)}>
-              {loginCta.label}
-            </a>
           </nav>
         </div>
       ) : null}
