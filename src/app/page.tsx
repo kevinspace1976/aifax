@@ -180,8 +180,8 @@ export default function Home() {
   return (
     <main>
       <section className="border-b border-white/10">
-        <div className="section-shell grid gap-8 pt-8 pb-4 sm:pt-10 sm:pb-6 lg:grid-cols-2 lg:items-center">
-          <div>
+        <div className="section-shell grid min-w-0 gap-8 pt-8 pb-4 sm:pt-10 sm:pb-6 lg:grid-cols-2 lg:items-center">
+          <div className="min-w-0">
             <p className="kicker">Fax-to-EHR Automation for Independent Practices</p>
             <h1 className="mt-3 text-2xl font-semibold leading-tight text-white sm:mt-4 sm:text-4xl lg:text-5xl">
               Stop Manually Moving Faxes Into Your EHR.{" "}
@@ -192,11 +192,11 @@ export default function Home() {
                 are hidden inside the hamburger menu, so a visitor landing
                 here needs them reachable without opening it or scrolling.
                 Desktop already shows these in the header, so hidden there. */}
-            <div className="mt-4 flex gap-2 md:hidden">
-              <a href={headerCtas[0].href} className="btn-primary flex-1 whitespace-nowrap px-2 py-2.5 text-[13px]">
+            <div className="mt-4 flex min-w-0 gap-2 md:hidden">
+              <a href={headerCtas[0].href} className="btn-primary min-w-0 flex-1 whitespace-nowrap px-2 py-2.5 text-[13px]">
                 {headerCtas[0].label}
               </a>
-              <a href={headerCtas[1].href} className="btn-accent flex-1 whitespace-nowrap px-2 py-2.5 text-[13px]">
+              <a href={headerCtas[1].href} className="btn-accent min-w-0 flex-1 whitespace-nowrap px-2 py-2.5 text-[13px]">
                 {headerCtas[1].label}
               </a>
             </div>
