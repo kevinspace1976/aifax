@@ -1,17 +1,10 @@
 import Link from "next/link";
-import { PageHero } from "@/components/page-hero";
 import { WorkflowReviewForm } from "@/components/workflow-review-form";
 import { sharedCtas } from "@/lib/site";
 
 export default function ContactPage() {
   return (
     <main>
-      <PageHero
-        title="Contact"
-        description="Tell us your goals and we’ll map a practical plan for AI fax automation, integration, and measurable ROI."
-        actions={<></>}
-      />
-
       <section className="section-shell py-14 sm:py-16">
         <WorkflowReviewForm />
         <div className="mt-8 flex flex-wrap gap-3">
