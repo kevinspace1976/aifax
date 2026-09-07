@@ -69,6 +69,13 @@ export function WorkflowReviewForm() {
     setSubmitError(null);
     setSubmitting(true);
 
+    // Shared with the server so the two Lead events (this one, fired from
+    // the browser, and the Conversions API one /api/contact tries server
+    // side) carry the same event ID. Meta de-duplicates on that id, so if
+    // the server-side send is ever working too, this won't double count.
+    const eventId =
+      typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID() : String(Date.now());
+
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
@@ -86,7 +93,8 @@ export function WorkflowReviewForm() {
           notes: value("notes"),
           // honeypot - real visitors never see this field, see the hidden
           // input below. A bot filling every field trips it.
-          companyWebsite: value("companyWebsite")
+          companyWebsite: value("companyWebsite"),
+          eventId
         })
       });
       if (!res.ok) {
@@ -95,6 +103,23 @@ export function WorkflowReviewForm() {
       }
       setSent(true);
       form.reset();
+
+      // Browser-side fallback for the "Lead" conversion signal. This is
+      // the one that actually reaches Meta today: the server-side
+      // Conversions API copy in /api/contact needs META_CAPI_ACCESS_TOKEN,
+      // which isn't set up yet, so without this, Meta would never learn
+      // that a visit turned into a lead at all, only that the page was
+      // viewed. Guarded because fbq only exists once NEXT_PUBLIC_META_PIXEL_ID
+      // is configured and the script has loaded (never present in dev, and
+      // absent entirely if an ad blocker stripped it).
+      try {
+        const fbq = (window as unknown as { fbq?: (...args: unknown[]) => void }).fbq;
+        if (typeof fbq === "function") {
+          fbq("track", "Lead", {}, { eventID: eventId });
+        }
+      } catch {
+        // never let pixel reporting break the success state the visitor sees
+      }
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : "Something went wrong sending your request.");
     } finally {

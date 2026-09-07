@@ -23,6 +23,10 @@ type ContactBody = {
   // honeypot: real visitors never see or fill this field (hidden via CSS).
   // A filled-in value means it was a bot filling every input it found.
   companyWebsite?: string;
+  // Generated client-side and also used for the browser-side fbq('track',
+  // 'Lead') call, so if this server-side Conversions API send is ever
+  // working too, Meta de-duplicates the two instead of double-counting.
+  eventId?: string;
 };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -111,7 +115,10 @@ export async function POST(req: NextRequest) {
     mailingAddress: mailingAddress()
   };
 
-  const eventId = randomUUID();
+  // Prefer the client's id so it dedupes against the browser-side fbq
+  // call in workflow-review-form.tsx; fall back to a fresh one if it's
+  // missing (e.g. a direct API call with no client involved).
+  const eventId = body.eventId || randomUUID();
 
   const [adminSend, leadSend] = await Promise.all([
     sendEmail({
