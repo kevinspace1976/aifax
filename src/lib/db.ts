@@ -117,6 +117,12 @@ async function runMigrations() {
   `;
   await db`CREATE INDEX IF NOT EXISTS leads_created_at_idx ON leads (created_at)`;
 
+  // leads pre-dates the CRM columns above, CREATE TABLE IF NOT EXISTS is a
+  // no-op against an already-existing table, so these need an explicit
+  // ALTER to actually land on rows created before this migration.
+  await db`ALTER TABLE leads ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'new'`;
+  await db`ALTER TABLE leads ADD COLUMN IF NOT EXISTS nurture_paused BOOLEAN NOT NULL DEFAULT FALSE`;
+
   await db`
     CREATE TABLE IF NOT EXISTS email_events (
       id BIGSERIAL PRIMARY KEY,
