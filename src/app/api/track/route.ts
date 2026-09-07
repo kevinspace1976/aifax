@@ -1,6 +1,7 @@
 import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { ensureSchema, sql } from "@/lib/db";
+import { ADMIN_SESSION_COOKIE, isValidAdminSession } from "@/lib/admin-auth";
 import {
   ATTRIBUTION_COOKIE,
   SESSION_COOKIE,
@@ -20,6 +21,14 @@ export const runtime = "nodejs";
  * carries the ad that actually drove it instead of "direct".
  */
 export async function POST(req: NextRequest) {
+  // A browser signed into /admin is the site owner, not a visitor. Skip
+  // logging entirely rather than polluting the numbers with the owner's
+  // own browsing (this also covers /admin itself, belt-and-suspenders
+  // alongside the client-side skip in <VisitTracker>).
+  if (isValidAdminSession(req.cookies.get(ADMIN_SESSION_COOKIE)?.value)) {
+    return NextResponse.json({ ok: true, skipped: "admin" });
+  }
+
   let body: { url?: string } = {};
   try {
     body = await req.json();
