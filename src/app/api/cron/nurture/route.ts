@@ -44,6 +44,7 @@ export async function GET(req: NextRequest) {
     SELECT id, name, email, practice_name, notes, sequence_step, created_at
     FROM leads
     WHERE unsubscribed = FALSE
+      AND nurture_paused = FALSE
       AND next_email_due_at IS NOT NULL
       AND next_email_due_at <= now()
       AND sequence_step < ${NURTURE_SEQUENCE.length}
