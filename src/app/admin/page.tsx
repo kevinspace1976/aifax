@@ -21,6 +21,13 @@ type Lead = {
   created_at: string;
 };
 type EmailStatsRow = { lead_id: number; opens: number; clicks: number; last_opened_at: string | null };
+type FollowUpRow = {
+  lead_id: number;
+  name: string;
+  follow_up_at: string;
+  body: string | null;
+  ticket_number: string | null;
+};
 
 function StatCard({ label, value, hint }: { label: string; value: string | number; hint?: string }) {
   return (
@@ -49,7 +56,7 @@ export default async function AdminPage() {
   await ensureSchema();
   const db = sql();
 
-  const [visits30, visits7, sources30, fb30, leads30, leadsRecent, emailStats] = await Promise.all([
+  const [visits30, visits7, sources30, fb30, leads30, leadsRecent, emailStats, followUps] = await Promise.all([
     rows<VisitTotals>(db`SELECT COUNT(*)::int AS total FROM visits WHERE created_at > now() - interval '30 days'`),
     rows<VisitTotals>(db`SELECT COUNT(*)::int AS total FROM visits WHERE created_at > now() - interval '7 days'`),
     rows<SourceRow>(db`
@@ -79,6 +86,19 @@ export default async function AdminPage() {
              MAX(occurred_at) FILTER (WHERE event_type = 'email.opened') AS last_opened_at
       FROM email_events
       GROUP BY lead_id
+    `),
+    rows<FollowUpRow>(db`
+      SELECT l.id AS lead_id, l.name, la.follow_up_at, la.body, la.ticket_number
+      FROM leads l
+      JOIN LATERAL (
+        SELECT follow_up_at, body, ticket_number
+        FROM lead_activities
+        WHERE lead_id = l.id
+        ORDER BY occurred_at DESC
+        LIMIT 1
+      ) la ON true
+      WHERE la.follow_up_at IS NOT NULL AND la.follow_up_at <= now()
+      ORDER BY la.follow_up_at ASC
     `)
   ]);
 
@@ -116,6 +136,28 @@ export default async function AdminPage() {
           hint={`${conversionRate}% of 30-day visits`}
         />
       </div>
+
+      {followUps.length > 0 ? (
+        <section className="card-surface mt-8 border border-orange-400/30 p-6">
+          <h2 className="text-lg font-semibold text-white">Needs follow-up ({followUps.length})</h2>
+          <div className="mt-3 space-y-2">
+            {followUps.map((f) => (
+              <Link
+                key={f.lead_id}
+                href={`/admin/leads/${f.lead_id}`}
+                className="block rounded-lg border border-white/10 p-3 text-sm hover:border-orange-400/40"
+              >
+                <span className="font-medium text-white">{f.name}</span>
+                <span className="ml-2 text-orange-300">
+                  due {new Date(f.follow_up_at).toLocaleDateString()}
+                </span>
+                {f.ticket_number ? <span className="ml-2 text-slate-400">Ticket: {f.ticket_number}</span> : null}
+                {f.body ? <p className="mt-1 text-slate-300">{f.body}</p> : null}
+              </Link>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       <section className="card-surface mt-8 p-6">
         <h2 className="text-lg font-semibold text-white">Traffic sources, last 30 days</h2>
@@ -182,7 +224,11 @@ export default async function AdminPage() {
                       <td className="py-2 pr-4 whitespace-nowrap text-slate-300">
                         {new Date(lead.created_at).toLocaleDateString()}
                       </td>
-                      <td className="py-2 pr-4 text-slate-200">{lead.name}</td>
+                      <td className="py-2 pr-4 text-slate-200">
+                        <Link href={`/admin/leads/${lead.id}`} className="text-cyan-300 underline-offset-4 hover:underline">
+                          {lead.name}
+                        </Link>
+                      </td>
                       <td className="py-2 pr-4 text-slate-200">
                         <a href={`mailto:${lead.email}`} className="text-cyan-300 underline-offset-4 hover:underline">
                           {lead.email}

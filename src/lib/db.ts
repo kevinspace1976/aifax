@@ -105,6 +105,8 @@ async function runMigrations() {
       next_email_due_at TIMESTAMPTZ,
       last_email_sent_at TIMESTAMPTZ,
       unsubscribed BOOLEAN NOT NULL DEFAULT FALSE,
+      status TEXT NOT NULL DEFAULT 'new',
+      nurture_paused BOOLEAN NOT NULL DEFAULT FALSE,
       created_at TIMESTAMPTZ NOT NULL DEFAULT now()
     )
   `;
@@ -126,4 +128,25 @@ async function runMigrations() {
     )
   `;
   await db`CREATE INDEX IF NOT EXISTS email_events_lead_idx ON email_events (lead_id)`;
+
+  // The CRM timeline: manually logged notes/calls/vendor contacts, status
+  // changes, and (once the Gmail sync is wired up) every inbound/outbound
+  // email tied to a lead, so nothing about where a client stands has to be
+  // remembered, it is just the log for that lead_id in order.
+  await db`
+    CREATE TABLE IF NOT EXISTS lead_activities (
+      id BIGSERIAL PRIMARY KEY,
+      lead_id BIGINT NOT NULL REFERENCES leads (id) ON DELETE CASCADE,
+      type TEXT NOT NULL,
+      subject TEXT,
+      body TEXT,
+      ticket_number TEXT,
+      follow_up_at TIMESTAMPTZ,
+      gmail_message_id TEXT UNIQUE,
+      occurred_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    )
+  `;
+  await db`CREATE INDEX IF NOT EXISTS lead_activities_lead_idx ON lead_activities (lead_id, occurred_at)`;
+  await db`CREATE INDEX IF NOT EXISTS lead_activities_follow_up_idx ON lead_activities (follow_up_at)`;
 }
