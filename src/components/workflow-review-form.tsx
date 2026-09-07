@@ -46,12 +46,21 @@ function makeChallenge() {
   return { a: 2 + Math.floor(Math.random() * 8), b: 1 + Math.floor(Math.random() * 8) };
 }
 
+/** Digits only, auto-hyphenated as XXX-XXX-XXXX (US 10-digit number). */
+function formatPhone(raw: string) {
+  const digits = raw.replace(/\D/g, "").slice(0, 10);
+  if (digits.length <= 3) return digits;
+  if (digits.length <= 6) return `${digits.slice(0, 3)}-${digits.slice(3)}`;
+  return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`;
+}
+
 export function WorkflowReviewForm() {
   const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [challenge, setChallenge] = useState(() => makeChallenge());
   const [challengeError, setChallengeError] = useState(false);
+  const [phone, setPhone] = useState("");
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -103,6 +112,7 @@ export function WorkflowReviewForm() {
       }
       setSent(true);
       form.reset();
+      setPhone("");
 
       // Browser-side fallback for the "Lead" conversion signal. This is
       // the one that actually reaches Meta today: the server-side
@@ -150,7 +160,17 @@ export function WorkflowReviewForm() {
         </div>
         <div>
           <label className={LABEL} htmlFor="phone">Phone</label>
-          <input id="phone" name="phone" className={FIELD} placeholder="Best number to reach you" />
+          <input
+            id="phone"
+            name="phone"
+            type="tel"
+            inputMode="numeric"
+            maxLength={12}
+            value={phone}
+            onChange={(e) => setPhone(formatPhone(e.target.value))}
+            className={FIELD}
+            placeholder="954-205-3158"
+          />
         </div>
         <div>
           <label className={LABEL} htmlFor="ehr">EHR platform</label>
