@@ -8,6 +8,7 @@ import {
   clientIp,
   hasAttributionSignal,
   hashIp,
+  isExcludedIp,
   parseAttributionFromUrl
 } from "@/lib/attribution";
 
@@ -27,6 +28,13 @@ export async function POST(req: NextRequest) {
   // alongside the client-side skip in <VisitTracker>).
   if (isValidAdminSession(req.cookies.get(ADMIN_SESSION_COOKIE)?.value)) {
     return NextResponse.json({ ok: true, skipped: "admin" });
+  }
+
+  // Configured owner IPs (EXCLUDED_VISITOR_IPS) never count either, so
+  // browsing the public site logged out still doesn't inflate the numbers.
+  const requestIp = clientIp(req.headers);
+  if (isExcludedIp(requestIp)) {
+    return NextResponse.json({ ok: true, skipped: "excluded-ip" });
   }
 
   let body: { url?: string } = {};
@@ -51,7 +59,6 @@ export async function POST(req: NextRequest) {
   try {
     await ensureSchema();
     const db = sql();
-    const ip = clientIp(req.headers);
     await db`
       INSERT INTO visits (
         session_id, path, referrer, utm_source, utm_medium, utm_campaign,
@@ -60,7 +67,7 @@ export async function POST(req: NextRequest) {
         ${sessionId}, ${attribution.sourcePath}, ${attribution.referrer},
         ${attribution.utmSource}, ${attribution.utmMedium}, ${attribution.utmCampaign},
         ${attribution.utmContent}, ${attribution.utmTerm}, ${attribution.fbclid}, ${attribution.gclid},
-        ${req.headers.get("user-agent")}, ${hashIp(ip)}
+        ${req.headers.get("user-agent")}, ${hashIp(requestIp)}
       )
     `;
   } catch (err) {
