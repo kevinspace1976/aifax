@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { ChatWidget } from "@/components/chat-widget";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
+import { MarketingPixels } from "@/components/marketing-pixels";
+import { VisitTracker } from "@/components/visit-tracker";
 import { brand } from "@/lib/site";
 import "./globals.css";
 
@@ -19,10 +21,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <VisitTracker />
         <Header />
         {children}
         <Footer />
         <ChatWidget />
+        <MarketingPixels />
       </body>
     </html>
   );

@@ -48,13 +48,16 @@ function makeChallenge() {
 
 export function WorkflowReviewForm() {
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [challenge, setChallenge] = useState(() => makeChallenge());
   const [challengeError, setChallengeError] = useState(false);
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const value = (key: string) => String(data.get(key) ?? "").trim() || "Not provided";
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    const value = (key: string) => String(data.get(key) ?? "").trim();
 
     if (Number(String(data.get("humanCheck") ?? "").trim()) !== challenge.a + challenge.b) {
       setChallengeError(true);
@@ -63,26 +66,40 @@ export function WorkflowReviewForm() {
       return;
     }
     setChallengeError(false);
+    setSubmitError(null);
+    setSubmitting(true);
 
-    const body = [
-      `Name: ${value("name")}`,
-      `Practice: ${value("practice")}`,
-      `Email: ${value("email")}`,
-      `Phone: ${value("phone")}`,
-      `EHR platform: ${value("ehr")}`,
-      `Current fax provider: ${value("faxProvider")}`,
-      `Current fax number: ${value("faxNumber")}`,
-      `Monthly fax volume: ${value("volume")}`,
-      `Best time to call: ${value("callWindow")}`,
-      "",
-      "What they want to solve:",
-      value("notes")
-    ].join("\n");
-
-    const subject = `Workflow review request - ${value("practice")}`;
-    window.location.href =
-      `mailto:info@aifax.net?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    setSent(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: value("name"),
+          practice: value("practice"),
+          email: value("email"),
+          phone: value("phone"),
+          ehr: value("ehr"),
+          faxProvider: value("faxProvider"),
+          faxNumber: value("faxNumber"),
+          volume: value("volume"),
+          callWindow: value("callWindow"),
+          notes: value("notes"),
+          // honeypot - real visitors never see this field, see the hidden
+          // input below. A bot filling every field trips it.
+          companyWebsite: value("companyWebsite")
+        })
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        throw new Error(body?.error || "Something went wrong sending your request.");
+      }
+      setSent(true);
+      form.reset();
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : "Something went wrong sending your request.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -177,13 +194,21 @@ export function WorkflowReviewForm() {
         ) : null}
       </div>
 
+      {/* Honeypot: hidden from real visitors (off-screen, not display:none
+          so basic bots that skip hidden fields still fill it), checked
+          server-side in /api/contact. */}
+      <div aria-hidden="true" style={{ position: "absolute", left: "-9999px", top: "auto", width: 1, height: 1, overflow: "hidden" }}>
+        <label htmlFor="companyWebsite">Website</label>
+        <input id="companyWebsite" name="companyWebsite" tabIndex={-1} autoComplete="off" />
+      </div>
+
       <p className="mt-4 text-xs text-slate-400">
         Please do not include patient health information in this form.
       </p>
 
       <div className="mt-5 flex flex-wrap items-center gap-3">
-        <button type="submit" className="btn-primary">
-          Send My Request <Send className="ml-2 h-4 w-4" />
+        <button type="submit" disabled={submitting} className="btn-primary disabled:opacity-60">
+          {submitting ? "Sending..." : "Send My Request"} <Send className="ml-2 h-4 w-4" />
         </button>
         <span className="text-sm text-slate-400">
           Prefer email?{" "}
@@ -195,8 +220,16 @@ export function WorkflowReviewForm() {
 
       {sent ? (
         <p className="mt-4 rounded-lg border border-cyan-300/40 bg-cyan-400/10 p-3 text-sm text-cyan-100">
-          Your email app should now be open with your request ready to send. If nothing opened, email the details to
-          info@aifax.net and we will take it from there.
+          Thanks, that's in. We will follow up shortly, and a confirmation just went to your email.
+        </p>
+      ) : null}
+      {submitError ? (
+        <p className="mt-4 rounded-lg border border-orange-400/40 bg-orange-400/10 p-3 text-sm text-orange-100">
+          {submitError} You can also email us directly at{" "}
+          <a href="mailto:info@aifax.net" className="underline underline-offset-4">
+            info@aifax.net
+          </a>
+          .
         </p>
       ) : null}
     </form>

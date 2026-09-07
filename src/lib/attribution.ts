@@ -1,0 +1,97 @@
+import { createHash, randomUUID } from "crypto";
+import { cookies, headers } from "next/headers";
+
+/**
+ * Everything needed to trace a lead back to the ad/search result/link that
+ * actually brought them to the site, so the admin page and the Facebook
+ * Custom Audience are both meaningful instead of a wall of anonymous rows.
+ */
+export type Attribution = {
+  sourcePath: string;
+  referrer: string | null;
+  utmSource: string | null;
+  utmMedium: string | null;
+  utmCampaign: string | null;
+  utmContent: string | null;
+  utmTerm: string | null;
+  fbclid: string | null;
+  gclid: string | null;
+};
+
+export const SESSION_COOKIE = "aifax_sid";
+export const ATTRIBUTION_COOKIE = "aifax_attr";
+
+const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"] as const;
+
+export function parseAttributionFromUrl(url: string, referrer: string | null): Attribution {
+  const parsed = (() => {
+    try {
+      return new URL(url);
+    } catch {
+      return null;
+    }
+  })();
+  const params = parsed?.searchParams;
+
+  return {
+    sourcePath: parsed ? parsed.pathname : "/",
+    referrer: referrer || null,
+    utmSource: params?.get("utm_source") ?? null,
+    utmMedium: params?.get("utm_medium") ?? null,
+    utmCampaign: params?.get("utm_campaign") ?? null,
+    utmContent: params?.get("utm_content") ?? null,
+    utmTerm: params?.get("utm_term") ?? null,
+    // fbclid: the id Facebook appends to every ad click. Its presence alone
+    // is proof-positive the visit came from a Facebook/Instagram ad, even
+    // if UTM params were left off the ad's destination URL.
+    fbclid: params?.get("fbclid") ?? null,
+    gclid: params?.get("gclid") ?? null
+  };
+}
+
+/** True once any UTM param is present, so a plain internal link doesn't overwrite it. */
+export function hasAttributionSignal(a: Attribution) {
+  return Boolean(a.utmSource || a.utmMedium || a.utmCampaign || a.fbclid || a.gclid);
+}
+
+/**
+ * Never store a raw IP. This is a one-way hash (IP + a server-only salt,
+ * per UTC day so the hash itself rotates daily) - enough to dedupe repeat
+ * visits or flag obvious form-spam bursts from one address, without
+ * keeping anything that identifies a real person or device long-term.
+ */
+export function hashIp(ip: string | null) {
+  if (!ip) return null;
+  const salt = process.env.IP_HASH_SALT || "aifax-dev-salt-change-me";
+  const day = new Date().toISOString().slice(0, 10);
+  return createHash("sha256").update(`${salt}:${day}:${ip}`).digest("hex");
+}
+
+export function clientIp(h: Headers) {
+  // Vercel sets x-forwarded-for; take the first (client) hop.
+  const fwd = h.get("x-forwarded-for");
+  if (fwd) return fwd.split(",")[0]!.trim();
+  return h.get("x-real-ip");
+}
+
+export async function currentSessionId() {
+  const jar = await cookies();
+  return jar.get(SESSION_COOKIE)?.value ?? randomUUID();
+}
+
+/** Reads the first-touch attribution captured on this visitor's first page load, if any. */
+export async function readStoredAttribution(): Promise<Attribution | null> {
+  const jar = await cookies();
+  const raw = jar.get(ATTRIBUTION_COOKIE)?.value;
+  if (!raw) return null;
+  try {
+    return JSON.parse(decodeURIComponent(raw)) as Attribution;
+  } catch {
+    return null;
+  }
+}
+
+export async function requestIp() {
+  const h = await headers();
+  return clientIp(h);
+}
