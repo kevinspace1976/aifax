@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Send } from "lucide-react";
+import { suggestEmailCorrection } from "@/lib/email-validation";
 
 const EHR_OPTIONS = [
   "Epic",
@@ -61,6 +62,7 @@ export function WorkflowReviewForm() {
   const [challenge, setChallenge] = useState(() => makeChallenge());
   const [challengeError, setChallengeError] = useState(false);
   const [phone, setPhone] = useState("");
+  const [faxNumber, setFaxNumber] = useState("");
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -75,6 +77,12 @@ export function WorkflowReviewForm() {
       return;
     }
     setChallengeError(false);
+
+    const correction = suggestEmailCorrection(value("email"));
+    if (correction) {
+      setSubmitError(`That email looks like a typo, did you mean ${correction}?`);
+      return;
+    }
     setSubmitError(null);
     setSubmitting(true);
 
@@ -113,6 +121,7 @@ export function WorkflowReviewForm() {
       setSent(true);
       form.reset();
       setPhone("");
+      setFaxNumber("");
 
       // Browser-side fallback for the "Lead" conversion signal. This is
       // the one that actually reaches Meta today: the server-side
@@ -187,7 +196,17 @@ export function WorkflowReviewForm() {
         </div>
         <div>
           <label className={LABEL} htmlFor="faxNumber">Current fax number</label>
-          <input id="faxNumber" name="faxNumber" className={FIELD} placeholder="Optional" />
+          <input
+            id="faxNumber"
+            name="faxNumber"
+            type="tel"
+            inputMode="numeric"
+            maxLength={12}
+            value={faxNumber}
+            onChange={(e) => setFaxNumber(formatPhone(e.target.value))}
+            className={FIELD}
+            placeholder="Optional"
+          />
         </div>
         <div>
           <label className={LABEL} htmlFor="volume">Monthly fax volume</label>
