@@ -74,6 +74,24 @@ export function clientIp(h: Headers) {
   return h.get("x-real-ip");
 }
 
+/**
+ * IPs that should never be logged as a visit, e.g. the site owner's own
+ * connection. Comma-separated in EXCLUDED_VISITOR_IPS. A residential IP
+ * can change over time, so this may need updating later, it's config,
+ * not a permanent fix, which is why it lives in an env var rather than
+ * hardcoded.
+ */
+export function isExcludedIp(ip: string | null) {
+  if (!ip) return false;
+  const raw = process.env.EXCLUDED_VISITOR_IPS;
+  if (!raw) return false;
+  return raw
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .includes(ip);
+}
+
 export async function currentSessionId() {
   const jar = await cookies();
   return jar.get(SESSION_COOKIE)?.value ?? randomUUID();

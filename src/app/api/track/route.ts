@@ -1,12 +1,14 @@
 import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { ensureSchema, sql } from "@/lib/db";
+import { ADMIN_SESSION_COOKIE, isValidAdminSession } from "@/lib/admin-auth";
 import {
   ATTRIBUTION_COOKIE,
   SESSION_COOKIE,
   clientIp,
   hasAttributionSignal,
   hashIp,
+  isExcludedIp,
   parseAttributionFromUrl
 } from "@/lib/attribution";
 
@@ -20,6 +22,21 @@ export const runtime = "nodejs";
  * carries the ad that actually drove it instead of "direct".
  */
 export async function POST(req: NextRequest) {
+  // A browser signed into /admin is the site owner, not a visitor. Skip
+  // logging entirely rather than polluting the numbers with the owner's
+  // own browsing (this also covers /admin itself, belt-and-suspenders
+  // alongside the client-side skip in <VisitTracker>).
+  if (isValidAdminSession(req.cookies.get(ADMIN_SESSION_COOKIE)?.value)) {
+    return NextResponse.json({ ok: true, skipped: "admin" });
+  }
+
+  // Configured owner IPs (EXCLUDED_VISITOR_IPS) never count either, so
+  // browsing the public site logged out still doesn't inflate the numbers.
+  const requestIp = clientIp(req.headers);
+  if (isExcludedIp(requestIp)) {
+    return NextResponse.json({ ok: true, skipped: "excluded-ip" });
+  }
+
   let body: { url?: string } = {};
   try {
     body = await req.json();
@@ -42,7 +59,6 @@ export async function POST(req: NextRequest) {
   try {
     await ensureSchema();
     const db = sql();
-    const ip = clientIp(req.headers);
     await db`
       INSERT INTO visits (
         session_id, path, referrer, utm_source, utm_medium, utm_campaign,
@@ -51,7 +67,7 @@ export async function POST(req: NextRequest) {
         ${sessionId}, ${attribution.sourcePath}, ${attribution.referrer},
         ${attribution.utmSource}, ${attribution.utmMedium}, ${attribution.utmCampaign},
         ${attribution.utmContent}, ${attribution.utmTerm}, ${attribution.fbclid}, ${attribution.gclid},
-        ${req.headers.get("user-agent")}, ${hashIp(ip)}
+        ${req.headers.get("user-agent")}, ${hashIp(requestIp)}
       )
     `;
   } catch (err) {

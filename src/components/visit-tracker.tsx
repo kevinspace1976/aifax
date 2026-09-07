@@ -16,11 +16,19 @@ import { usePathname } from "next/navigation";
  *
  * Never touches rendering (returns null) and every failure is swallowed:
  * analytics breaking is not a reason to break the marketing site.
+ *
+ * Skips the admin dashboard itself entirely: viewing/refreshing /admin is
+ * not a marketing site visit, and counting it made the visitor numbers
+ * climb every time the owner reloaded their own dashboard. The API route
+ * also refuses to log a visit from a browser that's authenticated as
+ * admin (see /api/track), which additionally excludes the owner's own
+ * browsing of the public pages once they're signed into /admin there.
  */
 export function VisitTracker() {
   const pathname = usePathname();
 
   useEffect(() => {
+    if (pathname?.startsWith("/admin")) return;
     try {
       fetch("/api/track", {
         method: "POST",
