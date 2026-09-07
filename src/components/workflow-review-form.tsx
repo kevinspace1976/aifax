@@ -38,6 +38,18 @@ const VOLUME_OPTIONS = [
 
 const CONTACT_WINDOWS = ["Morning", "Midday", "Afternoon", "Evening"];
 
+const GOAL_OPTIONS = [
+  "Routing faxes automatically into our EHR",
+  "Lowering our monthly fax costs",
+  "Cutting manual data entry / filing time",
+  "HIPAA compliance and security",
+  "Connecting multiple platforms/apps together",
+  "Scaling to handle higher fax volume",
+  "Custom development / API integration",
+  "Not sure yet, just exploring",
+  "Other (describe below)"
+];
+
 const FIELD =
   "mt-1 w-full rounded-lg border border-white/20 bg-slate-900/70 px-3 py-2 text-sm text-white " +
   "placeholder:text-slate-500 focus:border-cyan-300 focus:outline-none focus:ring-1 focus:ring-cyan-300";
@@ -63,8 +75,10 @@ export function WorkflowReviewForm() {
   const [challengeError, setChallengeError] = useState(false);
   const [phone, setPhone] = useState("");
   const [faxNumber, setFaxNumber] = useState("");
+  const [emailSuggestion, setEmailSuggestion] = useState<{ typed: string; suggested: string } | null>(null);
+  const [pendingForm, setPendingForm] = useState<HTMLFormElement | null>(null);
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
     const data = new FormData(form);
@@ -80,9 +94,38 @@ export function WorkflowReviewForm() {
 
     const correction = suggestEmailCorrection(value("email"));
     if (correction) {
-      setSubmitError(`That email looks like a typo, did you mean ${correction}?`);
+      // Ask rather than block outright: hold the form and let the visitor
+      // confirm the fix or insist their address is correct as typed.
+      setEmailSuggestion({ typed: value("email"), suggested: correction });
+      setPendingForm(form);
       return;
     }
+
+    void submitForm(form);
+  }
+
+  function acceptEmailSuggestion() {
+    if (!pendingForm || !emailSuggestion) return;
+    const emailInput = pendingForm.elements.namedItem("email") as HTMLInputElement;
+    emailInput.value = emailSuggestion.suggested;
+    const form = pendingForm;
+    setEmailSuggestion(null);
+    setPendingForm(null);
+    void submitForm(form);
+  }
+
+  function keepTypedEmail() {
+    if (!pendingForm) return;
+    const form = pendingForm;
+    setEmailSuggestion(null);
+    setPendingForm(null);
+    void submitForm(form);
+  }
+
+  async function submitForm(form: HTMLFormElement) {
+    const data = new FormData(form);
+    const value = (key: string) => String(data.get(key) ?? "").trim();
+
     setSubmitError(null);
     setSubmitting(true);
 
@@ -92,6 +135,10 @@ export function WorkflowReviewForm() {
     // the server-side send is ever working too, this won't double count.
     const eventId =
       typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID() : String(Date.now());
+
+    const goal = value("goal");
+    const notes = value("notes");
+    const combinedNotes = [goal, notes].filter(Boolean).join(" - ");
 
     try {
       const res = await fetch("/api/contact", {
@@ -107,7 +154,7 @@ export function WorkflowReviewForm() {
           faxNumber: value("faxNumber"),
           volume: value("volume"),
           callWindow: value("callWindow"),
-          notes: value("notes"),
+          notes: combinedNotes,
           // honeypot - real visitors never see this field, see the hidden
           // input below. A bot filling every field trips it.
           companyWebsite: value("companyWebsite"),
@@ -227,7 +274,16 @@ export function WorkflowReviewForm() {
           </select>
         </div>
         <div className="sm:col-span-2">
-          <label className={LABEL} htmlFor="notes">What would you like to solve first?</label>
+          <label className={LABEL} htmlFor="goal">What would you like to solve first?</label>
+          <select id="goal" name="goal" className={FIELD} defaultValue="">
+            <option value="" disabled>Select the closest fit</option>
+            {GOAL_OPTIONS.map((option) => (
+              <option key={option} value={option}>{option}</option>
+            ))}
+          </select>
+        </div>
+        <div className="sm:col-span-2">
+          <label className={LABEL} htmlFor="notes">Anything else to add? (optional)</label>
           <textarea
             id="notes"
             name="notes"
@@ -282,9 +338,33 @@ export function WorkflowReviewForm() {
         </span>
       </div>
 
+      {emailSuggestion ? (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4">
+          <div className="relative w-full max-w-sm rounded-2xl border border-orange-400/40 bg-slate-900 p-6 text-center shadow-2xl">
+            <h3 className="text-lg font-semibold text-white">Check your email</h3>
+            <p className="mt-2 text-sm text-slate-300">
+              You typed <span className="text-white">{emailSuggestion.typed}</span>. Did you mean{" "}
+              <span className="text-cyan-300">{emailSuggestion.suggested}</span>?
+            </p>
+            <div className="mt-5 flex justify-center gap-3">
+              <button type="button" onClick={acceptEmailSuggestion} className="btn-primary">
+                Yes, use this
+              </button>
+              <button
+                type="button"
+                onClick={keepTypedEmail}
+                className="rounded-full border border-white/20 px-4 py-2 text-sm text-slate-200 hover:border-white/40"
+              >
+                No, keep as typed
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
       {sent ? (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4"
           onClick={() => setSent(false)}
         >
           <div
