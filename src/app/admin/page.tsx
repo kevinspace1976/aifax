@@ -1,0 +1,191 @@
+import Link from "next/link";
+import { ensureSchema, rows, sql } from "@/lib/db";
+
+export const dynamic = "force-dynamic";
+
+type VisitTotals = { total: number };
+type SourceRow = { source: string; visits: number };
+type FbRow = { fb_visits: number };
+type Lead = {
+  id: number;
+  name: string;
+  email: string;
+  phone: string | null;
+  practice_name: string | null;
+  utm_source: string | null;
+  utm_campaign: string | null;
+  fbclid: string | null;
+  referrer: string | null;
+  sequence_step: number;
+  unsubscribed: boolean;
+  created_at: string;
+};
+
+function StatCard({ label, value, hint }: { label: string; value: string | number; hint?: string }) {
+  return (
+    <div className="card-surface p-5">
+      <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">{label}</p>
+      <p className="mt-2 text-3xl font-semibold text-white">{value}</p>
+      {hint ? <p className="mt-1 text-xs text-slate-400">{hint}</p> : null}
+    </div>
+  );
+}
+
+function sourceLabel(row: { utm_source: string | null; fbclid: string | null; referrer: string | null }) {
+  if (row.utm_source) return row.utm_source;
+  if (row.fbclid) return "facebook (ad click)";
+  if (row.referrer) {
+    try {
+      return new URL(row.referrer).hostname;
+    } catch {
+      return row.referrer;
+    }
+  }
+  return "direct";
+}
+
+export default async function AdminPage() {
+  await ensureSchema();
+  const db = sql();
+
+  const [visits30, visits7, sources30, fb30, leads30, leadsRecent] = await Promise.all([
+    rows<VisitTotals>(db`SELECT COUNT(*)::int AS total FROM visits WHERE created_at > now() - interval '30 days'`),
+    rows<VisitTotals>(db`SELECT COUNT(*)::int AS total FROM visits WHERE created_at > now() - interval '7 days'`),
+    rows<SourceRow>(db`
+      SELECT COALESCE(utm_source, CASE WHEN fbclid IS NOT NULL THEN 'facebook (ad click)' END, 'direct / other') AS source,
+             COUNT(*)::int AS visits
+      FROM visits
+      WHERE created_at > now() - interval '30 days'
+      GROUP BY source
+      ORDER BY visits DESC
+      LIMIT 10
+    `),
+    rows<FbRow>(
+      db`SELECT COUNT(*)::int AS fb_visits FROM visits WHERE fbclid IS NOT NULL AND created_at > now() - interval '30 days'`
+    ),
+    rows<VisitTotals>(db`SELECT COUNT(*)::int AS total FROM leads WHERE created_at > now() - interval '30 days'`),
+    rows<Lead>(db`
+      SELECT id, name, email, phone, practice_name, utm_source, utm_campaign, fbclid, referrer,
+             sequence_step, unsubscribed, created_at
+      FROM leads
+      ORDER BY created_at DESC
+      LIMIT 50
+    `)
+  ]);
+
+  const totalVisits30 = visits30[0]?.total ?? 0;
+  const totalLeads30 = leads30[0]?.total ?? 0;
+  const conversionRate = totalVisits30 > 0 ? ((totalLeads30 / totalVisits30) * 100).toFixed(1) : "-";
+
+  return (
+    <main className="section-shell py-10">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-2xl font-semibold text-white">Admin</h1>
+        <form action="/api/admin/logout" method="post">
+          <button
+            type="submit"
+            className="rounded-full border border-white/20 px-4 py-1.5 text-sm text-slate-200 hover:border-white/40"
+          >
+            Sign out
+          </button>
+        </form>
+      </div>
+
+      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <StatCard label="Visits, last 7 days" value={visits7[0]?.total ?? 0} />
+        <StatCard label="Visits, last 30 days" value={totalVisits30} />
+        <StatCard
+          label="From Facebook ad clicks, 30d"
+          value={fb30[0]?.fb_visits ?? 0}
+          hint="Visits carrying a Facebook click id (fbclid)"
+        />
+        <StatCard
+          label="Leads, last 30 days"
+          value={totalLeads30}
+          hint={`${conversionRate}% of 30-day visits`}
+        />
+      </div>
+
+      <section className="card-surface mt-8 p-6">
+        <h2 className="text-lg font-semibold text-white">Traffic sources, last 30 days</h2>
+        <div className="mt-4 overflow-x-auto">
+          <table className="w-full min-w-[420px] text-left text-sm">
+            <thead>
+              <tr className="border-b border-white/10 text-slate-400">
+                <th className="pb-2 font-medium">Source</th>
+                <th className="pb-2 font-medium">Visits</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sources30.length === 0 ? (
+                <tr>
+                  <td colSpan={2} className="py-4 text-slate-400">
+                    No visits recorded yet.
+                  </td>
+                </tr>
+              ) : (
+                sources30.map((row) => (
+                  <tr key={row.source} className="border-b border-white/5">
+                    <td className="py-2 text-slate-200">{row.source}</td>
+                    <td className="py-2 text-slate-200">{row.visits}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section className="card-surface mt-8 p-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-white">Leads</h2>
+          <Link href="/admin/leads/export" className="text-sm text-cyan-300 underline-offset-4 hover:underline">
+            Export CSV
+          </Link>
+        </div>
+        <div className="mt-4 overflow-x-auto">
+          <table className="w-full min-w-[900px] text-left text-sm">
+            <thead>
+              <tr className="border-b border-white/10 text-slate-400">
+                <th className="pb-2 pr-4 font-medium">Date</th>
+                <th className="pb-2 pr-4 font-medium">Name</th>
+                <th className="pb-2 pr-4 font-medium">Email</th>
+                <th className="pb-2 pr-4 font-medium">Practice</th>
+                <th className="pb-2 pr-4 font-medium">Source</th>
+                <th className="pb-2 pr-4 font-medium">Nurture step</th>
+              </tr>
+            </thead>
+            <tbody>
+              {leadsRecent.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="py-4 text-slate-400">
+                    No leads yet.
+                  </td>
+                </tr>
+              ) : (
+                leadsRecent.map((lead) => (
+                  <tr key={lead.id} className="border-b border-white/5 align-top">
+                    <td className="py-2 pr-4 whitespace-nowrap text-slate-300">
+                      {new Date(lead.created_at).toLocaleDateString()}
+                    </td>
+                    <td className="py-2 pr-4 text-slate-200">{lead.name}</td>
+                    <td className="py-2 pr-4 text-slate-200">
+                      <a href={`mailto:${lead.email}`} className="text-cyan-300 underline-offset-4 hover:underline">
+                        {lead.email}
+                      </a>
+                    </td>
+                    <td className="py-2 pr-4 text-slate-300">{lead.practice_name || "-"}</td>
+                    <td className="py-2 pr-4 text-slate-300">{sourceLabel(lead)}</td>
+                    <td className="py-2 pr-4 text-slate-300">
+                      {lead.unsubscribed ? "unsubscribed" : `${lead.sequence_step} / 6 sent`}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  );
+}
