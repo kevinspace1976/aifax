@@ -20,6 +20,7 @@ export async function sendEmail(opts: {
   html: string;
   text: string;
   replyTo?: string;
+  tags?: { name: string; value: string }[];
 }) {
   const resend = client();
   if (!resend) {
@@ -33,7 +34,8 @@ export async function sendEmail(opts: {
       subject: opts.subject,
       html: opts.html,
       text: opts.text,
-      replyTo: opts.replyTo
+      replyTo: opts.replyTo,
+      tags: opts.tags
     });
     if (error) {
       console.error("[email] Resend rejected the send", error);

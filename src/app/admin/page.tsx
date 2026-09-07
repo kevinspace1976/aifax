@@ -20,6 +20,7 @@ type Lead = {
   unsubscribed: boolean;
   created_at: string;
 };
+type EmailStatsRow = { lead_id: number; opens: number; clicks: number; last_opened_at: string | null };
 
 function StatCard({ label, value, hint }: { label: string; value: string | number; hint?: string }) {
   return (
@@ -48,7 +49,7 @@ export default async function AdminPage() {
   await ensureSchema();
   const db = sql();
 
-  const [visits30, visits7, sources30, fb30, leads30, leadsRecent] = await Promise.all([
+  const [visits30, visits7, sources30, fb30, leads30, leadsRecent, emailStats] = await Promise.all([
     rows<VisitTotals>(db`SELECT COUNT(*)::int AS total FROM visits WHERE created_at > now() - interval '30 days'`),
     rows<VisitTotals>(db`SELECT COUNT(*)::int AS total FROM visits WHERE created_at > now() - interval '7 days'`),
     rows<SourceRow>(db`
@@ -70,8 +71,18 @@ export default async function AdminPage() {
       FROM leads
       ORDER BY created_at DESC
       LIMIT 50
+    `),
+    rows<EmailStatsRow>(db`
+      SELECT lead_id,
+             COUNT(*) FILTER (WHERE event_type = 'email.opened')::int AS opens,
+             COUNT(*) FILTER (WHERE event_type = 'email.clicked')::int AS clicks,
+             MAX(occurred_at) FILTER (WHERE event_type = 'email.opened') AS last_opened_at
+      FROM email_events
+      GROUP BY lead_id
     `)
   ]);
+
+  const emailStatsByLead = new Map(emailStats.map((row) => [row.lead_id, row]));
 
   const totalVisits30 = visits30[0]?.total ?? 0;
   const totalLeads30 = leads30[0]?.total ?? 0;
@@ -153,34 +164,45 @@ export default async function AdminPage() {
                 <th className="pb-2 pr-4 font-medium">Practice</th>
                 <th className="pb-2 pr-4 font-medium">Source</th>
                 <th className="pb-2 pr-4 font-medium">Nurture step</th>
+                <th className="pb-2 pr-4 font-medium">Opened</th>
               </tr>
             </thead>
             <tbody>
               {leadsRecent.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="py-4 text-slate-400">
+                  <td colSpan={7} className="py-4 text-slate-400">
                     No leads yet.
                   </td>
                 </tr>
               ) : (
-                leadsRecent.map((lead) => (
-                  <tr key={lead.id} className="border-b border-white/5 align-top">
-                    <td className="py-2 pr-4 whitespace-nowrap text-slate-300">
-                      {new Date(lead.created_at).toLocaleDateString()}
-                    </td>
-                    <td className="py-2 pr-4 text-slate-200">{lead.name}</td>
-                    <td className="py-2 pr-4 text-slate-200">
-                      <a href={`mailto:${lead.email}`} className="text-cyan-300 underline-offset-4 hover:underline">
-                        {lead.email}
-                      </a>
-                    </td>
-                    <td className="py-2 pr-4 text-slate-300">{lead.practice_name || "-"}</td>
-                    <td className="py-2 pr-4 text-slate-300">{sourceLabel(lead)}</td>
-                    <td className="py-2 pr-4 text-slate-300">
-                      {lead.unsubscribed ? "unsubscribed" : `${lead.sequence_step} / 6 sent`}
-                    </td>
-                  </tr>
-                ))
+                leadsRecent.map((lead) => {
+                  const stats = emailStatsByLead.get(lead.id);
+                  return (
+                    <tr key={lead.id} className="border-b border-white/5 align-top">
+                      <td className="py-2 pr-4 whitespace-nowrap text-slate-300">
+                        {new Date(lead.created_at).toLocaleDateString()}
+                      </td>
+                      <td className="py-2 pr-4 text-slate-200">{lead.name}</td>
+                      <td className="py-2 pr-4 text-slate-200">
+                        <a href={`mailto:${lead.email}`} className="text-cyan-300 underline-offset-4 hover:underline">
+                          {lead.email}
+                        </a>
+                      </td>
+                      <td className="py-2 pr-4 text-slate-300">{lead.practice_name || "-"}</td>
+                      <td className="py-2 pr-4 text-slate-300">{sourceLabel(lead)}</td>
+                      <td className="py-2 pr-4 text-slate-300">
+                        {lead.unsubscribed ? "unsubscribed" : `${lead.sequence_step} / 6 sent`}
+                      </td>
+                      <td className="py-2 pr-4 text-slate-300">
+                        {!stats || stats.opens === 0
+                          ? "-"
+                          : `${stats.opens}x, last ${new Date(stats.last_opened_at!).toLocaleDateString()}${
+                              stats.clicks > 0 ? ` (${stats.clicks} click${stats.clicks === 1 ? "" : "s"})` : ""
+                            }`}
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>

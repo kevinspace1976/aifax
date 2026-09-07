@@ -14,6 +14,7 @@ export const DELAYS_DAYS = [0, 2, 5, 7, 12, 21] as const;
 export type NurtureContext = {
   name: string;
   practiceName: string | null;
+  notes: string | null;
   unsubscribeUrl: string;
   mailingAddress: string;
 };
@@ -22,6 +23,14 @@ type Template = { subject: string; html: (ctx: NurtureContext) => string; text: 
 
 function firstName(name: string) {
   return name.trim().split(/\s+/)[0] || "there";
+}
+
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
 
 function wrap(ctx: NurtureContext, bodyHtml: string) {
@@ -52,6 +61,12 @@ export const NURTURE_SEQUENCE: Template[] = [
         <p>Thanks for reaching out about AiFax${ctx.practiceName ? ` for ${ctx.practiceName}` : ""}. We got your
         details and someone from our team will follow up shortly with a workflow review tailored to how faxes
         reach your practice today.</p>
+        ${
+          ctx.notes
+            ? `<p>You mentioned: &ldquo;${escapeHtml(ctx.notes)}&rdquo; &mdash; that's exactly what we'll map out
+        in your workflow review.</p>`
+            : ""
+        }
         <p>In the meantime, here is a 2-minute look at how it works:
         <a href="https://www.aifax.net/how-it-works">aifax.net/how-it-works</a></p>
         <p>Talk soon,<br />The AiFax Team</p>`
@@ -59,7 +74,9 @@ export const NURTURE_SEQUENCE: Template[] = [
     text: (ctx) =>
       `Hi ${firstName(ctx.name)},\n\nThanks for reaching out about AiFax${
         ctx.practiceName ? ` for ${ctx.practiceName}` : ""
-      }. We got your details and someone from our team will follow up shortly with a workflow review tailored to how faxes reach your practice today.\n\nIn the meantime, here is a 2-minute look at how it works: https://www.aifax.net/how-it-works\n\nTalk soon,\nThe AiFax Team${textFooter(
+      }. We got your details and someone from our team will follow up shortly with a workflow review tailored to how faxes reach your practice today.\n${
+        ctx.notes ? `\nYou mentioned: "${ctx.notes}" - that's exactly what we'll map out in your workflow review.\n` : ""
+      }\nIn the meantime, here is a 2-minute look at how it works: https://www.aifax.net/how-it-works\n\nTalk soon,\nThe AiFax Team${textFooter(
         ctx
       )}`
   },

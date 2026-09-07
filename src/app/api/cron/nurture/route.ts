@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ensureSchema, rows, sql } from "@/lib/db";
-import { sendEmail } from "@/lib/resend";
+import { adminNotificationAddress, sendEmail } from "@/lib/resend";
 import { DELAYS_DAYS, NURTURE_SEQUENCE } from "@/lib/email-templates/nurture";
 import { mailingAddress, unsubscribeUrl } from "@/lib/unsubscribe";
 
@@ -11,6 +11,7 @@ type DueLead = {
   name: string;
   email: string;
   practice_name: string | null;
+  notes: string | null;
   sequence_step: number;
   created_at: string;
 };
@@ -40,7 +41,7 @@ export async function GET(req: NextRequest) {
   const db = sql();
 
   const due = await rows<DueLead>(db`
-    SELECT id, name, email, practice_name, sequence_step, created_at
+    SELECT id, name, email, practice_name, notes, sequence_step, created_at
     FROM leads
     WHERE unsubscribed = FALSE
       AND next_email_due_at IS NOT NULL
@@ -60,6 +61,7 @@ export async function GET(req: NextRequest) {
     const ctx = {
       name: lead.name,
       practiceName: lead.practice_name,
+      notes: lead.notes,
       unsubscribeUrl: unsubscribeUrl(lead.id),
       mailingAddress: mailingAddress()
     };
@@ -68,7 +70,12 @@ export async function GET(req: NextRequest) {
       to: lead.email,
       subject: template.subject,
       html: template.html(ctx),
-      text: template.text(ctx)
+      text: template.text(ctx),
+      replyTo: adminNotificationAddress(),
+      tags: [
+        { name: "lead_id", value: String(lead.id) },
+        { name: "step", value: String(lead.sequence_step) }
+      ]
     });
 
     if (!result.sent) {
