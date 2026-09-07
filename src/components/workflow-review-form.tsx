@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Send } from "lucide-react";
+import { CheckCircle2, Send, X } from "lucide-react";
 import { suggestEmailCorrection } from "@/lib/email-validation";
 
 const EHR_OPTIONS = [
@@ -283,9 +283,27 @@ export function WorkflowReviewForm() {
       </div>
 
       {sent ? (
-        <p className="mt-4 rounded-lg border border-cyan-300/40 bg-cyan-400/10 p-3 text-sm text-cyan-100">
-          Thanks, that's in. We will follow up shortly, and a confirmation just went to your email.
-        </p>
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+          onClick={() => setSent(false)}
+        >
+          <div
+            className="relative w-full max-w-sm rounded-2xl border border-cyan-300/40 bg-slate-900 p-6 text-center shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setSent(false)}
+              aria-label="Close"
+              className="absolute right-3 top-3 text-slate-400 hover:text-white"
+            >
+              <X className="h-5 w-5" />
+            </button>
+            <CheckCircle2 className="mx-auto h-12 w-12 text-cyan-300" />
+            <h3 className="mt-3 text-lg font-semibold text-white">Request sent</h3>
+            <p className="mt-2 text-sm text-slate-300">We'll follow up shortly. Check your email for confirmation.</p>
+          </div>
+        </div>
       ) : null}
       {submitError ? (
         <p className="mt-4 rounded-lg border border-orange-400/40 bg-orange-400/10 p-3 text-sm text-orange-100">
