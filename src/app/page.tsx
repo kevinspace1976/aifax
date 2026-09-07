@@ -182,8 +182,10 @@ export default function Home() {
       <section className="border-b border-white/10">
         <div className="section-shell grid min-w-0 gap-8 pt-8 pb-4 sm:pt-10 sm:pb-6 lg:grid-cols-2 lg:items-center">
           <div className="min-w-0">
-            <p className="kicker">Fax-to-EHR Automation for Independent Practices</p>
-            <h1 className="mt-3 text-2xl font-semibold leading-tight text-white sm:mt-4 sm:text-4xl lg:text-5xl">
+            <p className="text-2xl font-extrabold uppercase leading-tight tracking-tight text-red-500 sm:text-4xl lg:text-5xl">
+              Fax-to-EHR Automation for Medical Practices
+            </p>
+            <h1 className="mt-6 text-2xl font-semibold leading-tight text-white sm:mt-8 sm:text-4xl lg:text-5xl">
               Stop Manually Moving Faxes Into Your EHR.{" "}
               <span className="block text-sky-400">Every Fax, Read by AI.</span>
               <span className="block text-orange-400">Every Document Routed With Purpose.</span>
