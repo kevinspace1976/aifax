@@ -1,9 +1,10 @@
 /**
  * Thin wrapper around the Gmail REST API (no googleapis SDK dependency,
  * this app already talks to Resend and Meta the same way: plain fetch).
- * Used by the CRM's email sync (see /api/cron/gmail-sync) to read
- * info@aifax.net's mailbox - never to send, outbound mail still goes
- * through Resend (nurture emails) or a human sending manually in Gmail.
+ * Used for two things: the CRM's email sync (see /api/cron/gmail-sync)
+ * reads info@aifax.net's mailbox, and /api/contact creates a draft reply
+ * for the admin to review - it only ever creates drafts, never sends, the
+ * admin still reviews and hits send themselves in Gmail.
  */
 
 const TOKEN_URL = "https://oauth2.googleapis.com/token";
@@ -15,7 +16,7 @@ export function gmailConfigured() {
   );
 }
 
-async function getAccessToken(): Promise<string | null> {
+export async function getAccessToken(): Promise<string | null> {
   const clientId = process.env.GMAIL_CLIENT_ID;
   const clientSecret = process.env.GMAIL_CLIENT_SECRET;
   const refreshToken = process.env.GMAIL_REFRESH_TOKEN;
@@ -100,4 +101,32 @@ export async function searchMessages(query: string, maxResults = 25): Promise<Gm
     });
   }
   return messages;
+}
+
+/**
+ * Creates a Gmail draft addressed to the given recipient - never sent
+ * automatically, it just appears in info@aifax.net's Drafts folder for a
+ * human to review, edit, and send. Requires the gmail.compose scope
+ * (broader than the gmail.readonly used for the CRM sync), re-authorizing
+ * via /api/gmail/oauth/connect picks up both.
+ */
+export async function createDraft(opts: { to: string; subject: string; body: string }): Promise<boolean> {
+  const accessToken = await getAccessToken();
+  if (!accessToken) return false;
+
+  const message = [`To: ${opts.to}`, `Subject: ${opts.subject}`, "Content-Type: text/plain; charset=utf-8", "", opts.body].join(
+    "\r\n"
+  );
+  const raw = Buffer.from(message, "utf-8").toString("base64url");
+
+  const res = await fetch(`${API_BASE}/drafts`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ message: { raw } })
+  });
+  if (!res.ok) {
+    console.error("[gmail] failed to create draft", await res.text());
+    return false;
+  }
+  return true;
 }
