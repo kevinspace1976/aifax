@@ -6,6 +6,7 @@ import { adminNotificationAddress, sendEmail } from "@/lib/resend";
 import { fireMetaLeadEvent } from "@/lib/meta-capi";
 import { DELAYS_DAYS, NURTURE_SEQUENCE } from "@/lib/email-templates/nurture";
 import { mailingAddress, unsubscribeUrl } from "@/lib/unsubscribe";
+import { EMAIL_RE, suggestEmailCorrection } from "@/lib/email-validation";
 
 export const runtime = "nodejs";
 
@@ -29,8 +30,6 @@ type ContactBody = {
   eventId?: string;
 };
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 export async function POST(req: NextRequest) {
   let body: ContactBody;
   try {
@@ -49,6 +48,13 @@ export async function POST(req: NextRequest) {
   const email = (body.email || "").trim();
   if (!name || !EMAIL_RE.test(email)) {
     return NextResponse.json({ ok: false, error: "A valid name and email are required." }, { status: 400 });
+  }
+  const emailCorrection = suggestEmailCorrection(email);
+  if (emailCorrection) {
+    return NextResponse.json(
+      { ok: false, error: `That email looks like a typo, did you mean ${emailCorrection}?` },
+      { status: 400 }
+    );
   }
 
   const attribution = await readStoredAttribution();
