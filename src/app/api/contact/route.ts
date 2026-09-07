@@ -111,6 +111,7 @@ export async function POST(req: NextRequest) {
   const nurtureCtx = {
     name,
     practiceName: body.practice || null,
+    notes: body.notes || null,
     unsubscribeUrl: unsubscribeUrl(leadId),
     mailingAddress: mailingAddress()
   };
@@ -132,7 +133,11 @@ export async function POST(req: NextRequest) {
       to: email,
       subject: day0.subject,
       html: day0.html(nurtureCtx),
-      text: day0.text(nurtureCtx)
+      text: day0.text(nurtureCtx),
+      tags: [
+        { name: "lead_id", value: String(leadId) },
+        { name: "step", value: "0" }
+      ]
     }),
     fireMetaLeadEvent({
       email,

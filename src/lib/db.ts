@@ -114,4 +114,16 @@ async function runMigrations() {
       WHERE unsubscribed = FALSE
   `;
   await db`CREATE INDEX IF NOT EXISTS leads_created_at_idx ON leads (created_at)`;
+
+  await db`
+    CREATE TABLE IF NOT EXISTS email_events (
+      id BIGSERIAL PRIMARY KEY,
+      lead_id BIGINT REFERENCES leads (id) ON DELETE CASCADE,
+      step INT,
+      event_type TEXT NOT NULL,
+      link_url TEXT,
+      occurred_at TIMESTAMPTZ NOT NULL
+    )
+  `;
+  await db`CREATE INDEX IF NOT EXISTS email_events_lead_idx ON email_events (lead_id)`;
 }
