@@ -3,10 +3,13 @@ import { ADMIN_SESSION_COOKIE, isValidAdminSession } from "@/lib/admin-auth";
 
 export const runtime = "nodejs";
 
-// Read-only: the CRM only ever reads the mailbox to log communication
-// history. Outbound mail stays on the existing paths (Resend for nurture
-// emails, a human sending manually in Gmail).
-const SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"];
+// gmail.readonly powers the CRM's email sync; gmail.compose lets
+// /api/contact create a draft reply for a lead (still never sends, the
+// admin reviews and hits send themselves in Gmail).
+const SCOPES = [
+  "https://www.googleapis.com/auth/gmail.readonly",
+  "https://www.googleapis.com/auth/gmail.compose"
+];
 
 /**
  * Admin-only entry point into the one-time Gmail OAuth consent flow.

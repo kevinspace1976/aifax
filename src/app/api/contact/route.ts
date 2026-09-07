@@ -7,6 +7,8 @@ import { fireMetaLeadEvent } from "@/lib/meta-capi";
 import { DELAYS_DAYS, NURTURE_SEQUENCE } from "@/lib/email-templates/nurture";
 import { mailingAddress, unsubscribeUrl } from "@/lib/unsubscribe";
 import { EMAIL_RE, suggestEmailCorrection } from "@/lib/email-validation";
+import { generateLeadReply } from "@/lib/ai-draft";
+import { createDraft, gmailConfigured } from "@/lib/gmail";
 
 export const runtime = "nodejs";
 
@@ -29,6 +31,38 @@ type ContactBody = {
   // working too, Meta de-duplicates the two instead of double-counting.
   eventId?: string;
 };
+
+/**
+ * Best-effort: generates a personalized reply with Claude and creates it
+ * as a Gmail draft for the admin to review and send. Never sends anything
+ * itself, and any failure here (no API key, Gmail not connected, model
+ * error) must never affect the visitor's success response.
+ */
+async function attemptAutoDraft(lead: {
+  name: string;
+  practiceName: string | null;
+  email: string;
+  phone: string | null;
+  ehrPlatform: string | null;
+  faxProvider: string | null;
+  faxNumber: string | null;
+  monthlyVolume: string | null;
+  callWindow: string | null;
+  notes: string | null;
+}) {
+  if (!gmailConfigured()) return;
+  try {
+    const replyBody = await generateLeadReply(lead);
+    if (!replyBody) return;
+    await createDraft({
+      to: lead.email,
+      subject: `Re: Workflow review request - ${lead.practiceName || lead.name}`,
+      body: replyBody
+    });
+  } catch (err) {
+    console.error("[contact] auto-draft failed", err);
+  }
+}
 
 export async function POST(req: NextRequest) {
   let body: ContactBody;
@@ -152,6 +186,18 @@ export async function POST(req: NextRequest) {
       userAgent,
       fbclid: attribution?.fbclid || null,
       sourceUrl: `https://www.aifax.net${attribution?.sourcePath || "/contact"}`
+    }),
+    attemptAutoDraft({
+      name,
+      practiceName: body.practice || null,
+      email,
+      phone: body.phone || null,
+      ehrPlatform: body.ehr || null,
+      faxProvider: body.faxProvider || null,
+      faxNumber: body.faxNumber || null,
+      monthlyVolume: body.volume || null,
+      callWindow: body.callWindow || null,
+      notes: body.notes || null
     })
   ]);
 
