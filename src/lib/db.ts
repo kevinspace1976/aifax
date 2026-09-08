@@ -122,6 +122,7 @@ async function runMigrations() {
   // ALTER to actually land on rows created before this migration.
   await db`ALTER TABLE leads ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'new'`;
   await db`ALTER TABLE leads ADD COLUMN IF NOT EXISTS nurture_paused BOOLEAN NOT NULL DEFAULT FALSE`;
+  await db`ALTER TABLE leads ADD COLUMN IF NOT EXISTS unsubscribed_at TIMESTAMPTZ`;
 
   await db`
     CREATE TABLE IF NOT EXISTS email_events (

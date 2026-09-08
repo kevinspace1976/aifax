@@ -28,6 +28,13 @@ type FollowUpRow = {
   body: string | null;
   ticket_number: string | null;
 };
+type UnsubscribedRow = {
+  id: number;
+  name: string;
+  email: string;
+  practice_name: string | null;
+  unsubscribed_at: string | null;
+};
 
 function StatCard({ label, value, hint }: { label: string; value: string | number; hint?: string }) {
   return (
@@ -56,7 +63,7 @@ export default async function AdminPage() {
   await ensureSchema();
   const db = sql();
 
-  const [visits30, visits7, sources30, fb30, leads30, leadsRecent, emailStats, followUps] = await Promise.all([
+  const [visits30, visits7, sources30, fb30, leads30, leadsRecent, emailStats, followUps, unsubscribed] = await Promise.all([
     rows<VisitTotals>(db`SELECT COUNT(*)::int AS total FROM visits WHERE created_at > now() - interval '30 days'`),
     rows<VisitTotals>(db`SELECT COUNT(*)::int AS total FROM visits WHERE created_at > now() - interval '7 days'`),
     rows<SourceRow>(db`
@@ -99,6 +106,13 @@ export default async function AdminPage() {
       ) la ON true
       WHERE la.follow_up_at IS NOT NULL AND la.follow_up_at <= now()
       ORDER BY la.follow_up_at ASC
+    `),
+    rows<UnsubscribedRow>(db`
+      SELECT id, name, email, practice_name, unsubscribed_at
+      FROM leads
+      WHERE unsubscribed = TRUE
+      ORDER BY unsubscribed_at DESC NULLS LAST
+      LIMIT 50
     `)
   ]);
 
@@ -249,6 +263,46 @@ export default async function AdminPage() {
                     </tr>
                   );
                 })
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section className="card-surface mt-8 p-6">
+        <h2 className="text-lg font-semibold text-white">Unsubscribed ({unsubscribed.length})</h2>
+        <div className="mt-4 overflow-x-auto">
+          <table className="w-full min-w-[560px] text-left text-sm">
+            <thead>
+              <tr className="border-b border-white/10 text-slate-400">
+                <th className="pb-2 pr-4 font-medium">Name</th>
+                <th className="pb-2 pr-4 font-medium">Email</th>
+                <th className="pb-2 pr-4 font-medium">Practice</th>
+                <th className="pb-2 pr-4 font-medium">Unsubscribed</th>
+              </tr>
+            </thead>
+            <tbody>
+              {unsubscribed.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="py-4 text-slate-400">
+                    No unsubscribes yet.
+                  </td>
+                </tr>
+              ) : (
+                unsubscribed.map((lead) => (
+                  <tr key={lead.id} className="border-b border-white/5">
+                    <td className="py-2 pr-4 text-slate-200">
+                      <Link href={`/admin/leads/${lead.id}`} className="text-cyan-300 underline-offset-4 hover:underline">
+                        {lead.name}
+                      </Link>
+                    </td>
+                    <td className="py-2 pr-4 text-slate-300">{lead.email}</td>
+                    <td className="py-2 pr-4 text-slate-300">{lead.practice_name || "-"}</td>
+                    <td className="py-2 pr-4 whitespace-nowrap text-slate-300">
+                      {lead.unsubscribed_at ? new Date(lead.unsubscribed_at).toLocaleDateString() : "-"}
+                    </td>
+                  </tr>
+                ))
               )}
             </tbody>
           </table>
