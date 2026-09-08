@@ -27,6 +27,12 @@ type ContactBody = {
   // honeypot: real visitors never see or fill this field (hidden via CSS).
   // A filled-in value means it was a bot filling every input it found.
   companyWebsite?: string;
+  // True once the visitor has answered the "did you mean X?" prompt
+  // (either accepted the suggested domain or chose to keep what they
+  // typed). Skips the redundant server-side typo check below so a
+  // confirmed "keep as typed" isn't rejected right back with the same
+  // prompt it was just shown.
+  emailConfirmed?: boolean;
   // Generated client-side and also used for the browser-side fbq('track',
   // 'Lead') call, so if this server-side Conversions API send is ever
   // working too, Meta de-duplicates the two instead of double-counting.
@@ -86,7 +92,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "A valid name and email are required." }, { status: 400 });
   }
   const emailCorrection = suggestEmailCorrection(email);
-  if (emailCorrection) {
+  if (emailCorrection && !body.emailConfirmed) {
     return NextResponse.json(
       { ok: false, error: `That email looks like a typo, did you mean ${emailCorrection}?` },
       { status: 400 }
