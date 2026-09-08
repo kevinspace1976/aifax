@@ -66,7 +66,7 @@ export const NURTURE_SEQUENCE: Template[] = [
         reach your practice today.</p>
         ${
           ctx.notes
-            ? `<p>You mentioned: &ldquo;${escapeHtml(ctx.notes)}&rdquo; &mdash; that's exactly what we'll map out
+            ? `<p>You mentioned: &ldquo;${escapeHtml(ctx.notes)}&rdquo; - that's exactly what we'll map out
         in your workflow review.</p>`
             : ""
         }

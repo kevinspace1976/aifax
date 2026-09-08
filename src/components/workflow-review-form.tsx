@@ -106,12 +106,16 @@ export function WorkflowReviewForm() {
 
   function acceptEmailSuggestion() {
     if (!pendingForm || !emailSuggestion) return;
+    // Keep the visible field in sync too, so the corrected address is what
+    // the visitor sees if they look back at the form (e.g. after a submit
+    // error), but the request below carries the corrected email explicitly
+    // rather than depending on this DOM write being read back correctly.
     const emailInput = pendingForm.elements.namedItem("email") as HTMLInputElement;
     emailInput.value = emailSuggestion.suggested;
     const form = pendingForm;
     setEmailSuggestion(null);
     setPendingForm(null);
-    void submitForm(form);
+    void submitForm(form, { email: emailSuggestion.suggested, emailConfirmed: true });
   }
 
   function keepTypedEmail() {
@@ -119,12 +123,13 @@ export function WorkflowReviewForm() {
     const form = pendingForm;
     setEmailSuggestion(null);
     setPendingForm(null);
-    void submitForm(form);
+    void submitForm(form, { emailConfirmed: true });
   }
 
-  async function submitForm(form: HTMLFormElement) {
+  async function submitForm(form: HTMLFormElement, overrides?: { email?: string; emailConfirmed?: boolean }) {
     const data = new FormData(form);
     const value = (key: string) => String(data.get(key) ?? "").trim();
+    const email = overrides?.email ?? value("email");
 
     setSubmitError(null);
     setSubmitting(true);
@@ -147,7 +152,7 @@ export function WorkflowReviewForm() {
         body: JSON.stringify({
           name: value("name"),
           practice: value("practice"),
-          email: value("email"),
+          email,
           phone: value("phone"),
           ehr: value("ehr"),
           faxProvider: value("faxProvider"),
@@ -158,7 +163,8 @@ export function WorkflowReviewForm() {
           // honeypot - real visitors never see this field, see the hidden
           // input below. A bot filling every field trips it.
           companyWebsite: value("companyWebsite"),
-          eventId
+          eventId,
+          emailConfirmed: overrides?.emailConfirmed ?? false
         })
       });
       if (!res.ok) {
