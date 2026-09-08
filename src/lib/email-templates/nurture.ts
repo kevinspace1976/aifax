@@ -2,7 +2,7 @@
  * The lead-nurture sequence. Standard B2B SaaS cadence: confirm right
  * away, then educate, then prove it works, then handle the objections
  * that actually stall a purchase (price, compliance, setup effort), then
- * a direct check-in, then one last call before going quiet. Six touches
+ * a direct check-in, then one last nudge before going quiet. Six touches
  * over three weeks is enough contact for a considered B2B decision
  * without reading as spam.
  *
@@ -10,6 +10,7 @@
  * Index 0 is sent synchronously at signup by /api/contact, not by cron.
  */
 import { featuresHtml, featuresText } from "@/lib/features";
+import { newNumberUrl, portNumberUrl } from "@/lib/site";
 
 export const DELAYS_DAYS = [0, 2, 5, 7, 12, 21] as const;
 
@@ -62,14 +63,16 @@ export const NURTURE_SEQUENCE: Template[] = [
         ctx,
         `<p>Hi ${firstName(ctx.name)},</p>
         <p>Thanks for reaching out about AiFax${ctx.practiceName ? ` for ${ctx.practiceName}` : ""}. We got your
-        details and someone from our team will follow up shortly with a workflow review tailored to how faxes
-        reach your practice today.</p>
+        details and will follow up with a workflow review tailored to how faxes reach your practice today.</p>
         ${
           ctx.notes
             ? `<p>You mentioned: &ldquo;${escapeHtml(ctx.notes)}&rdquo; - that's exactly what we'll map out
         in your workflow review.</p>`
             : ""
         }
+        <p>Want to get started right away instead of waiting on us? <a href="${newNumberUrl}">Get a new fax
+        number</a> or <a href="${portNumberUrl}">port your current one</a> and the AI fax reading, routing, and
+        chat-with-your-faxes features turn on immediately, no call needed.</p>
         <p>In the meantime, here is a 2-minute look at how it works:
         <a href="https://www.aifax.net/how-it-works">aifax.net/how-it-works</a></p>
         <p>Talk soon,<br />The AiFax Team</p>`
@@ -77,9 +80,9 @@ export const NURTURE_SEQUENCE: Template[] = [
     text: (ctx) =>
       `Hi ${firstName(ctx.name)},\n\nThanks for reaching out about AiFax${
         ctx.practiceName ? ` for ${ctx.practiceName}` : ""
-      }. We got your details and someone from our team will follow up shortly with a workflow review tailored to how faxes reach your practice today.\n${
+      }. We got your details and will follow up with a workflow review tailored to how faxes reach your practice today.\n${
         ctx.notes ? `\nYou mentioned: "${ctx.notes}" - that's exactly what we'll map out in your workflow review.\n` : ""
-      }\nIn the meantime, here is a 2-minute look at how it works: https://www.aifax.net/how-it-works\n\nTalk soon,\nThe AiFax Team${textFooter(
+      }\nWant to get started right away instead of waiting on us? Get a new fax number: ${newNumberUrl} or port your current one: ${portNumberUrl}. The AI fax reading, routing, and chat-with-your-faxes features turn on immediately, no call needed.\n\nIn the meantime, here is a 2-minute look at how it works: https://www.aifax.net/how-it-works\n\nTalk soon,\nThe AiFax Team${textFooter(
         ctx
       )}`
   },
@@ -137,11 +140,13 @@ export const NURTURE_SEQUENCE: Template[] = [
         <p><strong>Is it HIPAA-compliant?</strong> Yes, that's the baseline, not an add-on.</p>
         <p><strong>How long does setup take?</strong> You keep your current fax number, there is no hardware
         to install, and most practices are live within days.</p>
-        <p>Happy to answer anything specific to your practice, just reply to this email.</p>
+        <p>Ready when you are: <a href="${portNumberUrl}">port your current number</a> or
+        <a href="${newNumberUrl}">get a new one</a> and you're live in days, no call required. Happy to answer
+        anything specific to your practice too, just reply to this email.</p>
         <p>The AiFax Team</p>`
       ),
     text: (ctx) =>
-      `Hi ${firstName(ctx.name)},\n\nThree questions every practice asks:\n\nWhat does it cost? Plans start at $9.99/month with page-based tiers. See plans: https://www.aifax.net/pricing\nIs it HIPAA-compliant? Yes, that's the baseline.\nHow long does setup take? You keep your current fax number, no hardware, most practices are live within days.\n\nReply to this email with anything specific to your practice.\n\nThe AiFax Team${textFooter(
+      `Hi ${firstName(ctx.name)},\n\nThree questions every practice asks:\n\nWhat does it cost? Plans start at $9.99/month with page-based tiers. See plans: https://www.aifax.net/pricing\nIs it HIPAA-compliant? Yes, that's the baseline.\nHow long does setup take? You keep your current fax number, no hardware, most practices are live within days.\n\nReady when you are: port your current number (${portNumberUrl}) or get a new one (${newNumberUrl}), no call required. Reply to this email with anything specific to your practice.\n\nThe AiFax Team${textFooter(
         ctx
       )}`
   },
@@ -155,15 +160,17 @@ export const NURTURE_SEQUENCE: Template[] = [
         <p>Wanted to check in, still looking at options for getting faxes into ${
           ctx.practiceName || "your EHR"
         } automatically?</p>
-        <p>If it's useful, we can do a short call and map your current fax volume and EHR straight to a setup
-        plan, no obligation.</p>
-        <p><a href="https://www.aifax.net/contact">Schedule a workflow review</a></p>
+        <p>You don't need a call to get started: <a href="${newNumberUrl}">get a new fax number</a> or
+        <a href="${portNumberUrl}">port your current one</a> and the AI fax reading, routing, and
+        chat-with-your-faxes features turn on right away.</p>
+        <p>If you specifically want your EHR integration scoped out, just reply here and we'll figure out the
+        right setup, no obligation.</p>
         <p>The AiFax Team</p>`
       ),
     text: (ctx) =>
       `Hi ${firstName(ctx.name)},\n\nStill looking at options for getting faxes into ${
         ctx.practiceName || "your EHR"
-      } automatically? Happy to do a short call and map your current fax volume and EHR to a setup plan, no obligation.\n\nSchedule a workflow review: https://www.aifax.net/contact\n\nThe AiFax Team${textFooter(
+      } automatically?\n\nYou don't need a call to get started: get a new fax number (${newNumberUrl}) or port your current one (${portNumberUrl}) and the AI fax reading, routing, and chat-with-your-faxes features turn on right away.\n\nIf you specifically want your EHR integration scoped out, just reply here and we'll figure out the right setup, no obligation.\n\nThe AiFax Team${textFooter(
         ctx
       )}`
   },
@@ -177,14 +184,15 @@ export const NURTURE_SEQUENCE: Template[] = [
         <p>This is the last email in this series, don't want to clutter your inbox if the timing isn't right.</p>
         <p>If getting faxes out of manual filing and into ${
           ctx.practiceName || "your EHR"
-        } becomes a priority later, everything above still applies, just reply or visit
-        <a href="https://www.aifax.net">aifax.net</a> whenever it's useful.</p>
+        } becomes a priority later, everything above still applies: <a href="${newNumberUrl}">get a new fax
+        number</a> or <a href="${portNumberUrl}">port your current one</a> whenever it's useful, no call needed.
+        Just reply if you'd rather talk through EHR integration first.</p>
         <p>The AiFax Team</p>`
       ),
     text: (ctx) =>
       `Hi ${firstName(ctx.name)},\n\nThis is the last email in this series. If getting faxes out of manual filing and into ${
         ctx.practiceName || "your EHR"
-      } becomes a priority later, just reply or visit https://www.aifax.net whenever it's useful.\n\nThe AiFax Team${textFooter(
+      } becomes a priority later, everything above still applies: get a new fax number (${newNumberUrl}) or port your current one (${portNumberUrl}) whenever it's useful, no call needed. Just reply if you'd rather talk through EHR integration first.\n\nThe AiFax Team${textFooter(
         ctx
       )}`
   }

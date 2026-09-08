@@ -7,6 +7,8 @@
  * admin still reviews and hits send themselves in Gmail.
  */
 
+import { randomUUID } from "crypto";
+
 const TOKEN_URL = "https://oauth2.googleapis.com/token";
 const API_BASE = "https://gmail.googleapis.com/gmail/v1/users/me";
 
@@ -109,14 +111,33 @@ export async function searchMessages(query: string, maxResults = 25): Promise<Gm
  * human to review, edit, and send. Requires the gmail.compose scope
  * (broader than the gmail.readonly used for the CRM sync), re-authorizing
  * via /api/gmail/oauth/connect picks up both.
+ *
+ * Sent as multipart/alternative (plain text + HTML) so the HTML part can
+ * carry real bold text and bullet points instead of asterisks/hyphens,
+ * while clients that don't render HTML still get a readable plain copy.
  */
-export async function createDraft(opts: { to: string; subject: string; body: string }): Promise<boolean> {
+export async function createDraft(opts: { to: string; subject: string; text: string; html: string }): Promise<boolean> {
   const accessToken = await getAccessToken();
   if (!accessToken) return false;
 
-  const message = [`To: ${opts.to}`, `Subject: ${opts.subject}`, "Content-Type: text/plain; charset=utf-8", "", opts.body].join(
-    "\r\n"
-  );
+  const boundary = `aifax_${randomUUID()}`;
+  const message = [
+    `To: ${opts.to}`,
+    `Subject: ${opts.subject}`,
+    `Content-Type: multipart/alternative; boundary="${boundary}"`,
+    "",
+    `--${boundary}`,
+    "Content-Type: text/plain; charset=utf-8",
+    "",
+    opts.text,
+    "",
+    `--${boundary}`,
+    "Content-Type: text/html; charset=utf-8",
+    "",
+    opts.html,
+    "",
+    `--${boundary}--`
+  ].join("\r\n");
   const raw = Buffer.from(message, "utf-8").toString("base64url");
 
   const res = await fetch(`${API_BASE}/drafts`, {

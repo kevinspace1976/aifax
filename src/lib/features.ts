@@ -10,7 +10,7 @@ export const FEATURE_SECTIONS: { title: string; items: string[] }[] = [
   {
     title: "EHR & software integration",
     items: [
-      "Fax-to-EHR integration (Practice Fusion, Office Ally, and others)",
+      "Fax-to-EHR integration with the platforms your practice already uses",
       "API-first architecture for custom integrations",
       "Routes into whichever workflow fits: API, interface, secure inbox, email, or assisted charting",
       "Forward fax summaries directly to your team"
@@ -52,17 +52,29 @@ export const FEATURE_SECTIONS: { title: string; items: string[] }[] = [
   }
 ];
 
-export function featuresHtml() {
+/**
+ * boxed (default true): the bordered/shaded card used in the automated
+ * nurture emails. Pass { boxed: false } for a plain, unboxed rendering
+ * (still bold section titles and real bullet points) that reads like an
+ * ordinary paragraph in a normal reply email, e.g. the auto-drafted Gmail
+ * reply in /api/contact.
+ */
+export function featuresHtml(opts: { boxed?: boolean } = {}) {
+  const boxed = opts.boxed ?? true;
   const sections = FEATURE_SECTIONS.map(
     (section) => `
-      <p style="margin:16px 0 4px;font-size:13px;font-weight:bold;color:#1a1a2e">${section.title}</p>
-      <ul style="margin:0;padding-left:18px;font-size:13px;color:#374151;line-height:1.6">
+      <p style="margin:16px 0 4px;font-size:14px;font-weight:bold;color:#1a1a2e">${section.title}</p>
+      <ul style="margin:0;padding-left:20px;font-size:14px;color:#374151;line-height:1.6">
         ${section.items.map((item) => `<li>${item}</li>`).join("")}
       </ul>`
   ).join("");
+  const heading = `<p style="margin:0 0 4px;font-size:15px;font-weight:bold;color:#1a1a2e">Everything included with your AiFax plan</p>`;
+  if (!boxed) {
+    return `<div style="margin-top:20px">${heading}${sections}</div>`;
+  }
   return `
     <div style="margin-top:28px;padding:16px 18px;border:1px solid #e5e7eb;border-radius:8px;background:#f9fafb">
-      <p style="margin:0 0 4px;font-size:15px;font-weight:bold;color:#1a1a2e">Everything included with your AiFax plan</p>
+      ${heading}
       ${sections}
     </div>`;
 }
