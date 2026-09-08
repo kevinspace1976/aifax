@@ -124,7 +124,7 @@ export async function POST(req: NextRequest) {
 
   const adminHtml = `
     <h2>New workflow review request</h2>
-    <p><strong>${name}</strong> (${email})${body.practice ? ` &mdash; ${body.practice}` : ""}</p>
+    <p><strong>${name}</strong> (${email})${body.practice ? ` - ${body.practice}` : ""}</p>
     <table cellpadding="4">
       <tr><td>Phone</td><td>${body.phone || "-"}</td></tr>
       <tr><td>EHR platform</td><td>${body.ehr || "-"}</td></tr>
