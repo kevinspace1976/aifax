@@ -349,7 +349,7 @@ export default function Home() {
       <section className="section-shell py-14 sm:py-16">
         <h2 className="text-2xl font-semibold text-white sm:text-3xl">Built Around the EHR You Already Use</h2>
         <p className="mt-3 max-w-3xl text-slate-300">
-          AiFax works with independent practices using Practice Fusion, Office Ally, and other EHR platforms.
+          AiFax works with independent practices across a wide range of EHR platforms.
         </p>
         <p className="mt-3 max-w-3xl text-slate-300">
           Because every EHR provides different integration capabilities, we evaluate the interfaces and workflow options

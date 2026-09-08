@@ -23,6 +23,9 @@ export const socialItems = [
   { href: "https://linkedin.com", label: "LinkedIn" }
 ];
 
+export const newNumberUrl = "https://portal.aifax.net/index.php?rp=/store/cloud-faxing&path=new";
+export const portNumberUrl = "https://portal.aifax.net/index.php?rp=/store/cloud-faxing&path=port";
+
 export const sharedCtas = {
   primary: { href: "https://portal.aifax.net/index.php?rp=/store/cloud-faxing", label: "Get Your Fax Number" },
   secondary: { href: "/pricing", label: "See Plans" }
@@ -34,12 +37,6 @@ export const loginCta = {
 };
 
 export const headerCtas = [
-  {
-    href: "https://portal.aifax.net/index.php?rp=/store/cloud-faxing&path=new",
-    label: "Get New Number"
-  },
-  {
-    href: "https://portal.aifax.net/index.php?rp=/store/cloud-faxing&path=port",
-    label: "Port My Number"
-  }
+  { href: newNumberUrl, label: "Get New Number" },
+  { href: portNumberUrl, label: "Port My Number" }
 ];

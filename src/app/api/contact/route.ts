@@ -9,7 +9,7 @@ import { mailingAddress, unsubscribeUrl } from "@/lib/unsubscribe";
 import { EMAIL_RE, suggestEmailCorrection } from "@/lib/email-validation";
 import { generateLeadReply } from "@/lib/ai-draft";
 import { createDraft, gmailConfigured } from "@/lib/gmail";
-import { featuresText } from "@/lib/features";
+import { featuresHtml, featuresText } from "@/lib/features";
 
 export const runtime = "nodejs";
 
@@ -39,6 +39,14 @@ type ContactBody = {
   eventId?: string;
 };
 
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
 /**
  * Best-effort: generates a personalized reply with Claude and creates it
  * as a Gmail draft for the admin to review and send. Never sends anything
@@ -61,11 +69,20 @@ async function attemptAutoDraft(lead: {
   try {
     const replyBody = await generateLeadReply(lead);
     if (!replyBody) return;
-    const fullBody = `${replyBody}\n\n--\nEverything included with your AiFax plan\n\n${featuresText()}`;
+    const text = `${replyBody}\n\n--\nEverything included with your AiFax plan\n\n${featuresText()}`;
+    const html = `
+      <div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#1a1a2e;line-height:1.6">
+        ${replyBody
+          .split(/\n{2,}/)
+          .map((para) => `<p style="margin:0 0 12px">${escapeHtml(para).replace(/\n/g, "<br />")}</p>`)
+          .join("")}
+        ${featuresHtml({ boxed: false })}
+      </div>`;
     await createDraft({
       to: lead.email,
       subject: `Re: Workflow review request - ${lead.practiceName || lead.name}`,
-      body: fullBody
+      text,
+      html
     });
   } catch (err) {
     console.error("[contact] auto-draft failed", err);
