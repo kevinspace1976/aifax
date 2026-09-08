@@ -9,7 +9,7 @@
  * DELAYS_DAYS[i] is days-since-signup that template i should go out.
  * Index 0 is sent synchronously at signup by /api/contact, not by cron.
  */
-import { featuresHtml, featuresText } from "@/lib/features";
+import { FEATURES_HEADING, featuresHtml, featuresText } from "@/lib/features";
 import { newNumberUrl, portNumberUrl } from "@/lib/site";
 
 export const DELAYS_DAYS = [0, 2, 5, 7, 12, 21] as const;
@@ -51,7 +51,7 @@ function wrap(ctx: NurtureContext, bodyHtml: string) {
 }
 
 function textFooter(ctx: NurtureContext) {
-  return `\n\n--\nEverything included with your AiFax plan\n\n${featuresText()}\n\n--\n${
+  return `\n\n--\n${FEATURES_HEADING}\n\n${featuresText()}\n\n--\n${
     ctx.mailingAddress ? `AiFax, ${ctx.mailingAddress}\n` : ""
   }Unsubscribe: ${ctx.unsubscribeUrl}`;
 }
