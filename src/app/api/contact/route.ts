@@ -9,7 +9,7 @@ import { mailingAddress, unsubscribeUrl } from "@/lib/unsubscribe";
 import { EMAIL_RE, suggestEmailCorrection } from "@/lib/email-validation";
 import { generateLeadReply } from "@/lib/ai-draft";
 import { createDraft, gmailConfigured } from "@/lib/gmail";
-import { featuresHtml, featuresText } from "@/lib/features";
+import { FEATURES_HEADING, featuresHtml, featuresText } from "@/lib/features";
 import { newNumberDisplay, newNumberUrl, portNumberDisplay, portNumberUrl } from "@/lib/site";
 
 export const runtime = "nodejs";
@@ -79,7 +79,7 @@ async function attemptAutoDraft(lead: {
   try {
     const replyBody = await generateLeadReply(lead);
     if (!replyBody) return;
-    const text = `${replyBody}\n\n--\nEverything included with your AiFax plan\n\n${featuresText()}`;
+    const text = `${replyBody}\n\n--\n${FEATURES_HEADING}\n\n${featuresText()}`;
     const html = `
       <div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#1a1a2e;line-height:1.6">
         ${replyBody

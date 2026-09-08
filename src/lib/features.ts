@@ -52,6 +52,10 @@ export const FEATURE_SECTIONS: { title: string; items: string[] }[] = [
   }
 ];
 
+// Shared with the plain-text callers (nurture.ts, api/contact/route.ts) so
+// the HTML and plain-text versions of the same email read the same.
+export const FEATURES_HEADING = "Everything included with your AiFax plan (plans starting from $9.99/month)";
+
 /**
  * boxed (default true): the bordered/shaded card used in the automated
  * nurture emails. Pass { boxed: false } for a plain, unboxed rendering
@@ -68,7 +72,7 @@ export function featuresHtml(opts: { boxed?: boolean } = {}) {
         ${section.items.map((item) => `<li>${item}</li>`).join("")}
       </ul>`
   ).join("");
-  const heading = `<p style="margin:0 0 4px;font-size:15px;font-weight:bold;color:#1a1a2e">Everything included with your AiFax plan</p>`;
+  const heading = `<p style="margin:0 0 4px;font-size:15px;font-weight:bold;color:#1a1a2e">${FEATURES_HEADING}</p>`;
   if (!boxed) {
     return `<div style="margin-top:20px">${heading}${sections}</div>`;
   }
