@@ -27,7 +27,7 @@ export default function SpecialityPage() {
         </div>
         <div className="mt-8 card-surface p-6">
           <h2 className="text-xl font-semibold text-white">Build your roadmap with us</h2>
-          <p className="mt-2 text-slate-300">Start small or launch enterprise-wide — we can prioritize high-ROI phases for rapid wins.</p>
+          <p className="mt-2 text-slate-300">Start small or launch enterprise-wide - we can prioritize high-ROI phases for rapid wins.</p>
           <div className="mt-4">
             <Link href="/contact" className="btn-primary">
               Plan My Rollout

@@ -33,10 +33,82 @@ function escapeHtml(value: string) {
     .replace(/"/g, "&quot;");
 }
 
+// Shown at the bottom of every nurture email (see wrap()/textFooter()) so
+// every touch keeps the full feature set - and the price relative to a
+// practice's current fax bill - in front of the reader, not just whatever
+// that one email's specific topic was.
+const FEATURE_SECTIONS: { title: string; items: string[] }[] = [
+  {
+    title: "EHR & software integration",
+    items: [
+      "Fax-to-EHR integration (Practice Fusion, Office Ally, and others)",
+      "API-first architecture for custom integrations",
+      "Routes into whichever workflow fits: API, interface, secure inbox, email, or assisted charting",
+      "Forward fax summaries directly to your team"
+    ]
+  },
+  {
+    title: "Reading & routing",
+    items: [
+      "Real-time AI fax reading - identifies patient, sender, and document type the moment it arrives",
+      "Automatic patient/chart matching (never guesses, flags unmatched faxes for staff review)",
+      "AI-generated summary of every fax (results, referrals, follow-ups)",
+      "Full original fax filed into the chart, not just a summary",
+      "OCR + NLP that handles tables, embedded images, and handwriting",
+      "24/7 zero-touch automation, nights and weekends included",
+      "Real-time delivery to email and SMS",
+      "Chat with your incoming faxes (ask questions across documents, available on paid tiers)",
+      "Custom AI prompts/extraction logic per workflow or specialty"
+    ]
+  },
+  {
+    title: "Scale & cost",
+    items: [
+      "Scales from a solo practice to multi-site/enterprise with no new headcount",
+      "Plans start at $9.99/month, a fraction of a typical fax line plus EHR integration cost",
+      "Operational analytics: throughput, quality, turnaround tracking"
+    ]
+  },
+  {
+    title: "Compliance & security",
+    items: ["HIPAA-compliant architecture, BAA signed electronically at signup", "Encryption in transit and at rest"]
+  },
+  {
+    title: "Setup & flexibility",
+    items: [
+      "Keep your current fax number, get a new one, or port an existing number",
+      "Guided onboarding, no hardware to install",
+      "24/7 customer support"
+    ]
+  }
+];
+
+function featuresHtml() {
+  const sections = FEATURE_SECTIONS.map(
+    (section) => `
+      <p style="margin:16px 0 4px;font-size:13px;font-weight:bold;color:#1a1a2e">${section.title}</p>
+      <ul style="margin:0;padding-left:18px;font-size:13px;color:#374151;line-height:1.6">
+        ${section.items.map((item) => `<li>${item}</li>`).join("")}
+      </ul>`
+  ).join("");
+  return `
+    <div style="margin-top:28px;padding:16px 18px;border:1px solid #e5e7eb;border-radius:8px;background:#f9fafb">
+      <p style="margin:0 0 4px;font-size:15px;font-weight:bold;color:#1a1a2e">Everything included with your AiFax plan</p>
+      ${sections}
+    </div>`;
+}
+
+function featuresText() {
+  return FEATURE_SECTIONS.map(
+    (section) => `${section.title}:\n${section.items.map((item) => `- ${item}`).join("\n")}`
+  ).join("\n\n");
+}
+
 function wrap(ctx: NurtureContext, bodyHtml: string) {
   return `
   <div style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:0 auto;color:#1a1a2e">
     ${bodyHtml}
+    ${featuresHtml()}
     <hr style="margin:32px 0;border:none;border-top:1px solid #e5e7eb" />
     <p style="font-size:12px;color:#6b7280;line-height:1.6">
       AiFax, ${ctx.mailingAddress}<br />
@@ -47,7 +119,7 @@ function wrap(ctx: NurtureContext, bodyHtml: string) {
 }
 
 function textFooter(ctx: NurtureContext) {
-  return `\n\n--\nAiFax, ${ctx.mailingAddress}\nUnsubscribe: ${ctx.unsubscribeUrl}`;
+  return `\n\n--\nEverything included with your AiFax plan\n\n${featuresText()}\n\n--\nAiFax, ${ctx.mailingAddress}\nUnsubscribe: ${ctx.unsubscribeUrl}`;
 }
 
 export const NURTURE_SEQUENCE: Template[] = [
