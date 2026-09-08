@@ -75,14 +75,14 @@ export const NURTURE_SEQUENCE: Template[] = [
         chat-with-your-faxes features turn on immediately, no call needed.</p>
         <p>In the meantime, here is a 2-minute look at how it works:
         <a href="https://www.aifax.net/how-it-works">aifax.net/how-it-works</a></p>
-        <p>Talk soon,<br />The AiFax Team</p>`
+        <p>Talk soon,<br />Team AiFax</p>`
       ),
     text: (ctx) =>
       `Hi ${firstName(ctx.name)},\n\nThanks for reaching out about AiFax${
         ctx.practiceName ? ` for ${ctx.practiceName}` : ""
       }. We got your details and will follow up with a workflow review tailored to how faxes reach your practice today.\n${
         ctx.notes ? `\nYou mentioned: "${ctx.notes}" - that's exactly what we'll map out in your workflow review.\n` : ""
-      }\nWant to get started right away instead of waiting on us? Get a new fax number: ${newNumberUrl} or port your current one: ${portNumberUrl}. The AI fax reading, routing, and chat-with-your-faxes features turn on immediately, no call needed.\n\nIn the meantime, here is a 2-minute look at how it works: https://www.aifax.net/how-it-works\n\nTalk soon,\nThe AiFax Team${textFooter(
+      }\nWant to get started right away instead of waiting on us? Get a new fax number: ${newNumberUrl} or port your current one: ${portNumberUrl}. The AI fax reading, routing, and chat-with-your-faxes features turn on immediately, no call needed.\n\nIn the meantime, here is a 2-minute look at how it works: https://www.aifax.net/how-it-works\n\nTalk soon,\nTeam AiFax${textFooter(
         ctx
       )}`
   },
@@ -101,10 +101,10 @@ export const NURTURE_SEQUENCE: Template[] = [
         <p>AiFax reads every fax the moment it arrives and routes it into the right patient's chart
         automatically, so your staff reviews instead of retypes.</p>
         <p><a href="https://www.aifax.net/ehr-integration">See how EHR integration works</a></p>
-        <p>The AiFax Team</p>`
+        <p>Team AiFax</p>`
       ),
     text: (ctx) =>
-      `Hi ${firstName(ctx.name)},\n\nEvery fax that lands in your practice goes through the same manual chain: open it, identify the patient, identify the document type, download it, rename it, find or create the chart, upload it, notify the provider. Miss a step and you get a misfiled fax or a missed follow-up.\n\nAiFax reads every fax the moment it arrives and routes it into the right patient's chart automatically.\n\nSee how EHR integration works: https://www.aifax.net/ehr-integration\n\nThe AiFax Team${textFooter(
+      `Hi ${firstName(ctx.name)},\n\nEvery fax that lands in your practice goes through the same manual chain: open it, identify the patient, identify the document type, download it, rename it, find or create the chart, upload it, notify the provider. Miss a step and you get a misfiled fax or a missed follow-up.\n\nAiFax reads every fax the moment it arrives and routes it into the right patient's chart automatically.\n\nSee how EHR integration works: https://www.aifax.net/ehr-integration\n\nTeam AiFax${textFooter(
         ctx
       )}`
   },
@@ -120,10 +120,10 @@ export const NURTURE_SEQUENCE: Template[] = [
         actual content of the document, identify the patient, classify the document type, and route it,
         whether it's a typed referral, a handwritten order, or a multi-page lab report.</p>
         <p><a href="https://www.aifax.net/solutions">See the full workflow</a></p>
-        <p>The AiFax Team</p>`
+        <p>Team AiFax</p>`
       ),
     text: (ctx) =>
-      `Hi ${firstName(ctx.name)},\n\nA common question: "our faxes don't follow a consistent format, will this work?" AiFax combines OCR with natural language processing to read the actual content, identify the patient, classify the document type, and route it, whether it's typed, handwritten, or a multi-page report.\n\nSee the full workflow: https://www.aifax.net/solutions\n\nThe AiFax Team${textFooter(
+      `Hi ${firstName(ctx.name)},\n\nA common question: "our faxes don't follow a consistent format, will this work?" AiFax combines OCR with natural language processing to read the actual content, identify the patient, classify the document type, and route it, whether it's typed, handwritten, or a multi-page report.\n\nSee the full workflow: https://www.aifax.net/solutions\n\nTeam AiFax${textFooter(
         ctx
       )}`
   },
@@ -143,10 +143,10 @@ export const NURTURE_SEQUENCE: Template[] = [
         <p>Ready when you are: <a href="${portNumberUrl}">port your current number</a> or
         <a href="${newNumberUrl}">get a new one</a> and you're live in days, no call required. Happy to answer
         anything specific to your practice too, just reply to this email.</p>
-        <p>The AiFax Team</p>`
+        <p>Team AiFax</p>`
       ),
     text: (ctx) =>
-      `Hi ${firstName(ctx.name)},\n\nThree questions every practice asks:\n\nWhat does it cost? Plans start at $9.99/month with page-based tiers. See plans: https://www.aifax.net/pricing\nIs it HIPAA-compliant? Yes, that's the baseline.\nHow long does setup take? You keep your current fax number, no hardware, most practices are live within days.\n\nReady when you are: port your current number (${portNumberUrl}) or get a new one (${newNumberUrl}), no call required. Reply to this email with anything specific to your practice.\n\nThe AiFax Team${textFooter(
+      `Hi ${firstName(ctx.name)},\n\nThree questions every practice asks:\n\nWhat does it cost? Plans start at $9.99/month with page-based tiers. See plans: https://www.aifax.net/pricing\nIs it HIPAA-compliant? Yes, that's the baseline.\nHow long does setup take? You keep your current fax number, no hardware, most practices are live within days.\n\nReady when you are: port your current number (${portNumberUrl}) or get a new one (${newNumberUrl}), no call required. Reply to this email with anything specific to your practice.\n\nTeam AiFax${textFooter(
         ctx
       )}`
   },
@@ -165,12 +165,12 @@ export const NURTURE_SEQUENCE: Template[] = [
         chat-with-your-faxes features turn on right away.</p>
         <p>If you specifically want your EHR integration scoped out, just reply here and we'll figure out the
         right setup, no obligation.</p>
-        <p>The AiFax Team</p>`
+        <p>Team AiFax</p>`
       ),
     text: (ctx) =>
       `Hi ${firstName(ctx.name)},\n\nStill looking at options for getting faxes into ${
         ctx.practiceName || "your EHR"
-      } automatically?\n\nYou don't need a call to get started: get a new fax number (${newNumberUrl}) or port your current one (${portNumberUrl}) and the AI fax reading, routing, and chat-with-your-faxes features turn on right away.\n\nIf you specifically want your EHR integration scoped out, just reply here and we'll figure out the right setup, no obligation.\n\nThe AiFax Team${textFooter(
+      } automatically?\n\nYou don't need a call to get started: get a new fax number (${newNumberUrl}) or port your current one (${portNumberUrl}) and the AI fax reading, routing, and chat-with-your-faxes features turn on right away.\n\nIf you specifically want your EHR integration scoped out, just reply here and we'll figure out the right setup, no obligation.\n\nTeam AiFax${textFooter(
         ctx
       )}`
   },
@@ -187,12 +187,12 @@ export const NURTURE_SEQUENCE: Template[] = [
         } becomes a priority later, everything above still applies: <a href="${newNumberUrl}">get a new fax
         number</a> or <a href="${portNumberUrl}">port your current one</a> whenever it's useful, no call needed.
         Just reply if you'd rather talk through EHR integration first.</p>
-        <p>The AiFax Team</p>`
+        <p>Team AiFax</p>`
       ),
     text: (ctx) =>
       `Hi ${firstName(ctx.name)},\n\nThis is the last email in this series. If getting faxes out of manual filing and into ${
         ctx.practiceName || "your EHR"
-      } becomes a priority later, everything above still applies: get a new fax number (${newNumberUrl}) or port your current one (${portNumberUrl}) whenever it's useful, no call needed. Just reply if you'd rather talk through EHR integration first.\n\nThe AiFax Team${textFooter(
+      } becomes a priority later, everything above still applies: get a new fax number (${newNumberUrl}) or port your current one (${portNumberUrl}) whenever it's useful, no call needed. Just reply if you'd rather talk through EHR integration first.\n\nTeam AiFax${textFooter(
         ctx
       )}`
   }

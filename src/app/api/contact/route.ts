@@ -10,6 +10,7 @@ import { EMAIL_RE, suggestEmailCorrection } from "@/lib/email-validation";
 import { generateLeadReply } from "@/lib/ai-draft";
 import { createDraft, gmailConfigured } from "@/lib/gmail";
 import { featuresHtml, featuresText } from "@/lib/features";
+import { newNumberDisplay, newNumberUrl, portNumberDisplay, portNumberUrl } from "@/lib/site";
 
 export const runtime = "nodejs";
 
@@ -47,6 +48,15 @@ function escapeHtml(value: string) {
     .replace(/"/g, "&quot;");
 }
 
+// The AI-drafted reply is told to write these short display labels rather
+// than the real (ugly, tracking-parameter) signup URLs, see ai-draft.ts.
+// Turn each label into a real link to the correct URL for the HTML part.
+function linkifyDisplayUrls(html: string) {
+  return html
+    .replaceAll(newNumberDisplay, `<a href="${escapeHtml(newNumberUrl)}">${newNumberDisplay}</a>`)
+    .replaceAll(portNumberDisplay, `<a href="${escapeHtml(portNumberUrl)}">${portNumberDisplay}</a>`);
+}
+
 /**
  * Best-effort: generates a personalized reply with Claude and creates it
  * as a Gmail draft for the admin to review and send. Never sends anything
@@ -74,7 +84,7 @@ async function attemptAutoDraft(lead: {
       <div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#1a1a2e;line-height:1.6">
         ${replyBody
           .split(/\n{2,}/)
-          .map((para) => `<p style="margin:0 0 12px">${escapeHtml(para).replace(/\n/g, "<br />")}</p>`)
+          .map((para) => `<p style="margin:0 0 12px">${linkifyDisplayUrls(escapeHtml(para).replace(/\n/g, "<br />"))}</p>`)
           .join("")}
         ${featuresHtml({ boxed: false })}
       </div>`;
