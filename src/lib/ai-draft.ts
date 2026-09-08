@@ -41,6 +41,7 @@ Rules:
   solve, ask for exactly those missing ones instead of guessing.
 - If both "Best time to call" and Phone are filled in, propose a call at that time using that number.
 - 3-5 short sentences total.
+- Never use an em dash. Use a hyphen instead, or rewrite the sentence.
 - Sign off exactly as:
 Kevin
 AiFax`;
