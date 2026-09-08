@@ -122,6 +122,11 @@ export async function createDraft(opts: { to: string; subject: string; text: str
 
   const boundary = `aifax_${randomUUID()}`;
   const message = [
+    // Set explicitly rather than left to Gmail's account-level identity
+    // resolution: that lagged behind after the mailbox's Workspace profile
+    // and "Send mail as" name were renamed to AiFax DevTeam, still sending
+    // as the old name.
+    'From: "AiFax DevTeam" <info@aifax.net>',
     `To: ${opts.to}`,
     `Subject: ${opts.subject}`,
     `Content-Type: multipart/alternative; boundary="${boundary}"`,
