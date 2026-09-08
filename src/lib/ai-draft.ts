@@ -46,7 +46,10 @@ Rules:
   getting a new one turns on AI fax reading, routing, and chat-with-your-faxes immediately.
   - Get a new fax number: ${newNumberDisplay}
   - Port an existing fax number: ${portNumberDisplay}
-  Write those two exactly as given above, don't alter or invent a different URL for them.
+  Write those two exactly as given above, don't alter or invent a different URL for them. Always mention BOTH
+  options somewhere in the email, even when they already gave a current fax number and porting is the obvious
+  lead: still name getting a new number as an alternative in case they'd rather start fresh, a brief mention
+  near the end is enough, don't drop it just because porting fits their situation better.
 - Do not propose a phone call, ask to schedule one, or reference "best time to call" or their phone number, even
   if those fields are filled in. The one exception: if "What they want to solve" or the EHR platform clearly
   means they want their EHR integration scoped out, you may offer a short call as one option, alongside just
