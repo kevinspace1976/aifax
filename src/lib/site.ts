@@ -26,6 +26,13 @@ export const socialItems = [
 export const newNumberUrl = "https://portal.aifax.net/index.php?rp=/store/cloud-faxing&path=new";
 export const portNumberUrl = "https://portal.aifax.net/index.php?rp=/store/cloud-faxing&path=port";
 
+// Short, clean stand-ins for the two URLs above, used as the visible link
+// text in the AI-drafted reply (see ai-draft.ts / api/contact/route.ts).
+// Not real subdomains, just display labels: every anchor built from these
+// still points at the real newNumberUrl/portNumberUrl href above.
+export const newNumberDisplay = "www.new.aifax.net";
+export const portNumberDisplay = "www.port.aifax.net";
+
 export const sharedCtas = {
   primary: { href: "https://portal.aifax.net/index.php?rp=/store/cloud-faxing", label: "Get Your Fax Number" },
   secondary: { href: "/pricing", label: "See Plans" }
