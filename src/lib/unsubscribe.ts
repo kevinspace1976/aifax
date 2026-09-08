@@ -26,6 +26,10 @@ export function unsubscribeUrl(leadId: number | string) {
   return `${base}/api/unsubscribe?lead=${leadId}&token=${unsubscribeToken(leadId)}`;
 }
 
-export function mailingAddress() {
-  return process.env.COMPANY_MAILING_ADDRESS || "[mailing address not yet configured]";
+/**
+ * Null until COMPANY_MAILING_ADDRESS is set, callers should just omit the
+ * mailing-address line rather than show a placeholder to real recipients.
+ */
+export function mailingAddress(): string | null {
+  return process.env.COMPANY_MAILING_ADDRESS || null;
 }

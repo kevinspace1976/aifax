@@ -19,7 +19,7 @@ export type NurtureContext = {
   practiceName: string | null;
   notes: string | null;
   unsubscribeUrl: string;
-  mailingAddress: string;
+  mailingAddress: string | null;
 };
 
 type Template = { subject: string; html: (ctx: NurtureContext) => string; text: (ctx: NurtureContext) => string };
@@ -43,7 +43,7 @@ function wrap(ctx: NurtureContext, bodyHtml: string) {
     ${featuresHtml()}
     <hr style="margin:32px 0;border:none;border-top:1px solid #e5e7eb" />
     <p style="font-size:12px;color:#6b7280;line-height:1.6">
-      AiFax, ${ctx.mailingAddress}<br />
+      ${ctx.mailingAddress ? `AiFax, ${ctx.mailingAddress}<br />` : ""}
       You are receiving this because you requested information from AiFax.
       <a href="${ctx.unsubscribeUrl}" style="color:#6b7280">Unsubscribe</a>
     </p>
@@ -51,7 +51,9 @@ function wrap(ctx: NurtureContext, bodyHtml: string) {
 }
 
 function textFooter(ctx: NurtureContext) {
-  return `\n\n--\nEverything included with your AiFax plan\n\n${featuresText()}\n\n--\nAiFax, ${ctx.mailingAddress}\nUnsubscribe: ${ctx.unsubscribeUrl}`;
+  return `\n\n--\nEverything included with your AiFax plan\n\n${featuresText()}\n\n--\n${
+    ctx.mailingAddress ? `AiFax, ${ctx.mailingAddress}\n` : ""
+  }Unsubscribe: ${ctx.unsubscribeUrl}`;
 }
 
 export const NURTURE_SEQUENCE: Template[] = [

@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
   try {
     await ensureSchema();
     const db = sql();
-    await db`UPDATE leads SET unsubscribed = TRUE, next_email_due_at = NULL WHERE id = ${Number(leadId)}`;
+    await db`UPDATE leads SET unsubscribed = TRUE, unsubscribed_at = now(), next_email_due_at = NULL WHERE id = ${Number(leadId)}`;
   } catch (err) {
     console.error("[unsubscribe] failed to update lead", err);
     return NextResponse.redirect(new URL("/unsubscribed?ok=0", req.url));
