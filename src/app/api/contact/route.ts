@@ -9,6 +9,7 @@ import { mailingAddress, unsubscribeUrl } from "@/lib/unsubscribe";
 import { EMAIL_RE, suggestEmailCorrection } from "@/lib/email-validation";
 import { generateLeadReply } from "@/lib/ai-draft";
 import { createDraft, gmailConfigured } from "@/lib/gmail";
+import { featuresText } from "@/lib/features";
 
 export const runtime = "nodejs";
 
@@ -54,10 +55,11 @@ async function attemptAutoDraft(lead: {
   try {
     const replyBody = await generateLeadReply(lead);
     if (!replyBody) return;
+    const fullBody = `${replyBody}\n\n--\nEverything included with your AiFax plan\n\n${featuresText()}`;
     await createDraft({
       to: lead.email,
       subject: `Re: Workflow review request - ${lead.practiceName || lead.name}`,
-      body: replyBody
+      body: fullBody
     });
   } catch (err) {
     console.error("[contact] auto-draft failed", err);
