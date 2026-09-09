@@ -34,7 +34,7 @@ export function PricingPlansGrid({ plans }: PricingPlansGridProps) {
         </div>
       </div>
 
-      <div className="mt-8 grid items-stretch gap-5 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="mt-8 grid items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {plans.map((plan) => {
           const isAnnual = billingPeriod === "annually" && Boolean(plan.annualPrice);
           const price = isAnnual ? plan.annualPrice : plan.price;
@@ -43,7 +43,7 @@ export function PricingPlansGrid({ plans }: PricingPlansGridProps) {
           return (
             <article
               key={plan.name}
-              className={`relative flex h-full flex-col rounded-2xl border bg-white p-7 ${
+              className={`relative flex h-full flex-col rounded-2xl border bg-white p-6 ${
                 plan.featured ? "border-2 border-orange-500" : "border-slate-200"
               }`}
             >
@@ -55,7 +55,7 @@ export function PricingPlansGrid({ plans }: PricingPlansGridProps) {
 
               <h2 className="text-xl text-slate-900">{plan.name}</h2>
               <p className="mt-1 flex items-baseline gap-1.5">
-                <span className="text-4xl font-extrabold tracking-tight text-slate-900 tabular-nums">{price}</span>
+                <span className="text-3xl font-extrabold tracking-tight text-slate-900 tabular-nums">{price}</span>
                 {isCustom ? null : <span className="text-slate-500">/month</span>}
               </p>
               <p className="text-sm text-slate-500">
@@ -65,8 +65,8 @@ export function PricingPlansGrid({ plans }: PricingPlansGridProps) {
 
               <ul className="mt-5 flex flex-1 flex-col gap-2.5">
                 {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-2.5 text-slate-700">
-                    <CheckCircle2 className="mt-0.5 h-5 w-5 flex-none text-emerald-600" aria-hidden="true" />
+                  <li key={feature} className="flex items-start gap-2 text-sm text-slate-700">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 flex-none text-emerald-600" aria-hidden="true" />
                     <span>{feature}</span>
                   </li>
                 ))}

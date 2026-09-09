@@ -1,10 +1,9 @@
 /**
  * The public plan ladder, shared by the pricing page and the Home teaser.
- * Priced by pages a month, sending and receiving combined. Checkout links
- * come from env so the Stripe/WHMCS products can change without a deploy.
- *
- * Group has no checkout link yet: until GROUP_STRIPE_CHECKOUT_LINK is set
- * it sends the visitor to the contact page instead of a dead "#".
+ * Names, prices, and page allowances mirror the products configured in
+ * WHMCS and Stripe: do not change them here without changing them there.
+ * Checkout links come from env so the Stripe/WHMCS products can change
+ * without a deploy.
  */
 export type Plan = {
   name: string;
@@ -18,8 +17,6 @@ export type Plan = {
   teaser: string[];
 };
 
-const groupLink = process.env.GROUP_STRIPE_CHECKOUT_LINK;
-
 export const plans: Plan[] = [
   {
     name: "Lite",
@@ -29,58 +26,75 @@ export const plans: Plan[] = [
     cta: "Subscribe",
     href: process.env.LITE_STRIPE_CHECKOUT_LINK ?? "#",
     features: [
-      "Keep or port your number",
-      "AI summary of every fax",
-      "Email delivery of fax and summary",
-      "HIPAA-compliant, BAA signed at signup",
-      "24/7 support"
+      "Secure, HIPAA-compliant fax with a BAA at signup",
+      "Port your existing fax number or get a new one",
+      "Setup, fax routing, user access, and configuration included",
+      "Instant access after signup",
+      "No contract, cancel anytime",
+      "24/7 support",
+      "Additional pages $0.05 each"
     ],
-    teaser: ["Keep or port your number", "AI summary of every fax", "HIPAA, BAA at signup"]
+    teaser: ["HIPAA-compliant fax, BAA at signup", "Port your number or get a new one", "Instant access, no contract"]
   },
   {
-    name: "Practice",
-    price: "$44.99",
-    annualPrice: "$37.34",
-    pages: "1,000 pages a month",
+    name: "Plus",
+    price: "$29.99",
+    annualPrice: "$24.89",
+    pages: "500 pages a month, send and receive",
     cta: "Subscribe",
-    href: process.env.PRO_STRIPE_CHECKOUT_LINK ?? "#",
+    href: process.env.PLUS_STRIPE_CHECKOUT_LINK ?? "#",
     featured: true,
     features: [
       "Everything in Lite",
-      "Patient matching against your patient list",
-      "Summaries to up to 3 addresses",
-      "Custom AI prompt per practice",
-      "Chat with any fax, up to 50 documents"
+      "AI summary and smart extraction on every fax (customizable)",
+      "OCR and NLP document intelligence",
+      "Dashboard access plus email summaries",
+      "Practice-specific automation and prompt logic",
+      "AI chatbot: up to 10 documents, 10 MB, 250 questions",
+      "Complete onboarding: routing, user access, automation rules, porting, and delivery"
     ],
-    teaser: ["Everything in Lite", "Patient matching", "Summaries to 3 addresses"]
+    teaser: ["Everything in Lite", "AI summary on every fax", "Chat with your faxes"]
   },
   {
-    name: "Group",
-    price: "$119.99",
-    annualPrice: "$99.59",
-    pages: "3,000 pages a month",
-    cta: groupLink ? "Subscribe" : "Talk to us",
-    href: groupLink ?? "/contact",
+    name: "Pro",
+    price: "$44.99",
+    annualPrice: "$37.34",
+    pages: "1,000 pages a month, send and receive",
+    cta: "Subscribe",
+    href: process.env.PRO_STRIPE_CHECKOUT_LINK ?? "#",
     features: [
-      "Everything in Practice",
-      "Multiple providers and sites, one platform",
-      "Priority onboarding and porting",
-      "Chat with any fax, up to 100 documents",
-      "Operational analytics"
+      "Everything in Plus",
+      "Double the page allowance for busier practices",
+      "AI chatbot: up to 50 documents, 50 MB, 500 questions"
     ],
-    teaser: ["Everything in Practice", "Multi-provider, multi-site", "Priority onboarding"]
+    teaser: ["Everything in Plus", "1,000 pages a month", "Larger AI chatbot"]
+  },
+  {
+    name: "Enterprise",
+    price: "$69.99",
+    annualPrice: "$58.09",
+    pages: "1,500 pages a month, send and receive",
+    cta: "Subscribe",
+    href: process.env.ENTERPRISE_STRIPE_CHECKOUT_LINK ?? "#",
+    features: [
+      "Everything in Pro",
+      "Highest page allowance for multi-provider groups",
+      "AI chatbot: up to 100 documents, 100 MB, 1,000 questions"
+    ],
+    teaser: []
   },
   {
     name: "Corporate",
     price: "Custom",
     pages: "Custom page volumes",
-    cta: "Contact us",
+    cta: "Contact sales",
     href: "/contact",
     features: [
-      "Everything in Group",
-      "API integration and advanced automation",
-      "Dedicated onboarding",
-      "Custom extraction logic per workflow"
+      "Everything in Enterprise",
+      "Enterprise scaling and custom volumes",
+      "Chat assistant tailored to your workflows",
+      "API integration and advanced automation support",
+      "Dedicated onboarding and priority support"
     ],
     teaser: []
   }
