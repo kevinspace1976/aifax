@@ -220,10 +220,15 @@ export default function Home() {
               ) : null}
               <h3 className="text-xl text-slate-900">{plan.name}</h3>
               <p className="mt-1 flex items-baseline gap-1.5">
-                <span className="text-4xl font-extrabold tracking-tight text-slate-900 tabular-nums">{plan.price}</span>
+                <span className="text-4xl font-extrabold tracking-tight text-slate-900 tabular-nums">
+                  {plan.annualPrice ?? plan.price}
+                </span>
                 <span className="text-slate-500">/month</span>
               </p>
-              <p className="text-sm text-slate-500">{plan.pages}</p>
+              <p className="text-sm text-slate-500">
+                {plan.pages}
+                {plan.annualPrice ? ", billed annually" : ""}
+              </p>
               <ul className="mt-4 flex flex-col gap-2.5">
                 {plan.teaser.map((line) => (
                   <Check key={line}>{line}</Check>
@@ -236,7 +241,7 @@ export default function Home() {
           ))}
         </div>
         <p className="mt-5 text-sm text-slate-500">
-          All plans month to month. Additional pages $0.05 each. EHR integration is scoped after a written discovery with
+          Prices shown billed annually, monthly billing available. Additional pages $0.05 each. EHR integration is scoped after a written discovery with
           your EHR vendor.
         </p>
       </section>
