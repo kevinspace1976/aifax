@@ -164,7 +164,7 @@ export async function POST(req: NextRequest) {
       <tr><td>Current fax provider</td><td>${body.faxProvider || "-"}</td></tr>
       <tr><td>Current fax number</td><td>${body.faxNumber || "-"}</td></tr>
       <tr><td>Monthly volume</td><td>${body.volume || "-"}</td></tr>
-      <tr><td>Best time to call</td><td>${body.callWindow || "-"}</td></tr>
+      <tr><td>Preferred contact</td><td>${body.callWindow || "-"}</td></tr>
       <tr><td>Source</td><td>${attribution?.utmSource || attribution?.referrer || "direct"}${
         attribution?.utmCampaign ? ` / campaign: ${attribution.utmCampaign}` : ""
       }${attribution?.fbclid ? " / from a Facebook ad click" : ""}</td></tr>
@@ -176,7 +176,7 @@ export async function POST(req: NextRequest) {
     body.practice ? ` - ${body.practice}` : ""
   }\nPhone: ${body.phone || "-"}\nEHR: ${body.ehr || "-"}\nCurrent fax provider: ${
     body.faxProvider || "-"
-  }\nMonthly volume: ${body.volume || "-"}\nBest time to call: ${body.callWindow || "-"}\nSource: ${
+  }\nMonthly volume: ${body.volume || "-"}\nPreferred contact: ${body.callWindow || "-"}\nSource: ${
     attribution?.utmSource || attribution?.referrer || "direct"
   }${attribution?.utmCampaign ? ` / campaign: ${attribution.utmCampaign}` : ""}${
     attribution?.fbclid ? " / from a Facebook ad click" : ""

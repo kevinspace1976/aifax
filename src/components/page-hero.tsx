@@ -1,33 +1,36 @@
-import Link from "next/link";
 import type { ReactNode } from "react";
 import { sharedCtas } from "@/lib/site";
 
 type PageHeroProps = {
   title: string;
   description: string;
+  kicker?: string;
   /** Replaces the default call-to-action row when provided. */
   actions?: ReactNode;
+  /** Optional note under the actions (price, compliance, timing). */
+  note?: string;
 };
 
-export function PageHero({ title, description, actions }: PageHeroProps) {
+export function PageHero({ title, description, kicker = "AI fax for medical practices", actions, note }: PageHeroProps) {
   return (
-    <section className="border-b border-white/10 bg-slate-900/60">
+    <section className="border-b border-slate-200">
       <div className="section-shell py-14 sm:py-16">
-        <p className="kicker">Enterprise AI Fax Platform</p>
-        <h1 className="mt-3 text-3xl font-semibold text-white sm:text-4xl md:text-5xl">{title}</h1>
-        <p className="mt-4 max-w-3xl text-base text-slate-300 sm:text-lg">{description}</p>
+        <p className="kicker">{kicker}</p>
+        <h1 className="mt-4 max-w-3xl text-4xl text-slate-900 sm:text-5xl">{title}</h1>
+        <p className="mt-5 max-w-2xl text-lg text-slate-700 sm:text-xl">{description}</p>
         <div className="mt-7">
           {actions ?? (
             <div className="flex flex-wrap gap-3">
-              <Link href={sharedCtas.primary.href} className="btn-primary">
+              <a href={sharedCtas.primary.href} className="btn-primary">
                 {sharedCtas.primary.label}
-              </Link>
-              <Link href={sharedCtas.secondary.href} className="btn-secondary">
+              </a>
+              <a href={sharedCtas.secondary.href} className="btn-secondary">
                 {sharedCtas.secondary.label}
-              </Link>
+              </a>
             </div>
           )}
         </div>
+        {note ? <p className="mt-4 text-sm text-slate-500">{note}</p> : null}
       </div>
     </section>
   );
