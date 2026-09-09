@@ -4,7 +4,7 @@ import { ADDITIONAL_PAGE_RATE, plans } from "@/lib/plans";
 
 export const metadata: Metadata = {
   title: "Pricing | AiFax",
-  description: "Pay for pages, not seats. Every plan is HIPAA-compliant with a BAA at signup and your number ported or new. AI summaries and chat start at Plus."
+  description: "Enterprise-grade fax automation priced for a private practice. Every fax read, summarized, and matched to the patient. HIPAA-compliant, plans from $9.99 a month, no contract."
 };
 
 const notes = [
@@ -27,10 +27,12 @@ export default function PricingPage() {
     <main>
       <section className="section-shell pt-14 pb-6 sm:pt-16">
         <p className="kicker">Pricing</p>
-        <h1 className="mt-4 max-w-3xl text-4xl text-slate-900 sm:text-5xl">Pay for pages, not seats.</h1>
+        <h1 className="mt-4 max-w-3xl text-4xl text-slate-900 sm:text-5xl">
+          Enterprise-grade fax automation, priced for a private practice.
+        </h1>
         <p className="mt-5 max-w-2xl text-lg text-slate-700 sm:text-xl">
-          Every plan is HIPAA-compliant with a BAA at signup and your number ported or new. AI summaries and
-          chat-with-your-faxes start at Plus. Month to month.
+          Every fax read, summarized, and matched to the patient the moment it arrives. Fewer errors, fewer staff
+          hours, HIPAA-compliant from day one. Plans start at $9.99 a month, no contract.
         </p>
       </section>
 
