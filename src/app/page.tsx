@@ -90,9 +90,19 @@ export default function Home() {
   return (
     <main>
       {/* Hero */}
-      <section className="section-shell grid gap-10 py-12 sm:py-16 lg:grid-cols-[minmax(0,1fr)_520px] lg:items-center lg:gap-16">
+      <section className="section-shell grid gap-10 py-12 sm:py-14 lg:grid-cols-[minmax(0,1fr)_520px] lg:items-start lg:gap-16">
         <div className="min-w-0">
-          <p className="kicker">AI fax for medical practices</p>
+          <div className="mb-9 max-w-xl border-b border-slate-200 pb-7">
+            <p className="text-2xl text-slate-900 sm:text-[26px]" style={{ fontFamily: "var(--font-display)", fontWeight: 700, letterSpacing: "-0.02em" }}>
+              Fax to EHR. EHR to fax. AI in the middle.
+            </p>
+            <p className="mt-2 text-slate-600">
+              Inbound faxes read, matched to the patient, and filed toward the chart. Outbound faxes sent from your
+              inbox. Built for physician practices and the businesses that still run on fax: legal, insurance, back
+              office.
+            </p>
+          </div>
+          <p className="kicker text-base">AI fax for medical practices</p>
           <h1 className="mt-5 text-4xl text-slate-900 sm:text-5xl lg:text-[54px] lg:font-extrabold">
             Every fax read, matched to the patient, and ready for the chart.
           </h1>
