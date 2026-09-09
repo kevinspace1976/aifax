@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CheckCircle2, Send, X } from "lucide-react";
 import { suggestEmailCorrection } from "@/lib/email-validation";
 
@@ -71,7 +71,13 @@ export function WorkflowReviewForm() {
   const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [challenge, setChallenge] = useState(() => makeChallenge());
+  // Start with a fixed challenge so server and client render the same HTML,
+  // then randomize after mount (a random initial value caused a hydration
+  // mismatch, React error 418, on every contact page load).
+  const [challenge, setChallenge] = useState({ a: 2, b: 3 });
+  useEffect(() => {
+    setChallenge(makeChallenge());
+  }, []);
   const [challengeError, setChallengeError] = useState(false);
   const [phone, setPhone] = useState("");
   const [faxNumber, setFaxNumber] = useState("");

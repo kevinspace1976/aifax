@@ -116,9 +116,20 @@ export async function searchMessages(query: string, maxResults = 25): Promise<Gm
  * carry real bold text and bullet points instead of asterisks/hyphens,
  * while clients that don't render HTML still get a readable plain copy.
  */
-export async function createDraft(opts: { to: string; subject: string; text: string; html: string }): Promise<boolean> {
+/**
+ * House rule: no em or en dashes in anything we send. The AI draft prompt
+ * forbids them but the model still produced one, so every draft is
+ * scrubbed here regardless of where the text came from.
+ */
+export function stripDashes(value: string): string {
+  return value.replace(/\s*[\u2014\u2013]\s*/g, " - ").replace(/\s*&(mdash|ndash|#8212|#8211);\s*/g, " - ");
+}
+
+export async function createDraft(input: { to: string; subject: string; text: string; html: string }): Promise<boolean> {
   const accessToken = await getAccessToken();
   if (!accessToken) return false;
+
+  const opts = { ...input, subject: stripDashes(input.subject), text: stripDashes(input.text), html: stripDashes(input.html) };
 
   const boundary = `aifax_${randomUUID()}`;
   const message = [
