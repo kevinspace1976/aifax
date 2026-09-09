@@ -1,87 +1,78 @@
 "use client";
 
 import { useState } from "react";
-
-type Plan = {
-  name: string;
-  price: string;
-  annualPrice?: string;
-  cta: string;
-  href: string;
-  featured?: boolean;
-  features: string[];
-};
+import { CheckCircle2 } from "lucide-react";
+import type { Plan } from "@/lib/plans";
 
 type PricingPlansGridProps = {
   plans: Plan[];
 };
 
 export function PricingPlansGrid({ plans }: PricingPlansGridProps) {
-  const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annually">("annually");
+  const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annually">("monthly");
+
+  const toggle = (period: "monthly" | "annually", label: string) => (
+    <button
+      type="button"
+      className={`rounded-full px-4 py-1.5 text-sm font-semibold transition ${
+        billingPeriod === period ? "bg-slate-900 text-white" : "text-slate-700 hover:text-slate-900"
+      }`}
+      onClick={() => setBillingPeriod(period)}
+      aria-pressed={billingPeriod === period}
+    >
+      {label}
+    </button>
+  );
 
   return (
     <>
-      <div className="mb-6 flex flex-wrap items-center justify-center gap-3">
-        <p className="text-base font-semibold text-white">Billing Period</p>
-        <div className="flex flex-wrap items-center justify-center gap-3">
-          <div className="inline-flex rounded-lg border border-white/10 bg-slate-900/70 p-1">
-            <button
-              type="button"
-              className={`rounded-md px-4 py-1.5 text-sm font-semibold ${
-                billingPeriod === "monthly" ? "bg-slate-200 text-slate-900" : "text-slate-200"
-              }`}
-              onClick={() => setBillingPeriod("monthly")}
-            >
-              Monthly
-            </button>
-            <button
-              type="button"
-              className={`rounded-md px-4 py-1.5 text-sm font-semibold ${
-                billingPeriod === "annually" ? "bg-slate-200 text-slate-900" : "text-slate-200"
-              }`}
-              onClick={() => setBillingPeriod("annually")}
-            >
-              Annually
-            </button>
-          </div>
-          <div className="flex items-center gap-1 text-base font-semibold uppercase tracking-[0.08em] text-orange-300">
-            <span aria-hidden>↗</span>
-            <span>Save 17%</span>
-          </div>
+      <div className="flex flex-wrap items-center gap-3">
+        <span className="font-semibold text-slate-900">Billing</span>
+        <div className="inline-flex rounded-full border border-slate-200 bg-white p-1">
+          {toggle("monthly", "Monthly")}
+          {toggle("annually", "Annually, save 17%")}
         </div>
       </div>
 
-      <div className="grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
+      <div className="mt-8 grid items-stretch gap-5 sm:grid-cols-2 xl:grid-cols-4">
         {plans.map((plan) => {
           const isAnnual = billingPeriod === "annually" && Boolean(plan.annualPrice);
-          const displayedPrice = isAnnual ? `${plan.annualPrice}/mo` : plan.price;
+          const price = isAnnual ? plan.annualPrice : plan.price;
+          const isCustom = !plan.annualPrice && plan.price === "Custom";
 
           return (
             <article
               key={plan.name}
-              className={`relative flex h-full flex-col rounded-2xl border p-6 ${
-                plan.featured ? "border-orange-400 bg-slate-900" : "border-white/10 bg-slate-900/70"
+              className={`relative flex h-full flex-col rounded-2xl border bg-white p-7 ${
+                plan.featured ? "border-2 border-orange-500" : "border-slate-200"
               }`}
             >
               {plan.featured ? (
-                <span className="absolute right-4 top-4 rounded-full bg-orange-500 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
-                  Featured
+                <span className="absolute -top-3 left-6 rounded-full bg-orange-500 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.08em] text-white">
+                  Most practices
                 </span>
               ) : null}
 
-              <h2 className="text-2xl font-semibold text-white">{plan.name}</h2>
-              <p className="mt-3 text-slate-300">
-                <span className="text-3xl font-semibold text-emerald-300">{displayedPrice}</span>
+              <h2 className="text-xl text-slate-900">{plan.name}</h2>
+              <p className="mt-1 flex items-baseline gap-1.5">
+                <span className="text-4xl font-extrabold tracking-tight text-slate-900 tabular-nums">{price}</span>
+                {isCustom ? null : <span className="text-slate-500">/month</span>}
               </p>
-              {isAnnual ? <p className="mt-1 text-xs text-slate-400">Billed Annually</p> : null}
+              <p className="text-sm text-slate-500">
+                {plan.pages}
+                {isAnnual ? ", billed annually" : ""}
+              </p>
 
-              <ul className="mt-5 flex-1 space-y-2 text-sm text-slate-300">
+              <ul className="mt-5 flex flex-1 flex-col gap-2.5">
                 {plan.features.map((feature) => (
-                  <li key={feature}>• {feature}</li>
+                  <li key={feature} className="flex items-start gap-2.5 text-slate-700">
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 flex-none text-emerald-600" aria-hidden="true" />
+                    <span>{feature}</span>
+                  </li>
                 ))}
               </ul>
 
-              <a href={plan.href} target={plan.name === "Corporate" ? undefined : "_blank"} rel={plan.name === "Corporate" ? undefined : "noreferrer"} className="btn-primary mt-6">
+              <a href={plan.href} className={`${plan.featured ? "btn-primary" : "btn-secondary"} mt-6`}>
                 {plan.cta}
               </a>
             </article>

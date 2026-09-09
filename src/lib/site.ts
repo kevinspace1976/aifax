@@ -1,18 +1,14 @@
 export const brand = {
   name: "AiFax",
-  tagline: "Enterprise AI Fax Automation",
+  tagline: "AI Fax for Medical Practices",
   description:
-    "HIPAA-compliant faxing with AI summarization, secure routing, and API-first integrations for healthcare, legal, and enterprise operations."
+    "Every fax read by AI, matched to the patient, summarized, and routed into your EHR workflow. HIPAA-compliant, keep your fax number."
 };
 
 export const navItems = [
-  { href: "/", label: "Home" },
   { href: "/how-it-works", label: "How It Works" },
-  { href: "/solutions", label: "Solutions" },
   { href: "/ehr-integration", label: "EHR Integration" },
   { href: "/pricing", label: "Pricing" },
-  { href: "/about", label: "About" },
-  { href: "/speciality", label: "Speciality" },
   { href: "/contact", label: "Contact" }
 ];
 
@@ -34,9 +30,15 @@ export const portNumberUrl = "https://portal.aifax.net/index.php?rp=/store/cloud
 export const newNumberDisplay = "www.new.aifax.net";
 export const portNumberDisplay = "www.port.aifax.net";
 
+export const phone = { display: "954-872-1918", href: "tel:+19548721918" };
+export const supportEmail = "info@aifax.net";
+
+/** Public demo video. Env can override; the default keeps the embed live. */
+export const demoVideoLink = process.env.YOUTUBE_VIDEO_LINK || "https://www.youtube.com/watch?v=Qba6EBhzKyI";
+
 export const sharedCtas = {
-  primary: { href: "https://portal.aifax.net/index.php?rp=/store/cloud-faxing", label: "Get Your Fax Number" },
-  secondary: { href: "/pricing", label: "See Plans" }
+  primary: { href: portNumberUrl, label: "Port My Number" },
+  secondary: { href: newNumberUrl, label: "Get a New Number" }
 };
 
 export const loginCta = {

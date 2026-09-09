@@ -1,441 +1,302 @@
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, ChevronDown, Cpu, FileText, ShieldCheck, Star, Workflow } from "lucide-react";
-import { VideoCard } from "@/components/video-card";
-import { headerCtas } from "@/lib/site";
+import { ArrowRight, CheckCircle2, X } from "lucide-react";
+import { DemoVideo } from "@/components/demo-video";
+import { SummaryCard } from "@/components/summary-card";
+import { plans } from "@/lib/plans";
+import { phone, sharedCtas } from "@/lib/site";
 
-const trustPoints = [
-  "EHR integration available - AI summaries delivered into email, SMS, EHR/EMR, or CRM, scoped to your workflow",
-  "Scales with you - one provider or fifty, same platform, no new staff to hire",
-  "HIPAA-compliant architecture, secure transmission, BAA executed at signup",
-  "Custom AI prompts and extraction logic per workflow - your practice, your rules"
-];
-
-const pillars = [
+const stops = [
   {
-    icon: ShieldCheck,
-    title: "Compliance-First Operations",
-    text: "Built for regulated teams with privacy, auditing, and data security as first-class requirements."
+    was: "Open and read every fax",
+    title: "Read on arrival",
+    body: "Every page is read by AI the moment it lands, 24/7. Staff review a summary instead of a stack."
   },
   {
-    icon: Workflow,
-    title: "Automation + Integration",
-    text: "Connect tools across intake, routing, communication, and care coordination for fewer handoffs and faster outcomes."
+    was: "Figure out who it belongs to",
+    title: "Matched to the patient",
+    body: "Name and date of birth are pulled from the document and matched against your patient list. Never guessed: anything uncertain is flagged for a person."
   },
   {
-    icon: FileText,
-    title: "Document Intelligence",
-    text: "Convert incoming faxes into concise summaries and structured data using OCR + NLP workflows."
-  },
-  {
-    icon: Cpu,
-    title: "Hospital + EMR Data Integration",
-    text: "Integrate faxing with hospital data and AI workflows for admission screening, provider practice support, and prior authorization."
+    was: "Download, rename, upload to the chart",
+    title: "Ready for the chart",
+    body: "The fax, its summary, and the patient label arrive in your email and dashboard. With EHR integration, it goes into the chart as directly as your EHR allows."
   }
 ];
 
-const manualSteps = [
-  "Open and read every fax",
-  "Identify the patient and document type",
-  "Download and rename the file",
-  "Create or locate the patient chart",
-  "Upload or route the document",
-  "Notify the appropriate provider",
-  "Remember which items still require follow-up"
-];
-
-const automationSteps = [
+const steps = [
   {
-    step: "1",
-    title: "Receive",
-    text: "Your incoming fax arrives through your existing or new fax number."
+    title: "A fax arrives",
+    body: "On your existing number, ported to us, or on a new one. Your line never goes down during the port."
   },
   {
-    step: "2",
-    title: "Read",
-    text: "AI reads the document and extracts patient identifiers, sender information, document type, and relevant clinical details."
+    title: "AI reads and matches",
+    body: "OCR and language models read every page, identify the patient and document type, and write a summary to your prompt."
   },
   {
-    step: "3",
-    title: "Summarize",
-    text: "A custom summary is created using instructions designed around your practice and specialty."
-  },
-  {
-    step: "4",
-    title: "Route",
-    text: "The fax and summary are delivered through the best workflow supported by your EHR - such as an available API, interface, secure inbox, email, or assisted charting process."
-  },
-  {
-    step: "5",
-    title: "Verify",
-    text: "Documents that cannot be confidently identified can be flagged for review instead of being silently misfiled."
+    title: "It is in your workflow",
+    body: "Fax PDF and summary emailed to up to three addresses, in your dashboard, and routed into your EHR where the EHR allows."
   }
 ];
 
-const partners = [
-  { name: "OpenAI", src: "/logos/partners/openai.svg" },
-  { name: "Telnyx", src: "/logos/partners/telnyx.svg" },
-  { name: "Stripe", src: "/logos/partners/stripe.svg" },
-  { name: "AWS", src: "/logos/partners/aws.svg" },
-  { name: "DigitalOcean", src: "/logos/partners/digitalocean.svg" },
-  { name: "GitHub", src: "/logos/partners/github.svg" },
-  { name: "Google", src: "/logos/partners/google.svg" },
-  { name: "Zoho", src: "/logos/partners/zoho.svg" },
-  { name: "Microsoft", src: "/logos/partners/microsoft.svg" }
+const ehrChecks = [
+  "Patient matched by name and date of birth against your patient list",
+  "Uncertain matches go to a review queue, never into a chart",
+  "Discovery with your EHR vendor handled by us, documented in writing",
+  "No printing, no scanning, no second patient list to maintain"
 ];
-const skills = [
-  { name: "AI Fax Solutions", score: 99 },
-  { name: "Software Development", score: 96 },
-  { name: "Artificial Intelligence", score: 97 },
-  { name: "Document Reader", score: 95 },
-  { name: "Web Development", score: 95 },
-  { name: "App Development", score: 95 }
+
+const firstWeek = [
+  { when: "Day 0", title: "Sign up and sign the BAA", body: "Pick a new number and fax today, or start your port. Your current line stays live." },
+  { when: "Day 1", title: "First AI summary in your inbox", body: "Every fax arrives as a PDF with its summary, patient name, and date of birth. Tune the prompt to your practice." },
+  { when: "Week 1 to 2", title: "Port completes, no downtime", body: "Carriers set the timeline. We file, track, and confirm the moment it lands." },
+  { when: "Ongoing", title: "Patient matching and EHR discovery", body: "Load your patient list and faxes arrive matched. If you want chart filing, discovery with your EHR vendor starts in writing." }
 ];
 
 const faqs = [
   {
-    q: "What is AiFax and how does it benefit my business?",
-    a: "AiFax is a HIPAA-compliant AI-powered faxing solution for businesses of all sizes. It summarizes incoming faxes instantly and sends synopsis content to email, text, and optionally EHR/EMR/CRM systems. With AI, NLP, OCR, and API integrations, AiFax saves time, reduces errors, and minimizes patient or client delays."
+    q: "Can I keep my fax number?",
+    a: "Yes. We file the port with your current provider; your line stays live until the switch completes. Or take a new number and be faxing today."
   },
   {
-    q: "How does AiFax ensure the security and compliance of my data?",
-    a: "AiFax is compliance-first with HIPAA, GLBA, SOX, and GDPR-aligned workflows. We apply end-to-end encryption for data in transit and storage so sensitive information remains protected for healthcare, legal, and enterprise use cases."
+    q: "Is it HIPAA compliant?",
+    a: "Yes. Encryption in transit and at rest, and a Business Associate Agreement you sign electronically at signup, before any patient document flows."
   },
   {
-    q: "Can AiFax integrate with my existing fax service or business software?",
-    a: "Yes. AiFax supports new numbers, number porting, and integrations with existing tools including EHR, EMR, and CRM environments. We also support integration with major fax providers for smooth implementation."
+    q: "Does it work with my EHR?",
+    a: "We integrate with what your EHR exposes. Discovery happens in writing first, so you know the exact filing workflow before we build."
   },
   {
-    q: "What types of businesses can benefit from AiFax?",
-    a: "AiFax supports small businesses through large enterprises, especially healthcare, legal, finance, real estate, education, and operations teams handling high document volume."
+    q: "What if a fax has no patient name or date of birth?",
+    a: "It is still delivered and summarized, and flagged for your staff to route. Nothing is ever guessed into a chart."
   },
   {
-    q: "How customizable is AiFax for my specific business needs?",
-    a: "AiFax includes customizable dashboards and prompt logic so each team can define exactly how summaries, extraction rules, and comparisons should run for their specialty workflows."
-  },
-  {
-    q: "How does AiFax handle the summarization of complex documents?",
-    a: "Using advanced NLP + OCR, AiFax interprets complex files including tables, embedded images, and clear handwriting to produce concise, high-value summaries."
-  },
-  {
-    q: "Can AiFax help my business scale as it grows?",
-    a: "Yes. AiFax is built to scale from lower-volume teams to enterprise-level document operations while maintaining speed, consistency, and compliance."
-  },
-  {
-    q: "How does AiFax contribute to improving operational efficiency?",
-    a: "AiFax automates repetitive intake and review steps, provides instant summaries, and accelerates turnaround time for patient care and client requests while reducing avoidable delays."
-  },
-  {
-    q: "What kind of customer support does AiFax offer?",
-    a: "AiFax provides 24/7 customer support and guided onboarding so your team can keep operations smooth and uninterrupted."
-  },
-  {
-    q: "Is AiFax suitable for small businesses as well as large enterprises?",
-    a: "Absolutely. AiFax is flexible and scalable, designed to fit startups, clinics, practices, and enterprise organizations alike."
-  },
-  {
-    q: "How does AiFax interact with my business documents in real-time?",
-    a: "AiFax uses your configured prompts to process each incoming fax in real-time, answer specific extraction needs, and route actionable summaries instantly."
-  },
-  {
-    q: "What makes AiFax different from other fax solutions?",
-    a: "AiFax combines compliance-first architecture with advanced AI automation and integrations. Unlike legacy faxing, AiFax automates processing, summarizes instantly, and connects into operational systems."
-  },
-  {
-    q: "Can AiFax generate and deliver summaries to multiple platforms simultaneously?",
-    a: "Yes. Summaries can be delivered to email and SMS in real-time, and we support integration pathways for EHR/EMR and CRM channels."
-  },
-  {
-    q: "How does AiFax ensure accuracy in document interpretation?",
-    a: "AiFax applies NLP and OCR models designed to understand context and extract relevant details with high accuracy in seconds."
-  },
-  {
-    q: "How quickly can AiFax be implemented into my business?",
-    a: "New numbers can be provisioned quickly with immediate service access. Number porting can take up to 5 days depending on carrier workflows, with AiFax summaries available once porting is complete."
+    q: "Is there a contract?",
+    a: "No. Plans are month to month. EHR integration is a separate, quoted project."
   }
 ];
 
-function toEmbedUrl(link?: string): string | null {
-  if (!link) return null;
-  try {
-    const url = new URL(link);
-    if (url.hostname.includes("youtu.be")) {
-      const id = url.pathname.replace("/", "");
-      return id ? `https://www.youtube.com/embed/${id}` : null;
-    }
-    if (url.hostname.includes("youtube.com")) {
-      const id = url.searchParams.get("v");
-      return id ? `https://www.youtube.com/embed/${id}` : null;
-    }
-    return null;
-  } catch {
-    return null;
-  }
+function Check({ children }: { children: React.ReactNode }) {
+  return (
+    <li className="flex items-start gap-2.5 text-slate-700">
+      <CheckCircle2 className="mt-0.5 h-5 w-5 flex-none text-emerald-600" aria-hidden="true" />
+      <span>{children}</span>
+    </li>
+  );
 }
 
 export default function Home() {
-  const youtubeEmbedUrl = toEmbedUrl(process.env.YOUTUBE_VIDEO_LINK);
-  const marqueeItems = [...partners, ...partners];
+  const teaserPlans = plans.filter((plan) => plan.teaser.length > 0);
 
   return (
     <main>
-      <section className="border-b border-white/10">
-        <div className="section-shell grid min-w-0 gap-8 pt-8 pb-4 sm:pt-10 sm:pb-6 lg:grid-cols-2 lg:items-center">
-          <div className="min-w-0">
-            <p className="text-2xl font-extrabold uppercase leading-tight tracking-tight text-red-500 sm:text-4xl lg:text-5xl">
-              Fax-to-EHR Automation for Medical Practices
+      {/* Hero */}
+      <section className="section-shell grid gap-10 py-12 sm:py-16 lg:grid-cols-[minmax(0,1fr)_520px] lg:items-center lg:gap-16">
+        <div className="min-w-0">
+          <p className="kicker">AI fax for medical practices</p>
+          <h1 className="mt-5 text-4xl text-slate-900 sm:text-5xl lg:text-[54px] lg:font-extrabold">
+            Every fax read, matched to the patient, and ready for the chart.
+          </h1>
+          <p className="mt-6 max-w-xl text-lg text-slate-700 sm:text-xl">
+            AiFax reads each incoming fax the moment it arrives, pulls the patient name and date of birth, summarizes
+            what is inside, and routes it into your EHR workflow. Keep your fax number.
+          </p>
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+            <a href={sharedCtas.primary.href} className="btn-primary">
+              {sharedCtas.primary.label}
+            </a>
+            <a href={sharedCtas.secondary.href} className="btn-secondary">
+              {sharedCtas.secondary.label}
+            </a>
+          </div>
+          <p className="mt-4 text-sm text-slate-500">
+            From $9.99/month &middot; HIPAA-compliant, BAA signed at signup &middot; No contract &middot; Live within a day
+            while your number ports
+          </p>
+        </div>
+        <div className="flex min-w-0 flex-col gap-4">
+          <SummaryCard />
+          <DemoVideo />
+        </div>
+      </section>
+
+      {/* What staff stop doing */}
+      <section className="section-alt py-16 sm:py-20">
+        <div className="section-shell">
+          <div className="max-w-2xl">
+            <h2 className="text-3xl text-slate-900 sm:text-4xl">Your fax inbox should not be a second medical-record system.</h2>
+            <p className="mt-4 text-lg text-slate-700">
+              Every incoming result, referral, and ER record goes through the same manual chain before a provider can use
+              it. AiFax removes the chain.
             </p>
-            <h1 className="mt-6 text-2xl font-semibold leading-tight text-white sm:mt-8 sm:text-4xl lg:text-5xl">
-              Stop Manually Moving Faxes Into Your EHR.{" "}
-              <span className="block text-sky-400">Every Fax, Read by AI.</span>
-              <span className="block text-orange-400">Every Document Routed With Purpose.</span>
-            </h1>
-            {/* Signup is the point of this page - on mobile the header's CTAs
-                are hidden inside the hamburger menu, so a visitor landing
-                here needs them reachable without opening it or scrolling.
-                Desktop already shows these in the header, so hidden there. */}
-            <div className="mt-4 flex min-w-0 gap-2 md:hidden">
-              <a href={headerCtas[0].href} className="btn-primary min-w-0 flex-1 whitespace-nowrap px-2 py-2.5 text-[13px]">
-                {headerCtas[0].label}
-              </a>
-              <a href={headerCtas[1].href} className="btn-accent min-w-0 flex-1 whitespace-nowrap px-2 py-2.5 text-[13px]">
-                {headerCtas[1].label}
-              </a>
-            </div>
           </div>
-
-          <div className="space-y-6">
-            {youtubeEmbedUrl ? <VideoCard embedUrl={youtubeEmbedUrl} /> : null}
-          </div>
-        </div>
-
-        <div className="section-shell pb-10 sm:pb-12">
-          <h2 className="text-2xl font-semibold text-white sm:text-3xl">
-            Your Fax Inbox Should Not Be a <span className="text-orange-400">Second Medical-Record System.</span>
-          </h2>
-          <p className="mt-2 text-slate-300">
-            Every incoming result, referral, medical record, authorization, and clinical document must eventually reach
-            the correct patient workflow. Without automation, your staff must:
-          </p>
-          <ul className="mt-3 grid gap-1.5 text-slate-300 sm:grid-cols-2 lg:grid-cols-4">
-            {manualSteps.map((step) => (
-              <li key={step} className="flex items-start gap-3">
-                <span aria-hidden="true" className="mt-0.5 font-bold text-orange-400">&#10007;</span>
-                <span>{step}</span>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-4 text-slate-300">
-            Every manual handoff adds time, delay, and the possibility of an overlooked result, incorrect patient match,
-            or filing error.
-          </p>
-          <p className="mt-3 text-lg font-semibold text-white">
-            AiFax turns incoming faxes into organized, summarized, EHR-ready documents - before they become another task
-            for your staff.
-          </p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Link href="/ehr-integration" className="btn-primary">
-              See My EHR Integration Options <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-            <Link href="/contact" className="btn-accent">
-              Schedule a Workflow Review
-            </Link>
-            <Link href="/pricing" className="btn-secondary">
-              See Plans
-            </Link>
-          </div>
-          <p className="mt-4 text-sm text-slate-400">
-            Keep your current fax number &middot; Practice-specific AI summaries &middot; HIPAA-compliant architecture
-          </p>
-        </div>
-      </section>
-
-      <section className="section-shell py-12 sm:py-14">
-        <p className="text-sm uppercase tracking-[0.15em] text-slate-400">Trusted Technology Providers</p>
-        <div className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60">
-          <div className="logo-marquee-track flex w-[200%] gap-6 p-6">
-            {marqueeItems.map((item, index) => (
-              <div
-                key={`${item.name}-${index}`}
-                className="inline-flex min-h-[88px] shrink-0 items-center rounded-lg border border-white/15 bg-slate-900/80 px-8"
-              >
-                <Image
-                  src={item.src}
-                  alt={item.name === "OpenAI" ? "OpenAI" : `${item.name} logo`}
-                  width={160}
-                  height={44}
-                  className={item.name === "OpenAI" ? "mx-auto w-auto" : "h-16 w-auto"}
-                  style={
-                    item.name === "OpenAI"
-                      ? { height: "48px", width: "auto", objectFit: "contain", imageRendering: "auto" }
-                      : undefined
-                  }
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section-shell py-14 sm:py-16">
-        <p className="max-w-4xl text-lg leading-relaxed text-slate-200 sm:text-xl">
-          AiFax identifies the patient, recognizes the document type, creates your practice-specific summary, and routes
-          the fax through the best available EHR workflow -{" "}
-          <strong className="text-white">reducing manual review, filing delays, and avoidable errors.</strong>
-        </p>
-        <div className="card-surface mt-8 p-6 sm:p-8">
-          <ul className="grid gap-3 md:grid-cols-2 text-base text-slate-300 sm:text-lg">
-            <li className="flex items-start gap-3">
-              <span aria-hidden="true" className="mt-0.5 font-bold text-orange-400">&#10007;</span>
-              <span>Hours of payroll burned every day opening, reading, and filing faxes</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <span aria-hidden="true" className="mt-0.5 font-bold text-orange-400">&#10007;</span>
-              <span>Results and referrals slipping through the cracks - quality gaps your quality scores remember</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <span aria-hidden="true" className="mt-0.5 font-bold text-emerald-300">&#10003;</span>
-              <span>
-                <strong className="text-white">AiFax reads every inbound fax the moment it lands</strong> - summarized,
-                patient name and DOB labeled
-              </span>
-            </li>
-            <li className="flex items-start gap-3">
-              <span aria-hidden="true" className="mt-0.5 font-bold text-emerald-300">&#10003;</span>
-              <span>
-                Routed into the workflow you already run - <strong className="text-white">EHR integration available</strong>
-              </span>
-            </li>
-            <li className="flex items-start gap-3">
-              <span aria-hidden="true" className="mt-0.5 font-bold text-emerald-300">&#10003;</span>
-              <span>
-                Solo practice or multi-site group - same platform, same speed,{" "}
-                <strong className="text-white">no new headcount</strong>
-              </span>
-            </li>
-          </ul>
-        </div>
-
-        <aside className="card-surface interactive mt-8 p-6 sm:p-8" aria-label="Trust points">
-          <h2 className="text-xl font-semibold text-white sm:text-2xl">Why practices switch to AiFax</h2>
-          <ul className="mt-5 grid gap-4 md:grid-cols-2">
-            {trustPoints.map((point) => (
-              <li key={point} className="flex items-start gap-3 text-sm text-slate-200 sm:text-base">
-                <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-300" />
-                <span>{point}</span>
-              </li>
-            ))}
-          </ul>
-        </aside>
-      </section>
-
-      <section className="border-y border-white/10 bg-slate-900/50">
-        <div className="section-shell py-14 sm:py-16">
-          <h2 className="text-2xl font-semibold text-white sm:text-3xl">What AiFax Automates</h2>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-            {automationSteps.map(({ step, title, text }) => (
-              <article key={title} className="card-surface interactive p-5">
-                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-sky-500 text-sm font-bold text-white">
-                  {step}
-                </span>
-                <h3 className="mt-3 text-lg font-semibold text-white">{title}</h3>
-                <p className="mt-2 text-sm text-slate-300">{text}</p>
+          <div className="mt-9 grid gap-5 md:grid-cols-3">
+            {stops.map((item) => (
+              <article key={item.title} className="card-surface p-7">
+                <p className="flex items-center gap-2 text-sm text-slate-500">
+                  <X className="h-4 w-4 flex-none" aria-hidden="true" />
+                  <span className="line-through">{item.was}</span>
+                </p>
+                <h3 className="mt-3 text-xl text-slate-900">{item.title}</h3>
+                <p className="mt-2 text-slate-700">{item.body}</p>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="section-shell py-14 sm:py-16">
-        <h2 className="text-2xl font-semibold text-white sm:text-3xl">Built Around the EHR You Already Use</h2>
-        <p className="mt-3 max-w-3xl text-slate-300">
-          AiFax works with independent practices across a wide range of EHR platforms.
-        </p>
-        <p className="mt-3 max-w-3xl text-slate-300">
-          Because every EHR provides different integration capabilities, we evaluate the interfaces and workflow options
-          available to your practice, then automate the most effective path for receiving, identifying, summarizing, and
-          routing faxed documents.
-        </p>
-        <p className="mt-4 max-w-3xl font-semibold text-white">
-          You do not have to replace your EHR - or abandon your existing fax number - to improve the workflow.
-        </p>
-        <div className="mt-6">
-          <Link href="/ehr-integration" className="btn-primary">
-            See My EHR Integration Options <ArrowRight className="ml-2 h-4 w-4" />
+      {/* Three steps */}
+      <section className="section-shell py-16 sm:py-20">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <h2 className="max-w-lg text-3xl text-slate-900 sm:text-4xl">Three steps. None of them yours.</h2>
+          <Link href="/how-it-works" className="inline-flex items-center gap-2 font-semibold text-slate-900 hover:text-orange-500">
+            See how it works <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Link>
+        </div>
+        <div className="mt-9 grid gap-8 md:grid-cols-3">
+          {steps.map((step, index) => (
+            <div key={step.title}>
+              <p className="kicker">Step {index + 1}</p>
+              <h3 className="mt-2 text-xl text-slate-900">{step.title}</h3>
+              <p className="mt-2 text-slate-700">{step.body}</p>
+            </div>
+          ))}
         </div>
       </section>
 
-      <section className="section-shell py-14 sm:py-16">
-        <h2 className="text-2xl font-semibold text-white sm:text-3xl">Core Platform Capabilities</h2>
-        <div className="mt-6 grid gap-4 sm:gap-5 md:grid-cols-2">
-          {pillars.map(({ icon: Icon, title, text }) => (
-            <article key={title} className="card-surface interactive p-6">
-              <Icon className="h-7 w-7 text-cyan-300" />
-              <h3 className="mt-3 text-lg font-semibold text-white">{title}</h3>
-              <p className="mt-2 text-sm text-slate-300 sm:text-base">{text}</p>
+      {/* EHR */}
+      <section className="section-alt py-16 sm:py-20">
+        <div className="section-shell grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-16">
+          <div>
+            <h2 className="text-3xl text-slate-900 sm:text-4xl">Works with the EHR you already use.</h2>
+            <p className="mt-4 text-lg text-slate-700">
+              Every EHR exposes different interfaces. We map the most direct path yours allows, in writing, before we
+              build anything.
+            </p>
+            <p className="mt-3 text-slate-700">
+              Where your EHR lets us, the whole fax files into the patient&apos;s chart automatically. Where it does not,
+              your staff file it in two clicks from a document we have already matched, named, and prepared. Either way
+              you keep your EHR and your fax number.
+            </p>
+            <Link href="/ehr-integration" className="btn-secondary mt-6">
+              See EHR integration
+            </Link>
+          </div>
+          <ul className="card-surface flex flex-col gap-3.5 p-7">
+            {ehrChecks.map((line) => (
+              <Check key={line}>{line}</Check>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* Pricing teaser */}
+      <section className="section-shell py-16 sm:py-20">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <h2 className="text-3xl text-slate-900 sm:text-4xl">Simple pricing by pages a month.</h2>
+          <Link href="/pricing" className="inline-flex items-center gap-2 font-semibold text-slate-900 hover:text-orange-500">
+            See all plans <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
+        </div>
+        <div className="mt-8 grid gap-5 md:grid-cols-3">
+          {teaserPlans.map((plan) => (
+            <article
+              key={plan.name}
+              className={`relative flex flex-col rounded-2xl border bg-white p-7 ${plan.featured ? "border-2 border-orange-500" : "border-slate-200"}`}
+            >
+              {plan.featured ? (
+                <span className="absolute -top-3 left-6 rounded-full bg-orange-500 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.08em] text-white">
+                  Most practices
+                </span>
+              ) : null}
+              <h3 className="text-xl text-slate-900">{plan.name}</h3>
+              <p className="mt-1 flex items-baseline gap-1.5">
+                <span className="text-4xl font-extrabold tracking-tight text-slate-900 tabular-nums">{plan.price}</span>
+                <span className="text-slate-500">/month</span>
+              </p>
+              <p className="text-sm text-slate-500">{plan.pages}</p>
+              <ul className="mt-4 flex flex-col gap-2.5">
+                {plan.teaser.map((line) => (
+                  <Check key={line}>{line}</Check>
+                ))}
+              </ul>
+              <a href={plan.href} className={`${plan.featured ? "btn-primary" : "btn-secondary"} mt-6`}>
+                {plan.cta}
+              </a>
             </article>
           ))}
         </div>
+        <p className="mt-5 text-sm text-slate-500">
+          All plans month to month. Additional pages $0.05 each. EHR integration is scoped after a written discovery with
+          your EHR vendor.
+        </p>
       </section>
 
-      <section className="border-y border-white/10 bg-slate-900/50">
-        <div className="section-shell py-14 sm:py-16">
-          <h2 className="text-3xl font-semibold text-white sm:text-4xl">Business <span className="text-orange-400">Success</span> With Technology</h2>
-          <p className="mt-2 text-slate-300">Our skills</p>
-          <div className="mt-6 space-y-4">
-            {skills.map((skill) => (
-              <div key={skill.name}>
-                <div className="mb-1 flex items-center justify-between text-sm text-slate-200">
-                  <span>{skill.name}</span>
-                  <span>{skill.score}%</span>
-                </div>
-                <div className="h-3 rounded-full bg-slate-700">
-                  <div className="h-3 rounded-full bg-orange-500" style={{ width: `${skill.score}%` }} />
-                </div>
-              </div>
-            ))}
+      {/* First week + FAQ */}
+      <section className="section-alt py-16 sm:py-20">
+        <div className="section-shell grid gap-12 lg:grid-cols-[5fr_6fr] lg:gap-16">
+          <div>
+            <h2 className="text-3xl text-slate-900 sm:text-4xl">Your first week with AiFax.</h2>
+            <ol className="card-surface mt-6 px-7 py-2">
+              {firstWeek.map((row, index) => (
+                <li
+                  key={row.when}
+                  className={`flex gap-5 py-4 ${index < firstWeek.length - 1 ? "border-b border-slate-200" : ""}`}
+                >
+                  <span className="w-24 flex-none pt-0.5 text-sm font-bold uppercase tracking-[0.06em] text-orange-500">
+                    {row.when}
+                  </span>
+                  <span>
+                    <span className="block font-bold text-slate-900">{row.title}</span>
+                    <span className="block text-[15px] text-slate-700">{row.body}</span>
+                  </span>
+                </li>
+              ))}
+            </ol>
+            <ul className="mt-6 flex flex-col gap-3">
+              <Check>Live within a day. Your number ports in the background, usually 1 to 2 weeks, with no downtime.</Check>
+              <Check>
+                A person answers.{" "}
+                <a href={phone.href} className="font-semibold text-slate-900 hover:text-orange-500">
+                  {phone.display}
+                </a>
+                , or reply to any email we send you.
+              </Check>
+              <Check>Also used outside medicine: legal, insurance, and back-office teams run the same platform.</Check>
+            </ul>
           </div>
-          <p className="mt-6 text-slate-300">
-            We are a robust technology partner that integrates faxing with EMRs and hospital data pipelines while applying artificial intelligence for admission screening, provider practice support, prior authorization workflows, and high-volume document operations.
-          </p>
+          <div>
+            <h3 className="text-xl text-slate-900">Questions practices ask first</h3>
+            <div className="mt-3">
+              {faqs.map((faq) => (
+                <details key={faq.q} className="group border-t border-slate-200 py-4">
+                  <summary className="flex cursor-pointer items-center justify-between gap-4 font-bold text-slate-900">
+                    {faq.q}
+                    <span className="text-slate-400 transition group-open:rotate-45" aria-hidden="true">
+                      +
+                    </span>
+                  </summary>
+                  <p className="mt-2 text-slate-700">{faq.a}</p>
+                </details>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
-      <section className="section-shell py-14 sm:py-16">
-        <h2 className="text-2xl font-semibold text-white sm:text-3xl">Frequently Asked Questions</h2>
-        <div className="mt-6 space-y-3">
-          {faqs.map((item) => (
-            <details key={item.q} className="card-surface p-4">
-              <summary className="flex cursor-pointer items-center justify-between gap-4 text-left text-sm font-semibold text-white sm:text-base">
-                {item.q}
-                <ChevronDown className="h-4 w-4 shrink-0 text-slate-300" />
-              </summary>
-              <p className="pt-3 text-sm text-slate-300 sm:text-base">{item.a}</p>
-            </details>
-          ))}
-        </div>
-      </section>
-
-      <section className="border-y border-white/10 bg-slate-900/50">
-        <div className="section-shell py-14 sm:py-16">
-          <h2 className="text-2xl font-semibold text-white sm:text-3xl">Customer confidence</h2>
-          <div className="mt-6 grid gap-4 md:grid-cols-2">
-            {["AiFax helped our operations team cut intake turnaround time dramatically while improving consistency.", "We finally have a fax workflow that feels modern, measurable, and integrated with our CRM stack."].map((quote, i) => (
-              <article key={quote} className="card-surface p-6">
-                <Star className="h-5 w-5 text-orange-300" />
-                <p className="mt-3 text-slate-200">“{quote}”</p>
-                <p className="mt-3 text-sm text-slate-400">{i === 0 ? "Director of Operations, Multi-site Healthcare Group" : "COO, Regional Legal Services Firm"}</p>
-              </article>
-            ))}
+      {/* Final CTA */}
+      <section className="section-shell py-14 sm:py-18">
+        <div className="flex flex-col gap-6 rounded-3xl bg-slate-900 px-8 py-10 text-white sm:px-12 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h2 className="text-3xl text-white">Keep your number. Lose the pile.</h2>
+            <p className="mt-2 text-slate-300">Port in a few clicks, or get a new number and be live today.</p>
           </div>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/solutions" className="btn-light">
-              Explore Industry Solutions <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-            <Link href="/how-it-works" className="btn-secondary">
-              See How It Works
-            </Link>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <a href={sharedCtas.primary.href} className="btn-primary">
+              {sharedCtas.primary.label}
+            </a>
+            <a href={sharedCtas.secondary.href} className="btn-light">
+              {sharedCtas.secondary.label}
+            </a>
           </div>
         </div>
       </section>

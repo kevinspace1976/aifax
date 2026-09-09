@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const EFFECTIVE_DATE = "September 9, 2026";
 
 function H2({ children }: { children: string }) {
-  return <h2 className="mt-10 text-xl font-semibold text-white">{children}</h2>;
+  return <h2 className="mt-10 text-xl font-semibold text-slate-900">{children}</h2>;
 }
 
 export default function TermsPage() {
@@ -20,11 +20,11 @@ export default function TermsPage() {
       <PageHero
         title="Terms and Conditions"
         description="The agreement between you and Healthcare Utilization Consultants LLC, doing business as AiFax, for use of this website and the AiFax service."
-        actions={<p className="text-sm text-slate-400">Effective date: {EFFECTIVE_DATE}</p>}
+        actions={<p className="text-sm text-slate-500">Effective date: {EFFECTIVE_DATE}</p>}
       />
 
       <section className="section-shell py-12 sm:py-14">
-        <div className="max-w-3xl space-y-4 text-slate-300">
+        <div className="max-w-3xl space-y-4 text-slate-700">
           <p>
             These Terms and Conditions (&quot;Terms&quot;) govern your use of www.aifax.net (the &quot;Site&quot;)
             and the AiFax fax, document reading, and related services (the &quot;Service&quot;) provided by

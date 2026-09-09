@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const EFFECTIVE_DATE = "September 9, 2026";
 
 function H2({ children }: { children: string }) {
-  return <h2 className="mt-10 text-xl font-semibold text-white">{children}</h2>;
+  return <h2 className="mt-10 text-xl font-semibold text-slate-900">{children}</h2>;
 }
 
 export default function PrivacyPage() {
@@ -20,11 +20,11 @@ export default function PrivacyPage() {
       <PageHero
         title="Privacy Policy"
         description="How Healthcare Utilization Consultants LLC, doing business as AiFax, collects, uses, and protects information on this website and in the AiFax service."
-        actions={<p className="text-sm text-slate-400">Effective date: {EFFECTIVE_DATE}</p>}
+        actions={<p className="text-sm text-slate-500">Effective date: {EFFECTIVE_DATE}</p>}
       />
 
       <section className="section-shell py-12 sm:py-14">
-        <div className="max-w-3xl space-y-4 text-slate-300">
+        <div className="max-w-3xl space-y-4 text-slate-700">
           <p>
             This Privacy Policy describes how Healthcare Utilization Consultants LLC, doing business as AiFax
             (&quot;AiFax,&quot; &quot;we,&quot; &quot;us&quot;), handles information when you visit www.aifax.net (the
@@ -48,19 +48,19 @@ export default function PrivacyPage() {
           <H2>2. Information we collect on the Site</H2>
           <ul className="list-disc space-y-2 pl-6">
             <li>
-              <strong className="text-slate-100">Information you give us.</strong> When you request a workflow
+              <strong className="text-slate-900">Information you give us.</strong> When you request a workflow
               review, contact us, or sign up, we collect what you enter: name, practice or organization, email,
               phone, EHR platform, current fax provider and number, monthly volume, and anything you add in a
               notes field.
             </li>
             <li>
-              <strong className="text-slate-100">Usage and device information.</strong> Pages visited, referring
+              <strong className="text-slate-900">Usage and device information.</strong> Pages visited, referring
               page, approximate location derived from IP address, browser and device type, and campaign
               identifiers from links you clicked (for example UTM parameters or advertising click IDs). We store
               IP addresses only in hashed form.
             </li>
             <li>
-              <strong className="text-slate-100">Cookies and similar technologies.</strong> We use a first-party
+              <strong className="text-slate-900">Cookies and similar technologies.</strong> We use a first-party
               cookie to remember how you arrived at the Site, and analytics and advertising tags described in
               section 5.
             </li>

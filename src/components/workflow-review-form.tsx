@@ -36,7 +36,7 @@ const VOLUME_OPTIONS = [
   "Over 3,000 pages a month"
 ];
 
-const CONTACT_WINDOWS = ["Morning", "Midday", "Afternoon", "Evening"];
+const CONTACT_PREFERENCES = ["Email", "Phone"];
 
 const GOAL_OPTIONS = [
   "Routing faxes automatically into our EHR",
@@ -51,9 +51,9 @@ const GOAL_OPTIONS = [
 ];
 
 const FIELD =
-  "mt-1 w-full rounded-lg border border-white/20 bg-slate-900/70 px-3 py-2 text-sm text-white " +
-  "placeholder:text-slate-500 focus:border-cyan-300 focus:outline-none focus:ring-1 focus:ring-cyan-300";
-const LABEL = "block text-sm font-medium text-slate-200";
+  "mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 " +
+  "placeholder:text-slate-500 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500";
+const LABEL = "block text-sm font-semibold text-slate-800";
 
 function makeChallenge() {
   return { a: 2 + Math.floor(Math.random() * 8), b: 1 + Math.floor(Math.random() * 8) };
@@ -201,10 +201,10 @@ export function WorkflowReviewForm() {
 
   return (
     <form onSubmit={handleSubmit} className="card-surface p-6 sm:p-8">
-      <h2 className="text-xl font-semibold text-white sm:text-2xl">Schedule a Workflow Review</h2>
-      <p className="mt-2 text-sm text-slate-300">
-        Tell us how faxes reach your practice today. We will map the best route into your EHR and follow up with
-        practical options. No obligation.
+      <h2 className="text-2xl text-slate-900 sm:text-[28px]">Get a workflow review by email</h2>
+      <p className="mt-2 text-[15px] text-slate-600">
+        Tell us how faxes reach your practice today. We map the best route into your EHR and reply with practical
+        options. No obligation.
       </p>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
@@ -221,7 +221,7 @@ export function WorkflowReviewForm() {
           <input id="email" name="email" type="email" required className={FIELD} placeholder="you@practice.com" />
         </div>
         <div>
-          <label className={LABEL} htmlFor="phone">Phone</label>
+          <label className={LABEL} htmlFor="phone">Phone (optional)</label>
           <input
             id="phone"
             name="phone"
@@ -271,10 +271,10 @@ export function WorkflowReviewForm() {
           </select>
         </div>
         <div>
-          <label className={LABEL} htmlFor="callWindow">Best time to call</label>
+          <label className={LABEL} htmlFor="callWindow">Preferred contact</label>
           <select id="callWindow" name="callWindow" className={FIELD} defaultValue="">
-            <option value="" disabled>Select a window</option>
-            {CONTACT_WINDOWS.map((option) => (
+            <option value="" disabled>Email (default) or phone</option>
+            {CONTACT_PREFERENCES.map((option) => (
               <option key={option} value={option}>{option}</option>
             ))}
           </select>
@@ -314,7 +314,7 @@ export function WorkflowReviewForm() {
           aria-describedby={challengeError ? "humanCheckError" : undefined}
         />
         {challengeError ? (
-          <p id="humanCheckError" className="mt-1 text-sm text-orange-300">
+          <p id="humanCheckError" className="mt-1 text-sm text-orange-700">
             That answer was not right. Here is a new one - please try again.
           </p>
         ) : null}
@@ -328,7 +328,7 @@ export function WorkflowReviewForm() {
         <input id="companyWebsite" name="companyWebsite" tabIndex={-1} autoComplete="off" />
       </div>
 
-      <p className="mt-4 text-xs text-slate-400">
+      <p className="mt-4 text-xs text-slate-500">
         Please do not include patient health information in this form.
       </p>
 
@@ -336,9 +336,9 @@ export function WorkflowReviewForm() {
         <button type="submit" disabled={submitting} className="btn-primary disabled:opacity-60">
           {submitting ? "Sending..." : "Send My Request"} <Send className="ml-2 h-4 w-4" />
         </button>
-        <span className="text-sm text-slate-400">
+        <span className="text-sm text-slate-500">
           Prefer email?{" "}
-          <a href="mailto:info@aifax.net" className="text-cyan-300 underline-offset-4 hover:underline">
+          <a href="mailto:info@aifax.net" className="text-orange-600 underline-offset-4 hover:underline">
             info@aifax.net
           </a>
         </span>
@@ -346,11 +346,11 @@ export function WorkflowReviewForm() {
 
       {emailSuggestion ? (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4">
-          <div className="relative w-full max-w-sm rounded-2xl border border-orange-400/40 bg-slate-900 p-6 text-center shadow-2xl">
-            <h3 className="text-lg font-semibold text-white">Check your email</h3>
-            <p className="mt-2 text-sm text-slate-300">
-              You typed <span className="text-white">{emailSuggestion.typed}</span>. Did you mean{" "}
-              <span className="text-cyan-300">{emailSuggestion.suggested}</span>?
+          <div className="relative w-full max-w-sm rounded-2xl border border-orange-300 bg-white p-6 text-center shadow-2xl">
+            <h3 className="text-lg font-semibold text-slate-900">Check your email</h3>
+            <p className="mt-2 text-sm text-slate-600">
+              You typed <span className="text-slate-900">{emailSuggestion.typed}</span>. Did you mean{" "}
+              <span className="text-orange-600">{emailSuggestion.suggested}</span>?
             </p>
             <div className="mt-5 flex justify-center gap-3">
               <button type="button" onClick={acceptEmailSuggestion} className="btn-primary">
@@ -359,7 +359,7 @@ export function WorkflowReviewForm() {
               <button
                 type="button"
                 onClick={keepTypedEmail}
-                className="rounded-full border border-white/20 px-4 py-2 text-sm text-slate-200 hover:border-white/40"
+                className="rounded-full border border-slate-300 px-4 py-2 text-sm text-slate-800 hover:border-slate-500"
               >
                 No, keep as typed
               </button>
@@ -374,25 +374,25 @@ export function WorkflowReviewForm() {
           onClick={() => setSent(false)}
         >
           <div
-            className="relative w-full max-w-sm rounded-2xl border border-cyan-300/40 bg-slate-900 p-6 text-center shadow-2xl"
+            className="relative w-full max-w-sm rounded-2xl border border-emerald-300 bg-white p-6 text-center shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               type="button"
               onClick={() => setSent(false)}
               aria-label="Close"
-              className="absolute right-3 top-3 text-slate-400 hover:text-white"
+              className="absolute right-3 top-3 text-slate-500 hover:text-slate-900"
             >
               <X className="h-5 w-5" />
             </button>
-            <CheckCircle2 className="mx-auto h-12 w-12 text-cyan-300" />
-            <h3 className="mt-3 text-lg font-semibold text-white">Request sent</h3>
-            <p className="mt-2 text-sm text-slate-300">We'll follow up shortly. Check your email for confirmation.</p>
+            <CheckCircle2 className="mx-auto h-12 w-12 text-orange-600" />
+            <h3 className="mt-3 text-lg font-semibold text-slate-900">Request sent</h3>
+            <p className="mt-2 text-sm text-slate-600">We'll follow up shortly. Check your email for confirmation.</p>
           </div>
         </div>
       ) : null}
       {submitError ? (
-        <p className="mt-4 rounded-lg border border-orange-400/40 bg-orange-400/10 p-3 text-sm text-orange-100">
+        <p className="mt-4 rounded-lg border border-orange-300 bg-orange-50 p-3 text-sm text-orange-900">
           {submitError} You can also email us directly at{" "}
           <a href="mailto:info@aifax.net" className="underline underline-offset-4">
             info@aifax.net
