@@ -98,8 +98,8 @@ export default function Home() {
             </p>
             <p className="mt-2 text-slate-600">
               Inbound faxes read, matched to the patient, and filed toward the chart. Outbound faxes sent from your
-              inbox. Built for physician practices and the businesses that still run on fax: legal, insurance, back
-              office.
+              inbox. Built for physician practices and businesses that depend on fax for critical workflows: legal,
+              insurance, and back-office operations.
             </p>
           </div>
           <p className="kicker text-base">AI fax for medical practices</p>
