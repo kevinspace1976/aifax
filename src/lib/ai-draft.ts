@@ -1,3 +1,4 @@
+import { stripDashes } from "@/lib/gmail";
 import { newNumberDisplay, portNumberDisplay } from "@/lib/site";
 
 /**
@@ -82,7 +83,7 @@ Team AiFax`;
     }
     const data = (await res.json()) as { content?: { type: string; text?: string }[] };
     const text = data.content?.find((block) => block.type === "text")?.text;
-    return text?.trim() || null;
+    return text ? stripDashes(text).trim() || null : null;
   } catch (err) {
     console.error("[ai-draft] request failed", err);
     return null;

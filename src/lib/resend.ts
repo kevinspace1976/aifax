@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import { stripDashes } from "@/lib/gmail";
 
 const FROM = process.env.RESEND_FROM || "AiFax <info@aifax.net>";
 const ADMIN_EMAIL = process.env.ADMIN_NOTIFICATION_EMAIL || "info@aifax.net";
@@ -31,9 +32,9 @@ export async function sendEmail(opts: {
     const { error } = await resend.emails.send({
       from: FROM,
       to: opts.to,
-      subject: opts.subject,
-      html: opts.html,
-      text: opts.text,
+      subject: stripDashes(opts.subject),
+      html: stripDashes(opts.html),
+      text: stripDashes(opts.text),
       replyTo: opts.replyTo,
       tags: opts.tags
     });
