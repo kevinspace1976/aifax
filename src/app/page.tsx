@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, X } from "lucide-react";
 import { DemoVideo } from "@/components/demo-video";
+import { SubscribeButton } from "@/components/subscribe-button";
 import { SummaryCard } from "@/components/summary-card";
 import { plans } from "@/lib/plans";
 import { phone, sharedCtas } from "@/lib/site";
@@ -220,28 +221,23 @@ export default function Home() {
               ) : null}
               <h3 className="text-xl text-slate-900">{plan.name}</h3>
               <p className="mt-1 flex items-baseline gap-1.5">
-                <span className="text-4xl font-extrabold tracking-tight text-slate-900 tabular-nums">
-                  {plan.annualPrice ?? plan.price}
-                </span>
+                <span className="text-4xl font-extrabold tracking-tight text-slate-900 tabular-nums">{plan.price}</span>
                 <span className="text-slate-500">/month</span>
               </p>
-              <p className="text-sm text-slate-500">
-                {plan.pages}
-                {plan.annualPrice ? ", billed annually" : ""}
-              </p>
+              <p className="text-sm text-slate-500">{plan.pages}</p>
               <ul className="mt-4 flex flex-col gap-2.5">
                 {plan.teaser.map((line) => (
                   <Check key={line}>{line}</Check>
                 ))}
               </ul>
-              <a href={plan.href} className={`${plan.featured ? "btn-primary" : "btn-secondary"} mt-6`}>
+              <SubscribeButton planName={plan.name} className={`${plan.featured ? "btn-primary" : "btn-secondary"} mt-6`}>
                 {plan.cta}
-              </a>
+              </SubscribeButton>
             </article>
           ))}
         </div>
         <p className="mt-5 text-sm text-slate-500">
-          Prices shown billed annually, monthly billing available. Additional pages $0.05 each. EHR integration is scoped after a written discovery with
+          All plans month to month. Additional pages $0.05 each. EHR integration is scoped after a written discovery with
           your EHR vendor.
         </p>
       </section>

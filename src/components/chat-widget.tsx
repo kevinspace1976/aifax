@@ -24,7 +24,7 @@ const FAQ: Record<string, { chip: string; answer: string }> = {
   pricing: {
     chip: "Pricing & plans",
     answer:
-      "All plans are month to month with no contract, free number porting, 24/7 support, and 5 cents per page over your allowance (service never stops mid-month). Annual billing saves about 17%.\n\nLite - $9.99/mo: 250 pages, fax only (no AI features).\nPlus - $29.99/mo (most popular): 500 pages, AI summary on every inbound fax with patient name and DOB labeling, plus the document chatbot (about 10 documents / 250 questions). The AI features start here.\nPro - $44.99/mo: 1,000 pages and a larger chatbot (about 50 documents / 500 questions).\nEnterprise - $69.99/mo: 1,500 pages and the largest chatbot (about 100 documents / 1,000 questions).\nCorporate: custom pricing for higher volume - email us at " +
+      "All plans are month to month with no contract, free number porting, 24/7 support, and 5 cents per page over your allowance (service never stops mid-month).\n\nLite - $9.99/mo: 250 pages, fax only (no AI features).\nPlus - $29.99/mo (most popular): 500 pages, AI summary on every inbound fax with patient name and DOB labeling, plus the document chatbot (about 10 documents / 250 questions). The AI features start here.\nPro - $44.99/mo: 1,000 pages and a larger chatbot (about 50 documents / 500 questions).\nEnterprise - $69.99/mo: 1,500 pages and the largest chatbot (about 100 documents / 1,000 questions).\nCorporate: custom pricing for higher volume - email us at " +
       EMAIL +
       ".\n\nFull details and signup are on the Pricing page."
   },
