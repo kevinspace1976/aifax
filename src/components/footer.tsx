@@ -6,7 +6,15 @@ export function Footer() {
     <footer className="border-t border-white/10 bg-slate-950/90">
       <div className="section-shell grid gap-8 py-10 md:grid-cols-2 md:items-center">
         <div>
-          <p className="text-sm text-slate-300">Privacy | Terms & Conditions</p>
+          <p className="text-sm text-slate-300">
+            <Link href="/privacy" className="hover:text-orange-300">
+              Privacy Policy
+            </Link>
+            {" | "}
+            <Link href="/terms" className="hover:text-orange-300">
+              Terms &amp; Conditions
+            </Link>
+          </p>
           <p className="mt-2 text-xs text-slate-400">Copyright © 2026 AI FAX | All Rights Reserved.</p>
         </div>
 
