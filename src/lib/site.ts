@@ -16,11 +16,12 @@ export const navItems = [
   { href: "/contact", label: "Contact" }
 ];
 
+// Twitter and Instagram removed for now (no active accounts). The LinkedIn
+// link is the public company page; the /admin/dashboard/ URL only works
+// for page admins.
 export const socialItems = [
-  { href: "https://facebook.com", label: "Facebook" },
-  { href: "https://twitter.com", label: "Twitter" },
-  { href: "https://instagram.com", label: "Instagram" },
-  { href: "https://linkedin.com", label: "LinkedIn" }
+  { href: "https://www.facebook.com/profile.php?id=61558699837320", label: "Facebook" },
+  { href: "https://www.linkedin.com/company/104773014/", label: "LinkedIn" }
 ];
 
 export const newNumberUrl = "https://portal.aifax.net/index.php?rp=/store/cloud-faxing&path=new";
