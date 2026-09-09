@@ -43,7 +43,6 @@ export const plans: Plan[] = [
     pages: "500 pages a month, send and receive",
     cta: "Subscribe",
     href: process.env.PLUS_STRIPE_CHECKOUT_LINK ?? "#",
-    featured: true,
     features: [
       "Everything in Lite",
       "AI summary and smart extraction on every fax (customizable)",
@@ -62,6 +61,7 @@ export const plans: Plan[] = [
     pages: "1,000 pages a month, send and receive",
     cta: "Subscribe",
     href: process.env.PRO_STRIPE_CHECKOUT_LINK ?? "#",
+    featured: true,
     features: [
       "Everything in Plus",
       "Double the page allowance for busier practices",
