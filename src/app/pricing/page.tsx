@@ -4,7 +4,7 @@ import { ADDITIONAL_PAGE_RATE, plans } from "@/lib/plans";
 
 export const metadata: Metadata = {
   title: "Pricing | AiFax",
-  description: "Pay for pages, not seats. Every plan includes AI summaries, HIPAA-compliant delivery, a BAA at signup, and your number ported or new."
+  description: "Pay for pages, not seats. Every plan is HIPAA-compliant with a BAA at signup and your number ported or new. AI summaries and chat start at Plus."
 };
 
 const notes = [
@@ -18,7 +18,7 @@ const notes = [
   },
   {
     title: "Not sure which plan?",
-    body: "Count last month's inbound and outbound pages together. A typical two-provider practice lands in Practice or Group."
+    body: "Count last month's inbound and outbound pages together. A typical two-provider practice lands in Plus or Pro."
   }
 ];
 
@@ -29,8 +29,8 @@ export default function PricingPage() {
         <p className="kicker">Pricing</p>
         <h1 className="mt-4 max-w-3xl text-4xl text-slate-900 sm:text-5xl">Pay for pages, not seats.</h1>
         <p className="mt-5 max-w-2xl text-lg text-slate-700 sm:text-xl">
-          Every plan includes AI summaries, HIPAA-compliant delivery, a BAA at signup, and your number ported or new.
-          Month to month.
+          Every plan is HIPAA-compliant with a BAA at signup and your number ported or new. AI summaries and
+          chat-with-your-faxes start at Plus. Month to month.
         </p>
       </section>
 
