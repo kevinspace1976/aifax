@@ -2,32 +2,27 @@
  * The public plan ladder, shared by the pricing page and the Home teaser.
  * Names, prices, and page allowances mirror the products configured in
  * WHMCS and Stripe: do not change them here without changing them there.
- * Subscribe buttons send the visitor to the WHMCS store on
- * portal.aifax.net, where they pick the plan and check out. A per-plan
- * *_STRIPE_CHECKOUT_LINK env var overrides that with a direct link.
+ * WHMCS bills monthly only, so only monthly prices are shown. Paid plans
+ * have no href: their Subscribe button opens a port-or-new-number choice
+ * (see SubscribeButton) that leads into the portal store.
  */
 export type Plan = {
   name: string;
   price: string;
-  annualPrice?: string;
   pages: string;
   cta: string;
-  href: string;
+  href?: string;
   featured?: boolean;
   features: string[];
   teaser: string[];
 };
 
-export const storeUrl = "https://portal.aifax.net/index.php?rp=/store/cloud-faxing";
-
 export const plans: Plan[] = [
   {
     name: "Lite",
     price: "$9.99",
-    annualPrice: "$8.29",
     pages: "250 pages a month, send and receive",
     cta: "Subscribe",
-    href: process.env.LITE_STRIPE_CHECKOUT_LINK || storeUrl,
     features: [
       "Secure, HIPAA-compliant fax with a BAA at signup",
       "Port your existing fax number or get a new one",
@@ -42,10 +37,8 @@ export const plans: Plan[] = [
   {
     name: "Plus",
     price: "$29.99",
-    annualPrice: "$24.89",
     pages: "500 pages a month, send and receive",
     cta: "Subscribe",
-    href: process.env.PLUS_STRIPE_CHECKOUT_LINK || storeUrl,
     features: [
       "Everything in Lite",
       "AI summary and smart extraction on every fax (customizable)",
@@ -60,10 +53,8 @@ export const plans: Plan[] = [
   {
     name: "Pro",
     price: "$44.99",
-    annualPrice: "$37.34",
     pages: "1,000 pages a month, send and receive",
     cta: "Subscribe",
-    href: process.env.PRO_STRIPE_CHECKOUT_LINK || storeUrl,
     featured: true,
     features: [
       "Everything in Plus",
@@ -75,10 +66,8 @@ export const plans: Plan[] = [
   {
     name: "Enterprise",
     price: "$69.99",
-    annualPrice: "$58.09",
     pages: "1,500 pages a month, send and receive",
     cta: "Subscribe",
-    href: process.env.ENTERPRISE_STRIPE_CHECKOUT_LINK || storeUrl,
     features: [
       "Everything in Pro",
       "Highest page allowance for multi-provider groups",
