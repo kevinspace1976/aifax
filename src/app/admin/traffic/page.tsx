@@ -71,10 +71,22 @@ function source(row: { utm_source: string | null; utm_campaign: string | null; f
   return "direct";
 }
 
+/**
+ * Device from the browser's user agent. Browsers deliberately blur some of
+ * this: an iPad in Safari's default desktop mode reports itself as a Mac,
+ * and Windows 11 reports as Windows 10, so labels are as specific as the
+ * browser allows and no more.
+ */
 function device(ua: string | null) {
   if (!ua) return "unknown";
-  if (/iPad|Tablet/i.test(ua)) return "tablet";
-  if (/Mobile|Android|iPhone/i.test(ua)) return "phone";
+  if (/iPhone/i.test(ua)) return "iPhone";
+  if (/iPad/i.test(ua)) return "iPad";
+  if (/Android/i.test(ua)) return /Mobile/i.test(ua) ? "Android phone" : "Android tablet";
+  if (/CrOS/i.test(ua)) return "Chromebook";
+  if (/Macintosh|Mac OS X/i.test(ua)) return "Mac";
+  if (/Windows/i.test(ua)) return "Windows PC";
+  if (/Linux/i.test(ua)) return "Linux PC";
+  if (/Mobile|Tablet/i.test(ua)) return "phone or tablet";
   return "desktop";
 }
 
@@ -155,9 +167,16 @@ export default async function TrafficPage() {
     `),
     rows<DeviceRow>(db`
       SELECT CASE
-               WHEN user_agent ~* '(iPad|Tablet)' THEN 'tablet'
-               WHEN user_agent ~* '(Mobile|Android|iPhone)' THEN 'phone'
                WHEN user_agent IS NULL THEN 'unknown'
+               WHEN user_agent ~* 'iPhone' THEN 'iPhone'
+               WHEN user_agent ~* 'iPad' THEN 'iPad'
+               WHEN user_agent ~* 'Android' AND user_agent ~* 'Mobile' THEN 'Android phone'
+               WHEN user_agent ~* 'Android' THEN 'Android tablet'
+               WHEN user_agent ~* 'CrOS' THEN 'Chromebook'
+               WHEN user_agent ~* '(Macintosh|Mac OS X)' THEN 'Mac'
+               WHEN user_agent ~* 'Windows' THEN 'Windows PC'
+               WHEN user_agent ~* 'Linux' THEN 'Linux PC'
+               WHEN user_agent ~* '(Mobile|Tablet)' THEN 'phone or tablet'
                ELSE 'desktop'
              END AS device,
              COUNT(*)::int AS visits
