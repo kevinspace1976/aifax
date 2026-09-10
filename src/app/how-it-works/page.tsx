@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
+import { FaxSummaryPreview } from "@/components/diagrams/fax-summary-preview";
 import { PageHero } from "@/components/page-hero";
 import { newNumberUrl, portNumberUrl } from "@/lib/site";
 
@@ -60,6 +61,7 @@ export default function HowItWorksPage() {
           </div>
         }
         note="Your fax line stays live on your current provider until the port completes."
+        aside={<FaxSummaryPreview />}
       />
 
       <section className="section-alt py-16 sm:py-20">

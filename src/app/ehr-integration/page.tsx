@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
+import { EhrRoutes } from "@/components/diagrams/ehr-routes";
 import { PageHero } from "@/components/page-hero";
 import { supportEmail } from "@/lib/site";
 
@@ -11,14 +12,14 @@ export const metadata: Metadata = {
 
 const routes = [
   {
-    kicker: "Direct",
+    kicker: "Automatic",
     title: "Filed by the system",
     body: "Where the EHR exposes document intake to a registered application, the matched fax is written to the chart with no one in the middle."
   },
   {
-    kicker: "Secure messaging",
-    title: "Filed in three clicks",
-    body: "Where the EHR accepts Direct secure messages, the prepared fax lands in the EHR's inbox and staff file it: open, select patient, file."
+    kicker: "Direct messaging",
+    title: "Filed from the inbox",
+    body: "Where the EHR accepts Direct secure messages (the national standard most certified EHRs support), the prepared fax lands in the EHR's Direct inbox and staff file it: open, select patient, file. How many clicks that takes depends on the EHR."
   },
   {
     kicker: "Guided",
@@ -59,6 +60,7 @@ export default function EhrIntegrationPage() {
           </div>
         }
         note="Discovery is done in writing with your EHR vendor before anything is built."
+        aside={<EhrRoutes />}
       />
 
       <section className="section-alt py-16 sm:py-20">
