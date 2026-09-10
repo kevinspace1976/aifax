@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { DeleteForm } from "@/components/delete-form";
+import { EXCLUDE_DEVICE_COOKIE, isExcludedDevice } from "@/lib/admin-auth";
 import { ensureSchema, rows, sql } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -86,6 +89,12 @@ function when(iso: string) {
 export default async function TrafficPage() {
   await ensureSchema();
   const db = sql();
+  const cookieStore = await cookies();
+  const thisDeviceExcluded = isExcludedDevice(cookieStore.get(EXCLUDE_DEVICE_COOKIE)?.value);
+  const excludedIps = (process.env.EXCLUDED_VISITOR_IPS || "")
+    .split(",")
+    .map((v) => v.trim())
+    .filter(Boolean).length;
 
   const [today, yesterday, week, month, cities, pages, sources, devices, recent] = await Promise.all([
     rows<Count>(db`
@@ -188,6 +197,18 @@ export default async function TrafficPage() {
           <Link href="/admin/traffic" className="btn-secondary min-h-0 px-4 py-1.5 text-sm">
             Refresh
           </Link>
+          <DeleteForm
+            action="/api/admin/visits/delete"
+            fields={{ all: "1" }}
+            confirmText="Delete every recorded visit? All traffic history is wiped. This cannot be undone."
+          >
+            <button
+              type="submit"
+              className="rounded-full border border-red-400/40 px-4 py-1.5 text-sm text-red-300 hover:border-red-400"
+            >
+              Delete all visits
+            </button>
+          </DeleteForm>
         </div>
       </div>
 
@@ -198,6 +219,30 @@ export default async function TrafficPage() {
         <StatCard label="Last 30 days" value={m.visitors} hint={`${m.visits} page views`} />
       </div>
       <p className="mt-2 text-xs text-slate-500">Big number is unique visitors (one per browser). Page views count every page opened.</p>
+
+      <section className="card-surface mt-6 flex flex-wrap items-center justify-between gap-4 p-5">
+        <div>
+          <h2 className="text-sm font-semibold text-white">Your own visits</h2>
+          <p className="mt-1 text-xs text-slate-400">
+            Never counted while signed in here. Excluding a device keeps it out for a year even when signed out.
+            {excludedIps > 0 ? ` ${excludedIps} network address${excludedIps === 1 ? "" : "es"} also excluded.` : ""}
+          </p>
+        </div>
+        <form action="/api/admin/exclude-device" method="post">
+          {thisDeviceExcluded ? (
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-emerald-300">This device is excluded</span>
+              <button type="submit" name="action" value="remove" className="btn-secondary min-h-0 px-4 py-1.5 text-sm">
+                Count it again
+              </button>
+            </div>
+          ) : (
+            <button type="submit" name="action" value="add" className="btn-primary min-h-0 px-4 py-1.5 text-sm">
+              Exclude this device
+            </button>
+          )}
+        </form>
+      </section>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-3">
         <section className="card-surface p-6 lg:col-span-1">
@@ -298,13 +343,14 @@ export default async function TrafficPage() {
                 <th className="pb-2 pr-4">Page</th>
                 <th className="pb-2 pr-4">Source</th>
                 <th className="pb-2 pr-4">Device</th>
-                <th className="pb-2">Visitor</th>
+                <th className="pb-2 pr-4">Visitor</th>
+                <th className="pb-2">Remove</th>
               </tr>
             </thead>
             <tbody>
               {recent.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="py-3 text-slate-400">
+                  <td colSpan={7} className="py-3 text-slate-400">
                     No visits recorded yet.
                   </td>
                 </tr>
@@ -316,7 +362,30 @@ export default async function TrafficPage() {
                     <td className="py-2 pr-4 text-slate-200">{v.path}</td>
                     <td className="py-2 pr-4 text-slate-300">{source(v)}</td>
                     <td className="py-2 pr-4 text-slate-400">{device(v.user_agent)}</td>
-                    <td className="py-2 font-mono text-xs text-slate-500">{v.session_id.slice(0, 8)}</td>
+                    <td className="py-2 pr-4 font-mono text-xs text-slate-500">{v.session_id.slice(0, 8)}</td>
+                    <td className="whitespace-nowrap py-2 text-xs">
+                      <DeleteForm
+                        action="/api/admin/visits/delete"
+                        fields={{ id: String(v.id) }}
+                        confirmText="Delete this one page view?"
+                        className="inline"
+                      >
+                        <button type="submit" className="text-slate-400 underline-offset-4 hover:text-red-300 hover:underline">
+                          this view
+                        </button>
+                      </DeleteForm>
+                      <span className="mx-1 text-slate-600">|</span>
+                      <DeleteForm
+                        action="/api/admin/visits/delete"
+                        fields={{ session_id: v.session_id }}
+                        confirmText={`Delete every page view from visitor ${v.session_id.slice(0, 8)}?`}
+                        className="inline"
+                      >
+                        <button type="submit" className="text-slate-400 underline-offset-4 hover:text-red-300 hover:underline">
+                          all from visitor
+                        </button>
+                      </DeleteForm>
+                    </td>
                   </tr>
                 ))
               )}

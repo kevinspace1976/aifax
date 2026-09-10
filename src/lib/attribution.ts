@@ -1,4 +1,5 @@
 import { createHash, randomUUID } from "crypto";
+import { BlockList, isIP } from "net";
 import { cookies, headers } from "next/headers";
 
 /**
@@ -99,20 +100,33 @@ export function clientIp(h: Headers) {
 
 /**
  * IPs that should never be logged as a visit, e.g. the site owner's own
- * connection. Comma-separated in EXCLUDED_VISITOR_IPS. A residential IP
- * can change over time, so this may need updating later, it's config,
- * not a permanent fix, which is why it lives in an env var rather than
- * hardcoded.
+ * connection. Comma-separated in EXCLUDED_VISITOR_IPS. Each entry is a
+ * single address or a CIDR block (e.g. 2600:1700:6070:1ac0::/64), because
+ * a home connection usually has an IPv4 address plus an IPv6 prefix whose
+ * last 64 bits change per device. A residential IP can change over time,
+ * so this may need updating later, it's config, not a permanent fix,
+ * which is why it lives in an env var rather than hardcoded.
  */
 export function isExcludedIp(ip: string | null) {
   if (!ip) return false;
   const raw = process.env.EXCLUDED_VISITOR_IPS;
   if (!raw) return false;
-  return raw
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean)
-    .includes(ip);
+  const ipFamily = isIP(ip);
+  if (!ipFamily) return false;
+  const list = new BlockList();
+  for (const entry of raw.split(",").map((s) => s.trim()).filter(Boolean)) {
+    const [addr, bits] = entry.split("/");
+    const family = isIP(addr ?? "");
+    if (!family || !addr) continue;
+    const type = family === 6 ? "ipv6" : "ipv4";
+    try {
+      if (bits) list.addSubnet(addr, Number(bits), type);
+      else list.addAddress(addr, type);
+    } catch {
+      // a malformed entry must never break visit logging
+    }
+  }
+  return list.check(ip, ipFamily === 6 ? "ipv6" : "ipv4");
 }
 
 export async function currentSessionId() {

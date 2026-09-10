@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { ensureSchema, sql } from "@/lib/db";
-import { ADMIN_SESSION_COOKIE, isValidAdminSession } from "@/lib/admin-auth";
+import { ADMIN_SESSION_COOKIE, EXCLUDE_DEVICE_COOKIE, isExcludedDevice, isValidAdminSession } from "@/lib/admin-auth";
 import {
   ATTRIBUTION_COOKIE,
   SESSION_COOKIE,
@@ -29,6 +29,13 @@ export async function POST(req: NextRequest) {
   // alongside the client-side skip in <VisitTracker>).
   if (isValidAdminSession(req.cookies.get(ADMIN_SESSION_COOKIE)?.value)) {
     return NextResponse.json({ ok: true, skipped: "admin" });
+  }
+
+  // A device the owner marked "exclude me" from the Traffic page. Outlives
+  // the admin login, so the owner's phone and laptop stay out of the
+  // numbers even when signed out.
+  if (isExcludedDevice(req.cookies.get(EXCLUDE_DEVICE_COOKIE)?.value)) {
+    return NextResponse.json({ ok: true, skipped: "excluded-device" });
   }
 
   // Configured owner IPs (EXCLUDED_VISITOR_IPS) never count either, so
