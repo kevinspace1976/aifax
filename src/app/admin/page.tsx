@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { DeleteForm, SelectAll } from "@/components/delete-form";
 import { ensureSchema, rows, sql } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -215,10 +216,17 @@ export default async function AdminPage() {
             Export CSV
           </Link>
         </div>
-        <div className="mt-4 overflow-x-auto">
+        <DeleteForm
+          action="/api/admin/leads/delete"
+          confirmText="Delete the selected leads? Their emails and activity are removed too. This cannot be undone."
+          className="mt-4 overflow-x-auto"
+        >
           <table className="w-full min-w-[900px] text-left text-sm">
             <thead>
               <tr className="border-b border-white/10 text-slate-400">
+                <th className="pb-2 pr-3">
+                  <SelectAll name="id" label="Select all leads" />
+                </th>
                 <th className="pb-2 pr-4 font-medium">Date</th>
                 <th className="pb-2 pr-4 font-medium">Name</th>
                 <th className="pb-2 pr-4 font-medium">Email</th>
@@ -231,7 +239,7 @@ export default async function AdminPage() {
             <tbody>
               {leadsRecent.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-4 text-slate-400">
+                  <td colSpan={8} className="py-4 text-slate-400">
                     No leads yet.
                   </td>
                 </tr>
@@ -240,6 +248,9 @@ export default async function AdminPage() {
                   const stats = emailStatsByLead.get(lead.id);
                   return (
                     <tr key={lead.id} className="border-b border-white/5 align-top">
+                      <td className="py-2 pr-3">
+                        <input type="checkbox" name="id" value={lead.id} aria-label={`Select ${lead.name}`} />
+                      </td>
                       <td className="py-2 pr-4 whitespace-nowrap text-slate-300">
                         {new Date(lead.created_at).toLocaleDateString()}
                       </td>
@@ -271,7 +282,15 @@ export default async function AdminPage() {
               )}
             </tbody>
           </table>
-        </div>
+          {leadsRecent.length > 0 ? (
+            <div className="mt-4 flex items-center gap-3">
+              <button type="submit" className="btn-secondary min-h-0 px-4 py-1.5 text-sm">
+                Delete selected
+              </button>
+              <span className="text-xs text-slate-500">Tick the boxes (or the top box for all), then delete. Test submissions go away for good.</span>
+            </div>
+          ) : null}
+        </DeleteForm>
       </section>
 
       <section className="card-surface mt-8 p-6">

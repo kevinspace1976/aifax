@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
+import { DeleteForm } from "@/components/delete-form";
 import { EXCLUDE_DEVICE_COOKIE, isExcludedDevice } from "@/lib/admin-auth";
 import { ensureSchema, rows, sql } from "@/lib/db";
 
@@ -196,6 +197,18 @@ export default async function TrafficPage() {
           <Link href="/admin/traffic" className="btn-secondary min-h-0 px-4 py-1.5 text-sm">
             Refresh
           </Link>
+          <DeleteForm
+            action="/api/admin/visits/delete"
+            fields={{ all: "1" }}
+            confirmText="Delete every recorded visit? All traffic history is wiped. This cannot be undone."
+          >
+            <button
+              type="submit"
+              className="rounded-full border border-red-400/40 px-4 py-1.5 text-sm text-red-300 hover:border-red-400"
+            >
+              Delete all visits
+            </button>
+          </DeleteForm>
         </div>
       </div>
 
@@ -330,13 +343,14 @@ export default async function TrafficPage() {
                 <th className="pb-2 pr-4">Page</th>
                 <th className="pb-2 pr-4">Source</th>
                 <th className="pb-2 pr-4">Device</th>
-                <th className="pb-2">Visitor</th>
+                <th className="pb-2 pr-4">Visitor</th>
+                <th className="pb-2">Remove</th>
               </tr>
             </thead>
             <tbody>
               {recent.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="py-3 text-slate-400">
+                  <td colSpan={7} className="py-3 text-slate-400">
                     No visits recorded yet.
                   </td>
                 </tr>
@@ -348,7 +362,30 @@ export default async function TrafficPage() {
                     <td className="py-2 pr-4 text-slate-200">{v.path}</td>
                     <td className="py-2 pr-4 text-slate-300">{source(v)}</td>
                     <td className="py-2 pr-4 text-slate-400">{device(v.user_agent)}</td>
-                    <td className="py-2 font-mono text-xs text-slate-500">{v.session_id.slice(0, 8)}</td>
+                    <td className="py-2 pr-4 font-mono text-xs text-slate-500">{v.session_id.slice(0, 8)}</td>
+                    <td className="whitespace-nowrap py-2 text-xs">
+                      <DeleteForm
+                        action="/api/admin/visits/delete"
+                        fields={{ id: String(v.id) }}
+                        confirmText="Delete this one page view?"
+                        className="inline"
+                      >
+                        <button type="submit" className="text-slate-400 underline-offset-4 hover:text-red-300 hover:underline">
+                          this view
+                        </button>
+                      </DeleteForm>
+                      <span className="mx-1 text-slate-600">|</span>
+                      <DeleteForm
+                        action="/api/admin/visits/delete"
+                        fields={{ session_id: v.session_id }}
+                        confirmText={`Delete every page view from visitor ${v.session_id.slice(0, 8)}?`}
+                        className="inline"
+                      >
+                        <button type="submit" className="text-slate-400 underline-offset-4 hover:text-red-300 hover:underline">
+                          all from visitor
+                        </button>
+                      </DeleteForm>
+                    </td>
                   </tr>
                 ))
               )}

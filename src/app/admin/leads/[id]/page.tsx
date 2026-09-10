@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { DeleteForm } from "@/components/delete-form";
 import { ensureSchema, rows, sql } from "@/lib/db";
 import { STATUS_OPTIONS } from "./status/route";
 
@@ -132,6 +133,19 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
               {lead.nurture_paused ? "Resume nurture emails" : "Pause nurture emails"}
             </button>
           </form>
+
+          <DeleteForm
+            action="/api/admin/leads/delete"
+            fields={{ id: String(lead.id) }}
+            confirmText={`Delete ${lead.name}? Their emails and activity are removed too. This cannot be undone.`}
+          >
+            <button
+              type="submit"
+              className="rounded-full border border-red-400/40 px-4 py-2 text-sm text-red-300 hover:border-red-400"
+            >
+              Delete lead
+            </button>
+          </DeleteForm>
         </div>
       </div>
 
