@@ -55,9 +55,10 @@ export default function PrivacyPage() {
             </li>
             <li>
               <strong className="text-slate-900">Usage and device information.</strong> Pages visited, referring
-              page, approximate location derived from IP address, browser and device type, and campaign
-              identifiers from links you clicked (for example UTM parameters or advertising click IDs). We store
-              IP addresses only in hashed form.
+              page, IP address and the approximate location derived from it, browser and device type, and
+              campaign identifiers from links you clicked (for example UTM parameters or advertising click IDs).
+              We use this to understand which organizations are interested in our services and to measure our
+              advertising.
             </li>
             <li>
               <strong className="text-slate-900">Cookies and similar technologies.</strong> We use a first-party

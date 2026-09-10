@@ -77,11 +77,14 @@ async function runMigrations() {
   `;
   await db`CREATE INDEX IF NOT EXISTS visits_created_at_idx ON visits (created_at)`;
   await db`CREATE INDEX IF NOT EXISTS visits_session_idx ON visits (session_id)`;
-  // Visitor location from Vercel's edge geo headers (city level, no raw IP).
-  // Added after launch, so ALTER rather than relying on CREATE TABLE.
+  // Visitor location from Vercel's edge geo headers (city level) plus the
+  // visitor's IP, so the owner can look up which practice or business a
+  // visit came from. Added after launch, so ALTER rather than relying on
+  // CREATE TABLE.
   await db`ALTER TABLE visits ADD COLUMN IF NOT EXISTS city TEXT`;
   await db`ALTER TABLE visits ADD COLUMN IF NOT EXISTS region TEXT`;
   await db`ALTER TABLE visits ADD COLUMN IF NOT EXISTS country TEXT`;
+  await db`ALTER TABLE visits ADD COLUMN IF NOT EXISTS ip TEXT`;
 
   await db`
     CREATE TABLE IF NOT EXISTS leads (

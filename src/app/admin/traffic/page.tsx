@@ -9,8 +9,9 @@ export const dynamic = "force-dynamic";
 /**
  * Site traffic, city level. Every row comes from /api/track (one per page
  * view). Bots and crawlers are filtered out by user agent so the counts
- * reflect people. Location comes from Vercel's edge geo headers; no raw IP
- * is stored or shown, per the privacy policy. Times are shown in Eastern.
+ * reflect people. Location comes from Vercel's edge geo headers. The IP
+ * address is stored and shown so the owner can identify the practice or
+ * business a visit came from. Times are shown in Eastern.
  */
 
 const TZ = "America/New_York";
@@ -35,6 +36,7 @@ type VisitRow = {
   fbclid: string | null;
   user_agent: string | null;
   session_id: string;
+  ip: string | null;
 };
 
 function StatCard({ label, value, hint }: { label: string; value: string | number; hint?: string }) {
@@ -167,7 +169,7 @@ export default async function TrafficPage() {
     `),
     rows<VisitRow>(db`
       SELECT id, created_at, city, region, country, path, referrer, utm_source, utm_campaign, fbclid,
-             user_agent, session_id
+             user_agent, session_id, ip
       FROM visits
       WHERE (user_agent IS NULL OR user_agent !~* ${BOT_UA})
       ORDER BY created_at DESC
@@ -332,7 +334,8 @@ export default async function TrafficPage() {
       <section className="card-surface mt-8 p-6">
         <h2 className="text-lg font-semibold text-white">Recent visits</h2>
         <p className="mt-1 text-xs text-slate-400">
-          Last 150 page views. Visitor is a per-browser id, the same across that person&apos;s pages.
+          Last 150 page views. Visitor is a per-browser id, the same across that person&apos;s pages. Click an IP
+          address to see which practice, hospital, or carrier owns that network.
         </p>
         <div className="mt-3 overflow-x-auto">
           <table className="w-full text-sm">
@@ -343,6 +346,7 @@ export default async function TrafficPage() {
                 <th className="pb-2 pr-4">Page</th>
                 <th className="pb-2 pr-4">Source</th>
                 <th className="pb-2 pr-4">Device</th>
+                <th className="pb-2 pr-4">IP address</th>
                 <th className="pb-2 pr-4">Visitor</th>
                 <th className="pb-2">Remove</th>
               </tr>
@@ -350,7 +354,7 @@ export default async function TrafficPage() {
             <tbody>
               {recent.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-3 text-slate-400">
+                  <td colSpan={8} className="py-3 text-slate-400">
                     No visits recorded yet.
                   </td>
                 </tr>
@@ -362,6 +366,21 @@ export default async function TrafficPage() {
                     <td className="py-2 pr-4 text-slate-200">{v.path}</td>
                     <td className="py-2 pr-4 text-slate-300">{source(v)}</td>
                     <td className="py-2 pr-4 text-slate-400">{device(v.user_agent)}</td>
+                    <td className="whitespace-nowrap py-2 pr-4 font-mono text-xs">
+                      {v.ip ? (
+                        <a
+                          href={`https://ipinfo.io/${encodeURIComponent(v.ip)}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          title="Look up the network owner (practice, hospital, or carrier)"
+                          className="text-cyan-300 underline-offset-4 hover:underline"
+                        >
+                          {v.ip}
+                        </a>
+                      ) : (
+                        <span className="text-slate-600">-</span>
+                      )}
+                    </td>
                     <td className="py-2 pr-4 font-mono text-xs text-slate-500">{v.session_id.slice(0, 8)}</td>
                     <td className="whitespace-nowrap py-2 text-xs">
                       <DeleteForm
