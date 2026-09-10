@@ -72,12 +72,12 @@ export async function POST(req: NextRequest) {
     await db`
       INSERT INTO visits (
         session_id, path, referrer, utm_source, utm_medium, utm_campaign,
-        utm_content, utm_term, fbclid, gclid, user_agent, ip_hash, city, region, country
+        utm_content, utm_term, fbclid, gclid, user_agent, ip_hash, ip, city, region, country
       ) VALUES (
         ${sessionId}, ${attribution.sourcePath}, ${attribution.referrer},
         ${attribution.utmSource}, ${attribution.utmMedium}, ${attribution.utmCampaign},
         ${attribution.utmContent}, ${attribution.utmTerm}, ${attribution.fbclid}, ${attribution.gclid},
-        ${req.headers.get("user-agent")}, ${hashIp(requestIp)}, ${geo.city}, ${geo.region}, ${geo.country}
+        ${req.headers.get("user-agent")}, ${hashIp(requestIp)}, ${requestIp}, ${geo.city}, ${geo.region}, ${geo.country}
       )
     `;
   } catch (err) {
