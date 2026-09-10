@@ -219,7 +219,7 @@ export default async function TrafficPage() {
     rows<VisitRow>(db`
       SELECT v.id, v.created_at, v.city, v.region, v.country, v.path, v.referrer, v.utm_source, v.utm_campaign,
              v.fbclid, v.user_agent, v.session_id, v.ip,
-             (v.engaged OR EXISTS (SELECT 1 FROM visits o WHERE o.session_id = v.session_id AND o.id <> v.id)) AS engaged
+             (v.engaged OR EXISTS (SELECT 1 FROM visits o WHERE o.session_id = v.session_id AND o.path <> v.path)) AS engaged
       FROM visits v
       WHERE (v.user_agent IS NULL OR v.user_agent !~* ${BOT_UA})
       ORDER BY created_at DESC
@@ -385,8 +385,8 @@ export default async function TrafficPage() {
         <h2 className="text-lg font-semibold text-white">Recent visits</h2>
         <p className="mt-1 text-xs text-slate-400">
           Last 150 page views. Visitor is a per-browser id, the same across that person&apos;s pages. Engaged means
-          they stayed at least 10 seconds or opened a second page. Click an IP address to see which practice,
-          hospital, or carrier owns that network.
+          they stayed at least 10 seconds or opened a different page. Reloading the same page does not count. Click
+          an IP address to see which practice, hospital, or carrier owns that network.
         </p>
         <div className="mt-3 overflow-x-auto">
           <table className="w-full text-sm">
