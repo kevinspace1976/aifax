@@ -45,12 +45,30 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true, skipped: "excluded-ip" });
   }
 
-  let body: { url?: string } = {};
+  let body: { url?: string; engage?: number } = {};
   try {
     body = await req.json();
   } catch {
     // malformed body - nothing to log, fail quiet, this must never break the page
   }
+
+  // Second beacon from the same browser 10 seconds into the page: mark the
+  // view engaged. Scoped to the session cookie so nobody can flip rows that
+  // are not their own.
+  if (body.engage !== undefined) {
+    const sid = req.cookies.get(SESSION_COOKIE)?.value;
+    const id = Number(body.engage);
+    if (sid && Number.isInteger(id) && id > 0) {
+      try {
+        await ensureSchema();
+        await sql()`UPDATE visits SET engaged = TRUE WHERE id = ${id} AND session_id = ${sid}`;
+      } catch (err) {
+        console.error("[track] failed to mark engaged", err);
+      }
+    }
+    return NextResponse.json({ ok: true });
+  }
+
   if (!body.url) {
     return NextResponse.json({ ok: false }, { status: 400 });
   }
@@ -66,10 +84,11 @@ export async function POST(req: NextRequest) {
 
   const geo = clientGeo(req.headers);
 
+  let visitId: number | null = null;
   try {
     await ensureSchema();
     const db = sql();
-    await db`
+    const inserted = await db`
       INSERT INTO visits (
         session_id, path, referrer, utm_source, utm_medium, utm_campaign,
         utm_content, utm_term, fbclid, gclid, user_agent, ip_hash, ip, city, region, country
@@ -79,13 +98,15 @@ export async function POST(req: NextRequest) {
         ${attribution.utmContent}, ${attribution.utmTerm}, ${attribution.fbclid}, ${attribution.gclid},
         ${req.headers.get("user-agent")}, ${hashIp(requestIp)}, ${requestIp}, ${geo.city}, ${geo.region}, ${geo.country}
       )
+      RETURNING id
     `;
+    visitId = Number((inserted as { id: number }[])[0]?.id) || null;
   } catch (err) {
     // Analytics must never take the site down. Log and move on.
     console.error("[track] failed to record visit", err);
   }
 
-  const res = NextResponse.json({ ok: true });
+  const res = NextResponse.json({ ok: true, id: visitId });
   res.cookies.set(SESSION_COOKIE, sessionId, {
     httpOnly: true,
     sameSite: "lax",

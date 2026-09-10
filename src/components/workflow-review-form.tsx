@@ -391,7 +391,7 @@ export function WorkflowReviewForm() {
             >
               <X className="h-5 w-5" />
             </button>
-            <CheckCircle2 className="mx-auto h-12 w-12 text-orange-600" />
+            <CheckCircle2 className="mx-auto h-12 w-12 text-emerald-600" />
             <h3 className="mt-3 text-lg font-semibold text-slate-900">Request sent</h3>
             <p className="mt-2 text-sm text-slate-600">We'll follow up shortly. Check your email for confirmation.</p>
           </div>

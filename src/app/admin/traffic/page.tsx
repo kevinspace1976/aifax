@@ -1,3 +1,4 @@
+import { BlockList, isIP } from "net";
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { DeleteForm } from "@/components/delete-form";
@@ -18,7 +19,31 @@ const TZ = "America/New_York";
 const BOT_UA =
   "(bot|crawl|spider|slurp|facebookexternalhit|preview|headless|python-requests|curl/|wget|lighthouse|pingdom|uptime|monitor)";
 
-type Count = { visits: number; visitors: number };
+// Address blocks belonging to the big cloud hosts. A "visitor" from one of
+// these is a scanner, uptime monitor, or crawler running on a rented server,
+// not a person in a practice. Not exhaustive: the engaged flag is the
+// stronger signal, this just labels the obvious ones.
+const HOSTING_BLOCKS: [string, number][] = [
+  ["34.64.0.0", 10], ["34.128.0.0", 10], ["35.184.0.0", 13], ["35.192.0.0", 12], ["35.208.0.0", 12],
+  ["35.224.0.0", 12], ["35.240.0.0", 13], // Google Cloud
+  ["3.0.0.0", 8], ["13.52.0.0", 14], ["13.56.0.0", 14], ["18.128.0.0", 9], ["34.192.0.0", 10],
+  ["44.192.0.0", 10], ["52.0.0.0", 11], ["52.32.0.0", 11], ["52.64.0.0", 12], ["54.64.0.0", 10],
+  ["54.128.0.0", 9], // Amazon Web Services
+  ["13.64.0.0", 11], ["20.0.0.0", 8], ["40.64.0.0", 10], ["52.96.0.0", 11], ["52.128.0.0", 9],
+  ["104.40.0.0", 13], // Microsoft Azure
+  ["45.55.0.0", 16], ["64.227.0.0", 17], ["68.183.0.0", 16], ["104.131.0.0", 16], ["137.184.0.0", 16],
+  ["138.197.0.0", 16], ["142.93.0.0", 16], ["143.198.0.0", 16], ["146.190.0.0", 16], ["157.245.0.0", 16],
+  ["159.65.0.0", 16], ["159.89.0.0", 16], ["164.90.0.0", 16], ["165.22.0.0", 16], ["167.99.0.0", 16],
+  ["178.128.0.0", 16], ["188.166.0.0", 16], ["206.189.0.0", 16] // DigitalOcean
+];
+const hostingList = new BlockList();
+for (const [addr, bits] of HOSTING_BLOCKS) hostingList.addSubnet(addr, bits, "ipv4");
+
+function isHostingIp(ip: string) {
+  return isIP(ip) === 4 && hostingList.check(ip, "ipv4");
+}
+
+type Count = { visits: number; visitors: number; engaged: number };
 type CityRow = { city: string | null; region: string | null; country: string | null; visits: number; visitors: number };
 type PageRow = { path: string; visits: number };
 type SourceRow = { source: string; visits: number; visitors: number };
@@ -37,6 +62,7 @@ type VisitRow = {
   user_agent: string | null;
   session_id: string;
   ip: string | null;
+  engaged: boolean;
 };
 
 function StatCard({ label, value, hint }: { label: string; value: string | number; hint?: string }) {
@@ -112,25 +138,29 @@ export default async function TrafficPage() {
 
   const [today, yesterday, week, month, cities, pages, sources, devices, recent] = await Promise.all([
     rows<Count>(db`
-      SELECT COUNT(*)::int AS visits, COUNT(DISTINCT session_id)::int AS visitors
+      SELECT COUNT(*)::int AS visits, COUNT(DISTINCT session_id)::int AS visitors,
+             COUNT(DISTINCT session_id) FILTER (WHERE engaged)::int AS engaged
       FROM visits
       WHERE (created_at AT TIME ZONE ${TZ})::date = (now() AT TIME ZONE ${TZ})::date
         AND (user_agent IS NULL OR user_agent !~* ${BOT_UA})
     `),
     rows<Count>(db`
-      SELECT COUNT(*)::int AS visits, COUNT(DISTINCT session_id)::int AS visitors
+      SELECT COUNT(*)::int AS visits, COUNT(DISTINCT session_id)::int AS visitors,
+             COUNT(DISTINCT session_id) FILTER (WHERE engaged)::int AS engaged
       FROM visits
       WHERE (created_at AT TIME ZONE ${TZ})::date = (now() AT TIME ZONE ${TZ})::date - 1
         AND (user_agent IS NULL OR user_agent !~* ${BOT_UA})
     `),
     rows<Count>(db`
-      SELECT COUNT(*)::int AS visits, COUNT(DISTINCT session_id)::int AS visitors
+      SELECT COUNT(*)::int AS visits, COUNT(DISTINCT session_id)::int AS visitors,
+             COUNT(DISTINCT session_id) FILTER (WHERE engaged)::int AS engaged
       FROM visits
       WHERE created_at > now() - interval '7 days'
         AND (user_agent IS NULL OR user_agent !~* ${BOT_UA})
     `),
     rows<Count>(db`
-      SELECT COUNT(*)::int AS visits, COUNT(DISTINCT session_id)::int AS visitors
+      SELECT COUNT(*)::int AS visits, COUNT(DISTINCT session_id)::int AS visitors,
+             COUNT(DISTINCT session_id) FILTER (WHERE engaged)::int AS engaged
       FROM visits
       WHERE created_at > now() - interval '30 days'
         AND (user_agent IS NULL OR user_agent !~* ${BOT_UA})
@@ -187,10 +217,11 @@ export default async function TrafficPage() {
       ORDER BY visits DESC
     `),
     rows<VisitRow>(db`
-      SELECT id, created_at, city, region, country, path, referrer, utm_source, utm_campaign, fbclid,
-             user_agent, session_id, ip
-      FROM visits
-      WHERE (user_agent IS NULL OR user_agent !~* ${BOT_UA})
+      SELECT v.id, v.created_at, v.city, v.region, v.country, v.path, v.referrer, v.utm_source, v.utm_campaign,
+             v.fbclid, v.user_agent, v.session_id, v.ip,
+             (v.engaged OR EXISTS (SELECT 1 FROM visits o WHERE o.session_id = v.session_id AND o.id <> v.id)) AS engaged
+      FROM visits v
+      WHERE (v.user_agent IS NULL OR v.user_agent !~* ${BOT_UA})
       ORDER BY created_at DESC
       LIMIT 150
     `)
@@ -234,10 +265,10 @@ export default async function TrafficPage() {
       </div>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Today" value={t.visitors} hint={`${t.visits} page views`} />
-        <StatCard label="Yesterday" value={y.visitors} hint={`${y.visits} page views`} />
-        <StatCard label="Last 7 days" value={w.visitors} hint={`${w.visits} page views`} />
-        <StatCard label="Last 30 days" value={m.visitors} hint={`${m.visits} page views`} />
+        <StatCard label="Today" value={t.visitors} hint={`${t.visits} page views, ${t.engaged} engaged`} />
+        <StatCard label="Yesterday" value={y.visitors} hint={`${y.visits} page views, ${y.engaged} engaged`} />
+        <StatCard label="Last 7 days" value={w.visitors} hint={`${w.visits} page views, ${w.engaged} engaged`} />
+        <StatCard label="Last 30 days" value={m.visitors} hint={`${m.visits} page views, ${m.engaged} engaged`} />
       </div>
       <p className="mt-2 text-xs text-slate-500">Big number is unique visitors (one per browser). Page views count every page opened.</p>
 
@@ -353,8 +384,9 @@ export default async function TrafficPage() {
       <section className="card-surface mt-8 p-6">
         <h2 className="text-lg font-semibold text-white">Recent visits</h2>
         <p className="mt-1 text-xs text-slate-400">
-          Last 150 page views. Visitor is a per-browser id, the same across that person&apos;s pages. Click an IP
-          address to see which practice, hospital, or carrier owns that network.
+          Last 150 page views. Visitor is a per-browser id, the same across that person&apos;s pages. Engaged means
+          they stayed at least 10 seconds or opened a second page. Click an IP address to see which practice,
+          hospital, or carrier owns that network.
         </p>
         <div className="mt-3 overflow-x-auto">
           <table className="w-full text-sm">
@@ -365,6 +397,7 @@ export default async function TrafficPage() {
                 <th className="pb-2 pr-4">Page</th>
                 <th className="pb-2 pr-4">Source</th>
                 <th className="pb-2 pr-4">Device</th>
+                <th className="pb-2 pr-4">Engaged</th>
                 <th className="pb-2 pr-4">IP address</th>
                 <th className="pb-2 pr-4">Visitor</th>
                 <th className="pb-2">Remove</th>
@@ -373,7 +406,7 @@ export default async function TrafficPage() {
             <tbody>
               {recent.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-3 text-slate-400">
+                  <td colSpan={9} className="py-3 text-slate-400">
                     No visits recorded yet.
                   </td>
                 </tr>
@@ -385,17 +418,31 @@ export default async function TrafficPage() {
                     <td className="py-2 pr-4 text-slate-200">{v.path}</td>
                     <td className="py-2 pr-4 text-slate-300">{source(v)}</td>
                     <td className="py-2 pr-4 text-slate-400">{device(v.user_agent)}</td>
+                    <td className="py-2 pr-4">
+                      {v.engaged ? (
+                        <span className="text-emerald-300">yes</span>
+                      ) : (
+                        <span className="text-slate-500">no</span>
+                      )}
+                    </td>
                     <td className="whitespace-nowrap py-2 pr-4 font-mono text-xs">
                       {v.ip ? (
-                        <a
-                          href={`https://ipinfo.io/${encodeURIComponent(v.ip)}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          title="Look up the network owner (practice, hospital, or carrier)"
-                          className="text-cyan-300 underline-offset-4 hover:underline"
-                        >
-                          {v.ip}
-                        </a>
+                        <>
+                          <a
+                            href={`https://ipinfo.io/${encodeURIComponent(v.ip)}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            title="Look up the network owner (practice, hospital, or carrier)"
+                            className="text-cyan-300 underline-offset-4 hover:underline"
+                          >
+                            {v.ip}
+                          </a>
+                          {isHostingIp(v.ip) ? (
+                            <span className="ml-2 rounded bg-amber-400/20 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-amber-200" title="Cloud data center address: a scanner, monitor, or crawler, not a person">
+                              bot?
+                            </span>
+                          ) : null}
+                        </>
                       ) : (
                         <span className="text-slate-600">-</span>
                       )}

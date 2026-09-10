@@ -2,7 +2,8 @@ import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { ensureSchema, sql } from "@/lib/db";
 import { hashIp, readStoredAttribution, requestIp } from "@/lib/attribution";
-import { adminNotificationAddress, sendEmail } from "@/lib/resend";
+import { sendEmail } from "@/lib/resend";
+import { notifyAdmin } from "@/lib/notify";
 import { fireMetaLeadEvent } from "@/lib/meta-capi";
 import { DELAYS_DAYS, NURTURE_SEQUENCE } from "@/lib/email-templates/nurture";
 import { mailingAddress, unsubscribeUrl } from "@/lib/unsubscribe";
@@ -197,8 +198,7 @@ export async function POST(req: NextRequest) {
   const eventId = body.eventId || randomUUID();
 
   const [adminSend, leadSend] = await Promise.all([
-    sendEmail({
-      to: adminNotificationAddress(),
+    notifyAdmin({
       subject: `Workflow review request - ${body.practice || name}`,
       html: adminHtml,
       text: adminText,
