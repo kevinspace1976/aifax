@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { EXCLUDE_DEVICE_COOKIE, isExcludedDevice } from "@/lib/admin-auth";
 import { ensureSchema, rows, sql } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -86,6 +88,12 @@ function when(iso: string) {
 export default async function TrafficPage() {
   await ensureSchema();
   const db = sql();
+  const cookieStore = await cookies();
+  const thisDeviceExcluded = isExcludedDevice(cookieStore.get(EXCLUDE_DEVICE_COOKIE)?.value);
+  const excludedIps = (process.env.EXCLUDED_VISITOR_IPS || "")
+    .split(",")
+    .map((v) => v.trim())
+    .filter(Boolean).length;
 
   const [today, yesterday, week, month, cities, pages, sources, devices, recent] = await Promise.all([
     rows<Count>(db`
@@ -198,6 +206,30 @@ export default async function TrafficPage() {
         <StatCard label="Last 30 days" value={m.visitors} hint={`${m.visits} page views`} />
       </div>
       <p className="mt-2 text-xs text-slate-500">Big number is unique visitors (one per browser). Page views count every page opened.</p>
+
+      <section className="card-surface mt-6 flex flex-wrap items-center justify-between gap-4 p-5">
+        <div>
+          <h2 className="text-sm font-semibold text-white">Your own visits</h2>
+          <p className="mt-1 text-xs text-slate-400">
+            Never counted while signed in here. Excluding a device keeps it out for a year even when signed out.
+            {excludedIps > 0 ? ` ${excludedIps} network address${excludedIps === 1 ? "" : "es"} also excluded.` : ""}
+          </p>
+        </div>
+        <form action="/api/admin/exclude-device" method="post">
+          {thisDeviceExcluded ? (
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-emerald-300">This device is excluded</span>
+              <button type="submit" name="action" value="remove" className="btn-secondary min-h-0 px-4 py-1.5 text-sm">
+                Count it again
+              </button>
+            </div>
+          ) : (
+            <button type="submit" name="action" value="add" className="btn-primary min-h-0 px-4 py-1.5 text-sm">
+              Exclude this device
+            </button>
+          )}
+        </form>
+      </section>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-3">
         <section className="card-surface p-6 lg:col-span-1">

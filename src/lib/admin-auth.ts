@@ -36,3 +36,32 @@ export function isValidAdminSession(cookieValue: string | undefined) {
   const b = Buffer.from(cookieValue);
   return a.length === b.length && timingSafeEqual(a, b);
 }
+
+/**
+ * "Exclude this device" cookie. Planted from the Traffic page, lives a
+ * year, and tells /api/track to skip the browser it is on regardless of
+ * whether the owner is signed in to /admin at the time. Signed the same
+ * way as the session cookie so a visitor cannot forge one just by
+ * setting a cookie named the same.
+ */
+export const EXCLUDE_DEVICE_COOKIE = "aifax_exclude_device";
+
+function expectedExcludeValue() {
+  const password = process.env.ADMIN_PASSWORD;
+  if (!password) return null;
+  return createHmac("sha256", password).update("aifax-exclude-device").digest("hex");
+}
+
+export function excludeDeviceCookieValue() {
+  const value = expectedExcludeValue();
+  if (!value) throw new Error("ADMIN_PASSWORD is not set");
+  return value;
+}
+
+export function isExcludedDevice(cookieValue: string | undefined) {
+  const expected = expectedExcludeValue();
+  if (!expected || !cookieValue) return false;
+  const a = Buffer.from(expected);
+  const b = Buffer.from(cookieValue);
+  return a.length === b.length && timingSafeEqual(a, b);
+}
