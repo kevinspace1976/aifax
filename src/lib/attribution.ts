@@ -67,6 +67,29 @@ export function hashIp(ip: string | null) {
   return createHash("sha256").update(`${salt}:${day}:${ip}`).digest("hex");
 }
 
+/**
+ * Visitor location as resolved by Vercel's edge from the request IP. The
+ * city header is URL-encoded (e.g. "Fort%20Lauderdale"). Absent on local
+ * dev, so every field is nullable. This is what the Traffic page shows
+ * instead of a raw address, in line with the privacy policy (IPs are only
+ * ever stored hashed).
+ */
+export function clientGeo(h: Headers) {
+  const decode = (v: string | null) => {
+    if (!v) return null;
+    try {
+      return decodeURIComponent(v);
+    } catch {
+      return v;
+    }
+  };
+  return {
+    city: decode(h.get("x-vercel-ip-city")),
+    region: decode(h.get("x-vercel-ip-country-region")),
+    country: decode(h.get("x-vercel-ip-country"))
+  };
+}
+
 export function clientIp(h: Headers) {
   // Vercel sets x-forwarded-for; take the first (client) hop.
   const fwd = h.get("x-forwarded-for");

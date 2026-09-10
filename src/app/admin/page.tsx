@@ -126,14 +126,19 @@ export default async function AdminPage() {
     <main className="section-shell py-10">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-semibold text-white">Admin</h1>
-        <form action="/api/admin/logout" method="post">
+        <div className="flex items-center gap-3">
+          <Link href="/admin/traffic" className="btn-secondary min-h-0 px-4 py-1.5 text-sm">
+            Traffic
+          </Link>
+          <form action="/api/admin/logout" method="post">
           <button
             type="submit"
             className="rounded-full border border-white/20 px-4 py-1.5 text-sm text-slate-200 hover:border-white/40"
           >
             Sign out
           </button>
-        </form>
+          </form>
+        </div>
       </div>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

@@ -5,6 +5,7 @@ import { ADMIN_SESSION_COOKIE, isValidAdminSession } from "@/lib/admin-auth";
 import {
   ATTRIBUTION_COOKIE,
   SESSION_COOKIE,
+  clientGeo,
   clientIp,
   hasAttributionSignal,
   hashIp,
@@ -56,18 +57,20 @@ export async function POST(req: NextRequest) {
   const existingAttrCookie = req.cookies.get(ATTRIBUTION_COOKIE)?.value;
   const shouldStoreAttribution = !existingAttrCookie && hasAttributionSignal(attribution);
 
+  const geo = clientGeo(req.headers);
+
   try {
     await ensureSchema();
     const db = sql();
     await db`
       INSERT INTO visits (
         session_id, path, referrer, utm_source, utm_medium, utm_campaign,
-        utm_content, utm_term, fbclid, gclid, user_agent, ip_hash
+        utm_content, utm_term, fbclid, gclid, user_agent, ip_hash, city, region, country
       ) VALUES (
         ${sessionId}, ${attribution.sourcePath}, ${attribution.referrer},
         ${attribution.utmSource}, ${attribution.utmMedium}, ${attribution.utmCampaign},
         ${attribution.utmContent}, ${attribution.utmTerm}, ${attribution.fbclid}, ${attribution.gclid},
-        ${req.headers.get("user-agent")}, ${hashIp(requestIp)}
+        ${req.headers.get("user-agent")}, ${hashIp(requestIp)}, ${geo.city}, ${geo.region}, ${geo.country}
       )
     `;
   } catch (err) {
