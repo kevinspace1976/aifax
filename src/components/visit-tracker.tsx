@@ -29,16 +29,36 @@ export function VisitTracker() {
 
   useEffect(() => {
     if (pathname?.startsWith("/admin")) return;
+    let timer: ReturnType<typeof setTimeout> | undefined;
     try {
       fetch("/api/track", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url: window.location.href }),
         keepalive: true
-      }).catch(() => {});
+      })
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data: { id?: number } | null) => {
+          if (!data?.id) return;
+          // Still here 10 seconds later, with the tab in front, means a
+          // person is reading. Bounced taps and crawlers never get this far.
+          timer = setTimeout(() => {
+            if (document.visibilityState !== "visible") return;
+            fetch("/api/track", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ engage: data.id }),
+              keepalive: true
+            }).catch(() => {});
+          }, 10_000);
+        })
+        .catch(() => {});
     } catch {
       // never let a tracking failure surface to the visitor
     }
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
   }, [pathname]);
 
   return null;

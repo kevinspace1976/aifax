@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { DeleteForm, SelectAll } from "@/components/delete-form";
 import { ensureSchema, rows, sql } from "@/lib/db";
+import { adminNotificationAddress } from "@/lib/resend";
 
 export const dynamic = "force-dynamic";
 
@@ -60,7 +61,17 @@ function sourceLabel(row: { utm_source: string | null; fbclid: string | null; re
   return "direct";
 }
 
-export default async function AdminPage() {
+export default async function AdminPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
+  const params = await searchParams;
+  const notice =
+    params.sent === "none"
+      ? `No leads were submitted in the last ${params.hours} hours.`
+      : params.sent === "failed"
+        ? "The digest could not be sent. Check the Gmail connection and Resend settings."
+        : params.sent
+          ? `Emailed ${params.notified} lead${params.notified === "1" ? "" : "s"} from the last ${params.hours} hours to ${adminNotificationAddress()} (via ${params.sent}).`
+          : null;
+
   await ensureSchema();
   const db = sql();
 
@@ -210,12 +221,26 @@ export default async function AdminPage() {
       </section>
 
       <section className="card-surface mt-8 p-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-lg font-semibold text-white">Leads</h2>
-          <Link href="/admin/leads/export" className="text-sm text-cyan-300 underline-offset-4 hover:underline">
-            Export CSV
-          </Link>
+          <div className="flex flex-wrap items-center gap-3">
+            <form action="/api/admin/leads/notify" method="post" className="flex items-center gap-2">
+              <select name="hours" defaultValue="24" className="rounded-md border border-white/20 bg-slate-900 px-2 py-1 text-sm text-slate-200">
+                <option value="24">last 24 hours</option>
+                <option value="48">last 48 hours</option>
+                <option value="168">last 7 days</option>
+                <option value="720">last 30 days</option>
+              </select>
+              <button type="submit" className="btn-secondary min-h-0 px-4 py-1.5 text-sm">
+                Email me these leads
+              </button>
+            </form>
+            <Link href="/admin/leads/export" className="text-sm text-cyan-300 underline-offset-4 hover:underline">
+              Export CSV
+            </Link>
+          </div>
         </div>
+        {notice ? <p className="mt-3 rounded-lg border border-cyan-400/40 bg-cyan-400/10 px-3 py-2 text-sm text-cyan-100">{notice}</p> : null}
         <DeleteForm
           action="/api/admin/leads/delete"
           confirmText="Delete the selected leads? Their emails and activity are removed too. This cannot be undone."

@@ -125,12 +125,11 @@ export function stripDashes(value: string): string {
   return value.replace(/\s*[\u2014\u2013]\s*/g, " - ").replace(/\s*&(mdash|ndash|#8212|#8211);\s*/g, " - ");
 }
 
-export async function createDraft(input: { to: string; subject: string; text: string; html: string }): Promise<boolean> {
-  const accessToken = await getAccessToken();
-  if (!accessToken) return false;
+type MailInput = { to: string; subject: string; text: string; html: string; replyTo?: string };
 
+/** Builds the base64url RFC 822 message Gmail expects for both drafts and sends. */
+function rawMessage(input: MailInput) {
   const opts = { ...input, subject: stripDashes(input.subject), text: stripDashes(input.text), html: stripDashes(input.html) };
-
   const boundary = `aifax_${randomUUID()}`;
   const message = [
     // Set explicitly rather than left to Gmail's account-level identity
@@ -139,6 +138,7 @@ export async function createDraft(input: { to: string; subject: string; text: st
     // as the old name.
     'From: "AiFax DevTeam" <info@aifax.net>',
     `To: ${opts.to}`,
+    ...(opts.replyTo ? [`Reply-To: ${opts.replyTo}`] : []),
     `Subject: ${opts.subject}`,
     `Content-Type: multipart/alternative; boundary="${boundary}"`,
     "",
@@ -154,15 +154,42 @@ export async function createDraft(input: { to: string; subject: string; text: st
     "",
     `--${boundary}--`
   ].join("\r\n");
-  const raw = Buffer.from(message, "utf-8").toString("base64url");
+  return Buffer.from(message, "utf-8").toString("base64url");
+}
+
+export async function createDraft(input: MailInput): Promise<boolean> {
+  const accessToken = await getAccessToken();
+  if (!accessToken) return false;
 
   const res = await fetch(`${API_BASE}/drafts`, {
     method: "POST",
     headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ message: { raw } })
+    body: JSON.stringify({ message: { raw: rawMessage(input) } })
   });
   if (!res.ok) {
     console.error("[gmail] failed to create draft", await res.text());
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Sends a message from info@aifax.net right away. Only used for mail to the
+ * site owner (new-lead alerts and lead digests), never to visitors: those
+ * still go through drafts for a human to review. The gmail.compose scope
+ * the draft flow already has also covers sending.
+ */
+export async function sendMessage(input: MailInput): Promise<boolean> {
+  const accessToken = await getAccessToken();
+  if (!accessToken) return false;
+
+  const res = await fetch(`${API_BASE}/messages/send`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ raw: rawMessage(input) })
+  });
+  if (!res.ok) {
+    console.error("[gmail] failed to send message", await res.text());
     return false;
   }
   return true;

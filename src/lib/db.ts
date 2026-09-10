@@ -85,6 +85,10 @@ async function runMigrations() {
   await db`ALTER TABLE visits ADD COLUMN IF NOT EXISTS region TEXT`;
   await db`ALTER TABLE visits ADD COLUMN IF NOT EXISTS country TEXT`;
   await db`ALTER TABLE visits ADD COLUMN IF NOT EXISTS ip TEXT`;
+  // Set when the browser is still on the page 10 seconds later, which a
+  // stray tap or a crawler almost never is. Used to separate people who
+  // read the page from clicks that bounced instantly.
+  await db`ALTER TABLE visits ADD COLUMN IF NOT EXISTS engaged BOOLEAN NOT NULL DEFAULT FALSE`;
 
   await db`
     CREATE TABLE IF NOT EXISTS leads (

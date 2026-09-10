@@ -47,7 +47,7 @@ export default function HowItWorksPage() {
     <main>
       <PageHero
         kicker="How it works"
-        title="Live in a day. Nothing to install."
+        title="Get set up in minutes. Nothing to install."
         description="Pick a number or port yours, tell the AI what to look for, and every fax from then on arrives read, matched, and summarized."
         actions={
           <div className="flex flex-wrap gap-3">
