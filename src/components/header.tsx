@@ -13,7 +13,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
       <div className="section-shell flex items-center justify-between py-3">
-        <Link href="/" className="mr-8 text-2xl font-extrabold tracking-tight text-slate-900">
+        <Link href="/" className="mr-8 text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">
           Ai<span className="text-orange-500">Fax</span>
         </Link>
 
@@ -38,7 +38,7 @@ export function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`inline-flex min-h-11 items-center whitespace-nowrap text-xs font-bold uppercase tracking-[0.1em] transition ${
+                className={`inline-flex min-h-11 items-center whitespace-nowrap text-xs font-bold uppercase tracking-[0.1em] transition lg:text-sm lg:tracking-[0.08em] ${
                   active ? "text-orange-500" : "text-slate-700 hover:text-slate-900"
                 }`}
               >
