@@ -42,10 +42,11 @@ export const plans: Plan[] = [
     features: [
       "Everything in Lite",
       "AI summary and smart extraction on every fax (customizable)",
+      "Chat with every fax you receive, unlimited",
       "OCR and NLP document intelligence",
       "Dashboard access plus email summaries",
       "Practice-specific automation and prompt logic",
-      "AI chatbot: 250 questions a month, up to 10 stored documents, 10 MB max per file",
+      "Reference library: 10 documents, 10 MB per file, 250 questions a month",
       "Complete onboarding: routing, user access, automation rules, porting, and delivery"
     ],
     teaser: ["Everything in Lite", "AI summary on every fax", "Chat with your faxes"]
@@ -59,9 +60,9 @@ export const plans: Plan[] = [
     features: [
       "Everything in Plus",
       "Double the page allowance for busier practices",
-      "AI chatbot: 500 questions a month, up to 50 stored documents, 50 MB max per file"
+      "Reference library: 50 documents, 50 MB per file, 500 questions a month"
     ],
-    teaser: ["Everything in Plus", "1,000 pages a month", "Larger AI chatbot"]
+    teaser: ["Everything in Plus", "1,000 pages a month", "Larger reference library"]
   },
   {
     name: "Enterprise",
@@ -71,7 +72,7 @@ export const plans: Plan[] = [
     features: [
       "Everything in Pro",
       "Highest page allowance for multi-provider groups",
-      "AI chatbot: 1,000 questions a month, up to 100 stored documents, 100 MB max per file"
+      "Reference library: 100 documents, 100 MB per file, 1,000 questions a month"
     ],
     teaser: []
   },
@@ -84,7 +85,7 @@ export const plans: Plan[] = [
     features: [
       "Everything in Enterprise",
       "Enterprise scaling and custom volumes",
-      "Chat assistant tailored to your workflows",
+      "Fax chat and reference library tailored to your workflows",
       "API integration and advanced automation support",
       "Dedicated onboarding and priority support"
     ],
