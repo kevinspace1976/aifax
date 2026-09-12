@@ -81,8 +81,8 @@ export default function PricingPage() {
               <h3 className="text-base text-slate-900">Also included: a reference library</h3>
               <p className="mt-1.5 text-sm text-slate-700">
                 Separate from fax chat. Upload payer policies, a specialty guideline, a coding reference, or a
-                journal article, and ask it questions weeks later. This is the only feature with limits, and
-                question counts reset every month.
+                journal article, and ask it questions weeks later. Question counts reset on the first of every
+                calendar month.
               </p>
               <p className="mt-3 text-xs text-slate-500 tabular-nums">Plus 10 documents &middot; Pro 50 &middot; Enterprise 100</p>
             </aside>
