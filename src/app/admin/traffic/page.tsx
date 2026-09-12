@@ -63,7 +63,17 @@ type VisitRow = {
   session_id: string;
   ip: string | null;
   engaged: boolean;
+  trail: string | null;
 };
+
+// Every page that visitor opened in this session, in order, shown under
+// the page only when there is more than one, so single-page rows stay clean.
+function trailOf(v: VisitRow): string | null {
+  if (!v.trail) return null;
+  const pages = v.trail.split(" > ");
+  if (pages.length < 2) return null;
+  return pages.map((p) => (p === "/" ? "home" : p.replace(/^\//, ""))).join(" \u203a ");
+}
 
 function StatCard({ label, value, hint }: { label: string; value: string | number; hint?: string }) {
   return (
@@ -219,7 +229,10 @@ export default async function TrafficPage() {
     rows<VisitRow>(db`
       SELECT v.id, v.created_at, v.city, v.region, v.country, v.path, v.referrer, v.utm_source, v.utm_campaign,
              v.fbclid, v.user_agent, v.session_id, v.ip,
-             (v.engaged OR EXISTS (SELECT 1 FROM visits o WHERE o.session_id = v.session_id AND o.path <> v.path)) AS engaged
+             (v.engaged OR EXISTS (SELECT 1 FROM visits o WHERE o.session_id = v.session_id AND o.path <> v.path)) AS engaged,
+             (SELECT string_agg(t.path, ' > ' ORDER BY t.first_seen)
+                FROM (SELECT o.path, MIN(o.created_at) AS first_seen FROM visits o WHERE o.session_id = v.session_id GROUP BY o.path) t
+             ) AS trail
       FROM visits v
       WHERE (v.user_agent IS NULL OR v.user_agent !~* ${BOT_UA})
       ORDER BY created_at DESC
@@ -386,7 +399,8 @@ export default async function TrafficPage() {
         <p className="mt-1 text-xs text-slate-400">
           Last 150 page views. Visitor is a per-browser id, the same across that person&apos;s pages. Engaged means
           they stayed at least 10 seconds or opened a different page. Reloading the same page does not count. Click
-          an IP address to see which practice, hospital, or carrier owns that network.
+          an IP address to see which practice, hospital, or carrier owns that network. The small line under a page lists
+          every page that visitor opened, in order.
         </p>
         <div className="mt-3 overflow-x-auto">
           <table className="w-full text-sm">
@@ -415,7 +429,10 @@ export default async function TrafficPage() {
                   <tr key={v.id} className="border-t border-white/10">
                     <td className="whitespace-nowrap py-2 pr-4 text-slate-300">{when(v.created_at)}</td>
                     <td className="whitespace-nowrap py-2 pr-4 text-slate-200">{place(v)}</td>
-                    <td className="py-2 pr-4 text-slate-200">{v.path}</td>
+                    <td className="py-2 pr-4 text-slate-200">
+                      {v.path}
+                      {trailOf(v) ? <div className="mt-0.5 text-[11px] leading-tight text-slate-500">{trailOf(v)}</div> : null}
+                    </td>
                     <td className="py-2 pr-4 text-slate-300">{source(v)}</td>
                     <td className="py-2 pr-4 text-slate-400">{device(v.user_agent)}</td>
                     <td className="py-2 pr-4">
