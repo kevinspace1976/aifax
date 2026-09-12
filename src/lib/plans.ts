@@ -45,7 +45,7 @@ export const plans: Plan[] = [
       "OCR and NLP document intelligence",
       "Dashboard access plus email summaries",
       "Practice-specific automation and prompt logic",
-      "AI chatbot: up to 10 documents, 10 MB, 250 questions",
+      "AI chatbot: up to 10 documents, 10 MB, 250 questions, reset each month",
       "Complete onboarding: routing, user access, automation rules, porting, and delivery"
     ],
     teaser: ["Everything in Lite", "AI summary on every fax", "Chat with your faxes"]
@@ -59,7 +59,7 @@ export const plans: Plan[] = [
     features: [
       "Everything in Plus",
       "Double the page allowance for busier practices",
-      "AI chatbot: up to 50 documents, 50 MB, 500 questions"
+      "AI chatbot: up to 50 documents, 50 MB, 500 questions, reset each month"
     ],
     teaser: ["Everything in Plus", "1,000 pages a month", "Larger AI chatbot"]
   },
@@ -71,7 +71,7 @@ export const plans: Plan[] = [
     features: [
       "Everything in Pro",
       "Highest page allowance for multi-provider groups",
-      "AI chatbot: up to 100 documents, 100 MB, 1,000 questions"
+      "AI chatbot: up to 100 documents, 100 MB, 1,000 questions, reset each month"
     ],
     teaser: []
   },
