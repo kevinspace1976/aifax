@@ -1,0 +1,217 @@
+{
+  "note": "LinkedIn content calendar for AiFax. posted_personal and posted_page record what has gone out so the daily job never repeats a post.",
+  "profile": "Kevin Aston personal profile, via Composio LINKEDIN_CREATE_LINKED_IN_POST.",
+  "page": "AiFax.Net - HCUC, organization 104773014. Automated posting is blocked until LinkedIn approves the Community Management API for the AiFax Publishing app. Post these by hand until then.",
+  "posts": [
+    {
+      "day": 1,
+      "theme": "Problem",
+      "text": "The fax machine was never the problem.\n\nThe reading is.\n\nA referral comes in. Somebody has to open it, figure out which patient it belongs to, find the reason for the visit, check whether there's a prior auth, and then file it in the right chart.\n\nThat's four to six minutes of a trained person's attention. Per fax.\n\nNow multiply by however many came in today.\n\nThe machine takes two seconds. The human takes the rest of the morning.\n\nWe built AiFax to do the reading.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 2,
+      "theme": "Problem",
+      "text": "Ask a practice manager what their front desk does all day and you'll hear some version of this:\n\n\"Phones, check-in, and faxes.\"\n\nFaxes is the one nobody counts.\n\nIt doesn't show up in a productivity report. There's no billing code for it. It just quietly eats a third of somebody's day, every day, forever.\n\nThe work is real. It's just invisible.\n\nThat's the part worth automating first.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 3,
+      "theme": "Problem",
+      "text": "Healthcare was supposed to be done with fax by now.\n\nInstead, in 2026, fax is still how referrals move. Still how prior auths come back. Still how the hospital sends the discharge summary.\n\nIt survived because it works when nothing else does. No portal login. No interface agreement. No vendor on both ends.\n\nYou don't need to kill the fax.\n\nYou need it to stop costing you staff hours.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 4,
+      "theme": "Problem",
+      "text": "The 40-page insurance packet.\n\nSomewhere in it is one number your biller needs.\n\nSomebody flips through all 40 pages to find it. Then does it again tomorrow with the next one.\n\nAsk the fax instead:\n\n\"What's the authorization number and the approved date range?\"\n\nAnswer in seconds. Zero pages flipped.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 5,
+      "theme": "Problem",
+      "text": "Here's a question worth asking your team this week:\n\nHow many faxes came in yesterday, and what was in them?\n\nMost practices can answer the first half.\n\nAlmost nobody can answer the second half without opening every single one.\n\nThat gap is where things get missed. A referral that sat for three days. A prior auth that expired. A result nobody routed.\n\nNot because anyone was careless. Because there was no way to see it.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 6,
+      "theme": "Problem",
+      "text": "Fax is the only part of a modern practice where the workflow is still: print it, read it, walk it over, file it.\n\nEverything else got a dashboard.\n\nLabs have a portal. Scheduling has a system. Billing has a clearinghouse.\n\nFax got a paper tray.\n\nIt's time it caught up.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 7,
+      "theme": "Problem",
+      "text": "Referral leakage usually gets blamed on relationships.\n\nSometimes it's just a fax that nobody got to.\n\nA specialist sends a referral on Tuesday. It lands in a stack. It gets read Friday. By then the patient already booked somewhere else.\n\nNobody did anything wrong. The document just moved slower than the patient did.\n\nSpeed of reading is a retention issue.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 8,
+      "theme": "Feature",
+      "text": "What happens when a fax arrives at AiFax:\n\nIt gets read. By AI. In seconds.\n\nYou get a summary in your dashboard and in your inbox before anyone on your team has opened it.\n\nReason for referral. Ordering provider. Insurance. Urgency. Whatever else you told us matters to your practice.\n\nThe original PDF is still attached. Always.\n\nWe add a layer on top of your fax. We never replace it.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 9,
+      "theme": "Feature",
+      "text": "You can talk to your faxes.\n\nNot a support chatbot. The actual document that just came in.\n\n\"Who referred this patient and what's their callback number?\"\n\"Is there a prior auth number on this?\"\n\"What did the cardiologist recommend?\"\n\"What insurance and member ID are listed?\"\n\nPlain English. Answer in seconds.\n\nIncluded and unlimited on every plan from $29.99 up.\n\nYour front desk stops reading faxes and starts asking them questions.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 10,
+      "theme": "Feature",
+      "text": "Every fax that arrives is matched to the patient before your team sees it.\n\nThat's the step that quietly costs the most time. Somebody reads the name, searches the chart, confirms the DOB, and only then can they do anything useful with the document.\n\nWe do that part first.\n\nBy the time it reaches a human, it already knows who it belongs to.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 11,
+      "theme": "Feature",
+      "text": "Generic AI summaries are close to useless in a specialty practice.\n\nA cardiology office and a pain management office care about completely different things in the same document.\n\nSo we don't ship a template.\n\nYou tell us what your practice needs pulled out of every fax. Referral reason. Diagnosis codes. Prior auth. Ordering provider. Medication list. Follow-up dates. Whatever you actually act on.\n\nWe tune the extraction to your workflow.\n\nThat's the difference between a summary you read and a summary you use.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 12,
+      "theme": "Feature",
+      "text": "\"Where's that referral from three months ago?\"\n\nWith a fax machine, that's a filing cabinet problem.\n\nWith AiFax, you search by what the document said, not by the date it arrived.\n\nEvery fax your practice has received becomes searchable by content.\n\nYour archive stops being storage and starts being useful.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 13,
+      "theme": "Feature",
+      "text": "Some people live in their inbox. Some people live in the dashboard.\n\nWe don't make you pick.\n\nEvery fax summary lands in both at the same time. Your team works from whichever one fits their day.\n\nSmall thing. Removes an argument that every practice has had at least once.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 14,
+      "theme": "Feature",
+      "text": "A reasonable question we get:\n\n\"If the AI reads it, do I still get the actual fax?\"\n\nYes. Every time. The full PDF is always attached, always downloadable, always exactly what was sent.\n\nThe AI adds a layer on top. It never replaces the record.\n\nYou keep the document. You just stop having to read all of it.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 15,
+      "theme": "Trust",
+      "text": "HIPAA question, answered plainly.\n\nAiFax is HIPAA-compliant. Encrypted in transit and at rest. We sign a BAA at signup, not after a negotiation, not as an upsell.\n\nIf a vendor is vague about the BAA, that's your answer about the vendor.\n\nOurs is part of onboarding. Day one.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 16,
+      "theme": "Trust",
+      "text": "\"Do I have to give up my fax number?\"\n\nNo.\n\nYou bring it with you. We handle the port, and your current service keeps running untouched the entire time so nothing drops.\n\nIt typically takes one to two weeks.\n\nOne thing to plan for: don't cancel your old provider until the port confirms complete. Cancelling early releases the number and the port fails with it.\n\nWe'll tell you the exact day it's safe.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 17,
+      "theme": "Trust",
+      "text": "\"What if the AI reads something wrong?\"\n\nFair question. Here's how we think about it.\n\nThe AI doesn't make clinical decisions. It reads a document and tells you what's in it, with the original attached so you can verify in one click.\n\nIt's the difference between a colleague saying \"this is a cardiology referral, urgent, prior auth attached\" and handing you 12 unopened pages.\n\nYou still decide. You just start from a better place.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 18,
+      "theme": "Trust",
+      "text": "On putting PHI through AI.\n\nIt's the right thing to ask, and you should ask it of every vendor.\n\nOurs: encrypted in transit and at rest, HIPAA-compliant infrastructure, a BAA signed at signup, and your documents are yours.\n\nAny vendor who gets uncomfortable when you ask this question has told you something important.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 19,
+      "theme": "Trust",
+      "text": "No contract. Cancel anytime.\n\nWe put that on the pricing page because we've seen what the alternative does to practices.\n\nThree-year terms. Auto-renewal windows you have to catch. Cancellation fees that cost more than a year of service.\n\nIf the product is good, it doesn't need a contract to keep you.\n\nOurs starts at $9.99 a month.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 20,
+      "theme": "Trust",
+      "text": "How long does it take to get running?\n\nSignup to working fax: same day.\n\nPick a new number and you're live immediately. Port an existing one and the new service runs alongside your old one until the port completes, so there's no gap and no dark period.\n\nNo hardware. No IT project. No install.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 21,
+      "theme": "Trust",
+      "text": "Pricing we're not embarrassed to publish.\n\n$9.99 a month for fax only.\n$29.99 adds AI summaries and unlimited chat with every fax.\n$44.99 for busier practices.\n\nAdditional pages are five cents. No overage surprises, and you see usage on your dashboard.\n\nIf a vendor won't show you a price until you sit through a demo, there's usually a reason.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 22,
+      "theme": "EHR",
+      "text": "Getting faxes into the EHR: there are three ways, and at least one always works.\n\n1. Fully automatic. Your EHR grants API write access and we file the fax and summary directly into the right patient chart. Nobody touches it.\n\n2. Into your EHR inbox. With one click your staff confirms and files, instead of reading, searching and typing.\n\n3. Prepared and ready. A fully processed, patient-matched, summarized document in one queue. Only the final filing click remains.\n\nThe AI reading, the summaries and the patient matching are identical at all three levels.\n\nThe only thing that changes is how many clicks your staff saves.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 23,
+      "theme": "EHR",
+      "text": "We won't promise an EHR integration before we've confirmed what your EHR actually allows.\n\nThat's what discovery is. Two to three weeks, and you get a written integration map: what your system permits, which approach you land on, and what your staff's day looks like afterward.\n\nIt's $1,000 and it's credited in full toward implementation.\n\nThere's no version of this where you pay for discovery and walk away with nothing.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 24,
+      "theme": "EHR",
+      "text": "Published 2026 EHR integration projects start around $10,000 and routinely run past $48,000.\n\nThat number wasn't built for a two-provider practice. It was built for a health system with a project manager and a budget line.\n\nWe built ours for the practice that has neither.\n\nDiscovery $1,000, credited. Implementation $3,500. Same engineering, sized for the customer.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 25,
+      "theme": "EHR",
+      "text": "Independent practices get treated like they're too small to automate.\n\nThe enterprise vendors quote health system numbers. The cheap tools don't do healthcare. So the practice keeps doing it by hand and gets told that's just how it is.\n\nIt isn't.\n\nThe technology doesn't care how many providers you have. Only the pricing model does.\n\nWe changed the pricing model.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 26,
+      "theme": "EHR",
+      "text": "Your front desk is the bottleneck in almost every practice.\n\nNot because they're slow. Because everything routes through them: phones, check-in, insurance, and the fax pile nobody else touches.\n\nTake the fax reading off that desk and you've given back hours a week without hiring anyone.\n\nThat's usually the cheapest capacity you'll ever add.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 27,
+      "theme": "Vision",
+      "text": "A thing we believe about healthcare software:\n\nThe best automation is the kind nobody has to learn.\n\nNo new tab. No training day. No change management deck.\n\nA fax arrives. A summary shows up where your team already looks. If they have a question, they ask it in plain English.\n\nIf your staff needs a manual to use it, it wasn't finished.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 28,
+      "theme": "Vision",
+      "text": "We keep hearing the same sentence from practices:\n\n\"We know it's inefficient. We just don't have time to fix it.\"\n\nThat's the trap. The thing eating your time is the thing you can't find time to fix.\n\nWhich is why the first version has to be easy. Keep your number, keep your workflow, get summaries starting day one.\n\nFix the small thing first. The big one gets easier.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 29,
+      "theme": "Vision",
+      "text": "Fax isn't going away in 2026. Let's stop pretending otherwise and make it better.\n\nInteroperability has been five years away for fifteen years. Meanwhile the referral still comes in on a fax line, and somebody still has to read it.\n\nWork with what's actually there.\n\nThat's not lowering the bar. That's engineering for reality.",
+      "posted_personal": null,
+      "posted_page": null
+    },
+    {
+      "day": 30,
+      "theme": "Vision",
+      "text": "If your practice runs on fax, here's what changes in the first week with AiFax:\n\nEvery incoming fax is read and summarized before your team opens it.\nEvery fax is matched to the patient automatically.\nAnyone on your staff can ask a document a question and get an answer in seconds.\nYou keep your number.\nYou sign a BAA on day one.\n\nFrom $9.99 a month, no contract.\n\nAiFax.net",
+      "posted_personal": null,
+      "posted_page": null
+    }
+  ]
+}
