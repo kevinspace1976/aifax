@@ -41,8 +41,8 @@ const faxChatExamples = [
 export default function PricingPage() {
   return (
     <main>
-      <section className="section-shell pt-14 pb-6 sm:pt-16">
-        <p className="kicker">Pricing</p>
+      <section className="section-shell pt-8 pb-6 sm:pt-10">
+        <p className="inline-flex text-xs font-bold uppercase tracking-[0.14em] text-orange-500 lg:text-sm">Pricing</p>
         <h1 className="mt-4 max-w-3xl text-4xl text-slate-900 sm:text-5xl">
           Enterprise-grade fax automation, priced for a private practice.
         </h1>
