@@ -13,8 +13,13 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
       <div className="section-shell flex items-center justify-between py-3">
-        <Link href="/" className="mr-8 text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">
-          Ai<span className="text-orange-500">Fax</span>
+        <Link href="/" className="mr-8 flex flex-col leading-none">
+          <span className="text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">
+            Ai<span className="text-orange-500">Fax</span>
+          </span>
+          <span className="mt-1 text-[11px] font-semibold tracking-[0.04em] text-slate-500 md:text-xs">
+            A fax provider. AI included.
+          </span>
         </Link>
 
         <div className="flex items-center gap-2 md:hidden">
