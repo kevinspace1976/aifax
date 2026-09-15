@@ -55,6 +55,10 @@ const firstWeek = [
 
 const faqs = [
   {
+    q: "Do I need EHR integration to use AiFax?",
+    a: "No. Every plan is the full fax service plus the AI: send, receive, email-to-fax, summaries, patient matching, search, and chat with any fax. EHR integration is optional and quoted separately."
+  },
+  {
     q: "Can I keep my fax number?",
     a: "Yes. We file the port with your current provider; your line stays live until the switch completes. Or take a new number and be faxing today."
   },
@@ -74,6 +78,16 @@ const faqs = [
     q: "Is there a contract?",
     a: "No. Plans are month to month. EHR integration is a separate, quoted project."
   }
+];
+
+const faxServiceIncludes = [
+  "Send and receive from the web app",
+  "Send a fax from your email: attach the PDF, done",
+  "Every incoming fax in your inbox as a PDF",
+  "Delivery confirmation and automatic retries",
+  "AI summary written to your prompt",
+  "Patient matched by name and date of birth",
+  "Search every fax, and chat with any fax"
 ];
 
 function Check({ children }: { children: React.ReactNode }) {
@@ -98,9 +112,9 @@ export default function Home() {
               Fax to EHR. EHR to fax. AI in the middle.
             </p>
             <p className="mt-2 text-slate-600">
-              Inbound faxes read, matched to the patient, and filed toward the chart. Outbound faxes sent from your
-              inbox. Built for physician practices and businesses that depend on fax for critical workflows: legal,
-              insurance, and back-office operations.
+              AiFax is a HIPAA-compliant fax service with AI built in. Inbound faxes read, matched to the patient, and
+              filed toward the chart. Outbound faxes sent from your inbox or your email. Built for physician practices
+              and businesses that depend on fax for critical workflows: legal, insurance, and back-office operations.
             </p>
           </div>
           <p className="kicker text-base">AI fax for medical practices</p>
@@ -127,6 +141,67 @@ export default function Home() {
         <div className="flex min-w-0 flex-col gap-4">
           <SummaryCard />
           <DemoVideo />
+        </div>
+      </section>
+
+      {/* Two ways to use AiFax */}
+      <section className="section-shell pb-14 sm:pb-16">
+        <div className="max-w-2xl">
+          <p className="kicker">Two ways to use AiFax</p>
+          <h2 className="mt-3 text-3xl text-slate-900 sm:text-4xl">Pick one, or both.</h2>
+          <p className="mt-3 text-lg text-slate-700">
+            AiFax is a fax company. The fax service stands on its own and starts today. EHR integration is a separate
+            project you can add when you want faxes filed into the chart.
+          </p>
+        </div>
+        <div className="mt-8 grid gap-6 lg:grid-cols-2">
+          <div className="card-surface flex flex-col p-7 sm:p-8">
+            <p className="kicker">Fax service &middot; start today</p>
+            <h3 className="mt-3 text-2xl text-slate-900">Replace your current fax provider.</h3>
+            <p className="mt-2 text-slate-700">
+              Keep your number or get a new one, then send and receive the way you do now, with the AI included.
+            </p>
+            <ul className="mt-5 flex flex-col gap-2.5">
+              {faxServiceIncludes.map((item) => (
+                <Check key={item}>{item}</Check>
+              ))}
+            </ul>
+            <p className="mt-5 text-sm text-slate-500">Four plans from $9.99/month. No contract. BAA signed at signup.</p>
+            <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+              <Link href="/pricing" className="btn-primary">
+                See plans
+              </Link>
+              <a href={sharedCtas.secondary.href} className="btn-secondary">
+                {sharedCtas.secondary.label}
+              </a>
+            </div>
+          </div>
+          <div className="card-surface flex flex-col p-7 sm:p-8">
+            <p className="kicker">EHR integration &middot; separate project</p>
+            <h3 className="mt-3 text-2xl text-slate-900">Faxes filed into the patient chart.</h3>
+            <p className="mt-2 text-slate-700">
+              As far as your EHR allows: automatic filing, Direct messaging, or a guided workflow for your staff. Scoped
+              in writing before anything is built, quoted separately, added to any plan.
+            </p>
+            <ul className="mt-5 flex flex-col gap-2.5">
+              <Check>Discovery with your EHR vendor handled by us, by email, documented in writing</Check>
+              <Check>You know the exact filing workflow before you commit</Check>
+              <Check>Uncertain matches go to a review queue, never into a chart</Check>
+            </ul>
+            <p className="mt-5 text-sm text-slate-500">
+              To start discovery, email{" "}
+              <a href="mailto:info@aifax.net" className="font-semibold text-slate-900 hover:text-orange-500">
+                info@aifax.net
+              </a>{" "}
+              with the name of your EHR.
+            </p>
+            <div className="mt-5">
+              <Link href="/ehr-integration" className="btn-secondary">
+                How integration works
+                <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 
