@@ -189,11 +189,11 @@ export default function Home() {
               <Check>Uncertain matches go to a review queue, never into a chart</Check>
             </ul>
             <p className="mt-5 text-sm text-slate-500">
-              To start discovery, email{" "}
-              <a href="mailto:info@aifax.net" className="font-semibold text-slate-900 hover:text-orange-500">
-                info@aifax.net
-              </a>{" "}
-              with the name of your EHR.
+              To start discovery,{" "}
+              <Link href="/contact" className="font-semibold text-slate-900 hover:text-orange-500">
+                complete the contact form
+              </Link>
+              . It asks for the few details we need, and we reply by email.
             </p>
             <div className="mt-5">
               <Link href="/ehr-integration" className="btn-secondary">
