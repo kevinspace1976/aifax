@@ -117,7 +117,7 @@ export default function Home() {
               and businesses that depend on fax for critical workflows: legal, insurance, and back-office operations.
             </p>
           </div>
-          <p className="kicker text-base">AI fax for medical practices</p>
+          <p className="kicker text-lg!">AI fax for medical practices</p>
           <h1 className="mt-5 text-4xl text-slate-900 sm:text-5xl lg:text-[54px] lg:font-extrabold">
             Every fax read, matched to the patient, and ready for the chart.
           </h1>
@@ -147,7 +147,7 @@ export default function Home() {
       {/* Two ways to use AiFax */}
       <section className="section-shell pb-14 sm:pb-16">
         <div className="max-w-2xl">
-          <p className="kicker">Two ways to use AiFax</p>
+          <p className="kicker text-lg!">Two ways to use AiFax</p>
           <h2 className="mt-3 text-3xl text-slate-900 sm:text-4xl">Pick one, or both.</h2>
           <p className="mt-3 text-lg text-slate-700">
             AiFax is a fax company. The fax service stands on its own and starts today. EHR integration is a separate
@@ -156,7 +156,7 @@ export default function Home() {
         </div>
         <div className="mt-8 grid gap-6 lg:grid-cols-2">
           <div className="card-surface flex flex-col p-7 sm:p-8">
-            <p className="kicker">Fax service &middot; start today</p>
+            <p className="kicker text-lg!">Fax service &middot; start today</p>
             <h3 className="mt-3 text-2xl text-slate-900">Replace your current fax provider.</h3>
             <p className="mt-2 text-slate-700">
               Keep your number or get a new one, then send and receive the way you do now, with the AI included.
@@ -177,7 +177,7 @@ export default function Home() {
             </div>
           </div>
           <div className="card-surface flex flex-col p-7 sm:p-8">
-            <p className="kicker">EHR integration &middot; separate project</p>
+            <p className="kicker text-lg!">EHR integration &middot; separate project</p>
             <h3 className="mt-3 text-2xl text-slate-900">Faxes filed into the patient chart.</h3>
             <p className="mt-2 text-slate-700">
               As far as your EHR allows: automatic filing, Direct messaging, or a guided workflow for your staff. Scoped
