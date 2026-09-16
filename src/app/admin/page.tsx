@@ -8,6 +8,7 @@ export const dynamic = "force-dynamic";
 type VisitTotals = { total: number };
 type SourceRow = { source: string; visits: number };
 type FbRow = { fb_visits: number };
+type GoogleRow = { google_visits: number };
 type Lead = {
   id: number;
   name: string;
@@ -17,6 +18,7 @@ type Lead = {
   utm_source: string | null;
   utm_campaign: string | null;
   fbclid: string | null;
+  gclid: string | null;
   referrer: string | null;
   sequence_step: number;
   unsubscribed: boolean;
@@ -48,8 +50,18 @@ function StatCard({ label, value, hint }: { label: string; value: string | numbe
   );
 }
 
-function sourceLabel(row: { utm_source: string | null; fbclid: string | null; referrer: string | null }) {
-  if (row.utm_source) return row.utm_source;
+function sourceLabel(row: {
+  utm_source: string | null;
+  utm_campaign: string | null;
+  fbclid: string | null;
+  gclid: string | null;
+  referrer: string | null;
+}) {
+  // Tagged traffic names its own campaign. An untagged ad click carries only
+  // the network's click id (gclid for Google, fbclid for Facebook), so those
+  // two fallbacks are what keep paid traffic from reading as "direct".
+  if (row.utm_source) return row.utm_campaign ? `${row.utm_source} / ${row.utm_campaign}` : row.utm_source;
+  if (row.gclid) return "google ads (click)";
   if (row.fbclid) return "facebook (ad click)";
   if (row.referrer) {
     try {
@@ -75,11 +87,14 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
   await ensureSchema();
   const db = sql();
 
-  const [visits30, visits7, sources30, fb30, leads30, leadsRecent, emailStats, followUps, unsubscribed] = await Promise.all([
+  const [visits30, visits7, sources30, fb30, google30, leads30, leadsRecent, emailStats, followUps, unsubscribed] = await Promise.all([
     rows<VisitTotals>(db`SELECT COUNT(*)::int AS total FROM visits WHERE created_at > now() - interval '30 days'`),
     rows<VisitTotals>(db`SELECT COUNT(*)::int AS total FROM visits WHERE created_at > now() - interval '7 days'`),
     rows<SourceRow>(db`
-      SELECT COALESCE(utm_source, CASE WHEN fbclid IS NOT NULL THEN 'facebook (ad click)' END, 'direct / other') AS source,
+      SELECT COALESCE(utm_source,
+                      CASE WHEN gclid IS NOT NULL THEN 'google ads (click)' END,
+                      CASE WHEN fbclid IS NOT NULL THEN 'facebook (ad click)' END,
+                      'direct / other') AS source,
              COUNT(*)::int AS visits
       FROM visits
       WHERE created_at > now() - interval '30 days'
@@ -90,9 +105,13 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
     rows<FbRow>(
       db`SELECT COUNT(*)::int AS fb_visits FROM visits WHERE fbclid IS NOT NULL AND created_at > now() - interval '30 days'`
     ),
+    rows<GoogleRow>(
+      db`SELECT COUNT(*)::int AS google_visits FROM visits
+         WHERE (gclid IS NOT NULL OR utm_source = 'google') AND created_at > now() - interval '30 days'`
+    ),
     rows<VisitTotals>(db`SELECT COUNT(*)::int AS total FROM leads WHERE created_at > now() - interval '30 days'`),
     rows<Lead>(db`
-      SELECT id, name, email, phone, practice_name, utm_source, utm_campaign, fbclid, referrer,
+      SELECT id, name, email, phone, practice_name, utm_source, utm_campaign, fbclid, gclid, referrer,
              sequence_step, unsubscribed, created_at
       FROM leads
       ORDER BY created_at DESC
@@ -153,13 +172,18 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
         </div>
       </div>
 
-      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <StatCard label="Visits, last 7 days" value={visits7[0]?.total ?? 0} />
         <StatCard label="Visits, last 30 days" value={totalVisits30} />
         <StatCard
           label="From Facebook ad clicks, 30d"
           value={fb30[0]?.fb_visits ?? 0}
           hint="Visits carrying a Facebook click id (fbclid)"
+        />
+        <StatCard
+          label="From Google Ads clicks, 30d"
+          value={google30[0]?.google_visits ?? 0}
+          hint="Visits carrying a Google click id (gclid) or tagged utm_source=google"
         />
         <StatCard
           label="Leads, last 30 days"

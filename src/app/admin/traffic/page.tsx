@@ -59,6 +59,7 @@ type VisitRow = {
   utm_source: string | null;
   utm_campaign: string | null;
   fbclid: string | null;
+  gclid: string | null;
   user_agent: string | null;
   session_id: string;
   ip: string | null;
@@ -93,8 +94,12 @@ function place(row: { city: string | null; region: string | null; country: strin
   return [...parts, row.country].filter(Boolean).join(", ");
 }
 
-function source(row: { utm_source: string | null; utm_campaign: string | null; fbclid: string | null; referrer: string | null }) {
+function source(row: { utm_source: string | null; utm_campaign: string | null; fbclid: string | null; gclid: string | null; referrer: string | null }) {
   if (row.utm_source) return row.utm_campaign ? `${row.utm_source} / ${row.utm_campaign}` : row.utm_source;
+  // gclid and fbclid are the click ids Google and Facebook append to every ad
+  // click. An untagged ad click carries only the id, so without these two
+  // lines paid traffic would read as "direct".
+  if (row.gclid) return "google ads (click)";
   if (row.fbclid) return "facebook (ad click)";
   if (row.referrer) {
     try {
@@ -194,7 +199,9 @@ export default async function TrafficPage() {
       LIMIT 15
     `),
     rows<SourceRow>(db`
-      SELECT COALESCE(utm_source, CASE WHEN fbclid IS NOT NULL THEN 'facebook (ad click)' END,
+      SELECT COALESCE(utm_source,
+                      CASE WHEN gclid IS NOT NULL THEN 'google ads (click)' END,
+                      CASE WHEN fbclid IS NOT NULL THEN 'facebook (ad click)' END,
                       CASE WHEN referrer IS NOT NULL AND referrer NOT LIKE '%aifax.net%' THEN 'referral' END,
                       'direct') AS source,
              COUNT(*)::int AS visits, COUNT(DISTINCT session_id)::int AS visitors
@@ -228,7 +235,7 @@ export default async function TrafficPage() {
     `),
     rows<VisitRow>(db`
       SELECT v.id, v.created_at, v.city, v.region, v.country, v.path, v.referrer, v.utm_source, v.utm_campaign,
-             v.fbclid, v.user_agent, v.session_id, v.ip,
+             v.fbclid, v.gclid, v.user_agent, v.session_id, v.ip,
              (v.engaged OR EXISTS (SELECT 1 FROM visits o WHERE o.session_id = v.session_id AND o.path <> v.path)) AS engaged,
              (SELECT string_agg(t.path, ' > ' ORDER BY t.first_seen)
                 FROM (SELECT o.path, MIN(o.created_at) AS first_seen FROM visits o WHERE o.session_id = v.session_id GROUP BY o.path) t
