@@ -1,0 +1,1 @@
+AiFax: every fax read by AI, matched to the patient, and ready for the chart. HIPAA-compliant cloud fax for medical practices.
