@@ -198,6 +198,22 @@ export function WorkflowReviewForm() {
       } catch {
         // never let pixel reporting break the success state the visitor sees
       }
+
+      // The same signal for Google. GA4 is loaded site-wide (marketing-pixels)
+      // but only ever fired page views, so Google Ads had no lead event to
+      // import and no way to tell which keyword produced a lead. generate_lead
+      // is GA4's standard name for this, which is what makes it selectable as
+      // a conversion once GA4 is linked to Google Ads. Guarded the same way as
+      // fbq above: gtag only exists once NEXT_PUBLIC_GA4_ID is configured and
+      // the script has loaded, and an ad blocker can strip it entirely.
+      try {
+        const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
+        if (typeof gtag === "function") {
+          gtag("event", "generate_lead", { event_id: eventId, source: "workflow_review_form" });
+        }
+      } catch {
+        // never let pixel reporting break the success state the visitor sees
+      }
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : "Something went wrong sending your request.");
     } finally {

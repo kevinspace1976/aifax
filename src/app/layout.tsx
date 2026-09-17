@@ -23,6 +23,8 @@ const body = Source_Sans_3({
 });
 
 export const metadata: Metadata = {
+  // absolute base so the file-convention opengraph-image resolves to www.aifax.net, not the Vercel preview host
+  metadataBase: new URL("https://www.aifax.net"),
   title: `${brand.name} | ${brand.tagline}`,
   description: brand.description
 };
