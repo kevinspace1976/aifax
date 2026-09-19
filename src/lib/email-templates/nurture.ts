@@ -121,11 +121,11 @@ export const NURTURE_SEQUENCE: Template[] = [
         <p>AiFax doesn't rely on a fixed template. It combines OCR with natural language processing to read the
         actual content of the document, identify the patient, classify the document type, and route it,
         whether it's a typed referral, a handwritten order, or a multi-page lab report.</p>
-        <p><a href="https://www.aifax.net/solutions">See the full workflow</a></p>
+        <p><a href="https://www.aifax.net/how-it-works">See the full workflow</a></p>
         <p>Team AiFax</p>`
       ),
     text: (ctx) =>
-      `Hi ${firstName(ctx.name)},\n\nA common question: "our faxes don't follow a consistent format, will this work?" AiFax combines OCR with natural language processing to read the actual content, identify the patient, classify the document type, and route it, whether it's typed, handwritten, or a multi-page report.\n\nSee the full workflow: https://www.aifax.net/solutions\n\nTeam AiFax${textFooter(
+      `Hi ${firstName(ctx.name)},\n\nA common question: "our faxes don't follow a consistent format, will this work?" AiFax combines OCR with natural language processing to read the actual content, identify the patient, classify the document type, and route it, whether it's typed, handwritten, or a multi-page report.\n\nSee the full workflow: https://www.aifax.net/how-it-works\n\nTeam AiFax${textFooter(
         ctx
       )}`
   },
