@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, Phone, X } from "lucide-react";
 import { useState } from "react";
+import { CtaLink } from "@/components/cta-link";
 import { brand, headerCtas, loginCta, navItems, phone } from "@/lib/site";
 
 export function Header() {
@@ -60,9 +61,14 @@ export function Header() {
             {phone.display}
           </a>
           {headerCtas.map((cta, index) => (
-            <a key={cta.href} href={cta.href} className={`${index === 0 ? "btn-primary" : "btn-accent"} whitespace-nowrap`}>
+            <CtaLink
+              key={cta.href}
+              href={cta.href}
+              cta={index === 0 ? "header_new_number" : "header_port_number"}
+              className={`${index === 0 ? "btn-primary" : "btn-accent"} whitespace-nowrap`}
+            >
               {cta.label}
-            </a>
+            </CtaLink>
           ))}
           <a href={loginCta.href} className="btn-light whitespace-nowrap">
             {loginCta.label}
@@ -92,14 +98,15 @@ export function Header() {
               Call {phone.display}
             </a>
             {headerCtas.map((cta, index) => (
-              <a
+              <CtaLink
                 key={cta.href}
                 href={cta.href}
+                cta={index === 0 ? "header_new_number" : "header_port_number"}
                 className={`${index === 0 ? "btn-primary" : "btn-accent"} mt-2`}
                 onClick={() => setOpen(false)}
               >
                 {cta.label}
-              </a>
+              </CtaLink>
             ))}
           </nav>
         </div>

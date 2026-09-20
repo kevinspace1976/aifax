@@ -4,6 +4,7 @@ import { DemoVideo } from "@/components/demo-video";
 import { SubscribeButton } from "@/components/subscribe-button";
 import { SummaryCard } from "@/components/summary-card";
 import { plans } from "@/lib/plans";
+import { CtaLink } from "@/components/cta-link";
 import { phone, sharedCtas } from "@/lib/site";
 
 const stops = [
@@ -126,12 +127,12 @@ export default function Home() {
             what is inside, and routes it into your EHR workflow. Keep your fax number.
           </p>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-            <a href={sharedCtas.primary.href} className="btn-primary">
+            <CtaLink href={sharedCtas.primary.href} cta="page_port_number" className="btn-primary">
               {sharedCtas.primary.label}
-            </a>
-            <a href={sharedCtas.secondary.href} className="btn-secondary">
+            </CtaLink>
+            <CtaLink href={sharedCtas.secondary.href} cta="page_new_number" className="btn-secondary">
               {sharedCtas.secondary.label}
-            </a>
+            </CtaLink>
           </div>
           <p className="mt-4 text-sm text-slate-500">
             From $9.99/month &middot; HIPAA-compliant, BAA signed at signup &middot; No contract &middot; Live within a day
@@ -171,9 +172,9 @@ export default function Home() {
               <Link href="/pricing" className="btn-primary">
                 See plans
               </Link>
-              <a href={sharedCtas.secondary.href} className="btn-secondary">
+              <CtaLink href={sharedCtas.secondary.href} cta="page_new_number" className="btn-secondary">
                 {sharedCtas.secondary.label}
-              </a>
+              </CtaLink>
             </div>
           </div>
           <div className="card-surface flex flex-col p-7 sm:p-8">
@@ -377,12 +378,12 @@ export default function Home() {
             <p className="mt-2 text-slate-300">Port in a few clicks, or get a new number and be live today.</p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">
-            <a href={sharedCtas.primary.href} className="btn-primary">
+            <CtaLink href={sharedCtas.primary.href} cta="page_port_number" className="btn-primary">
               {sharedCtas.primary.label}
-            </a>
-            <a href={sharedCtas.secondary.href} className="btn-light">
+            </CtaLink>
+            <CtaLink href={sharedCtas.secondary.href} cta="page_new_number" className="btn-light">
               {sharedCtas.secondary.label}
-            </a>
+            </CtaLink>
           </div>
         </div>
       </section>

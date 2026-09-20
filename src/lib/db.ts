@@ -168,4 +168,24 @@ async function runMigrations() {
   `;
   await db`CREATE INDEX IF NOT EXISTS lead_activities_lead_idx ON lead_activities (lead_id, occurred_at)`;
   await db`CREATE INDEX IF NOT EXISTS lead_activities_follow_up_idx ON lead_activities (follow_up_at)`;
+
+  // One row per click on a buy-path button (see lib/cta.ts). visits says
+  // who arrived and what they read; this says who reached for the buy
+  // button and how far they got before they dropped out. session_id is the
+  // same cookie visits uses, so a click joins back to the visit that
+  // produced it. user_agent is stored so the Traffic page can filter bots
+  // with the same expression it already uses on visits.
+  await db`
+    CREATE TABLE IF NOT EXISTS cta_clicks (
+      id BIGSERIAL PRIMARY KEY,
+      session_id TEXT,
+      cta TEXT NOT NULL,
+      plan TEXT,
+      path TEXT,
+      user_agent TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    )
+  `;
+  await db`CREATE INDEX IF NOT EXISTS cta_clicks_created_at_idx ON cta_clicks (created_at)`;
+  await db`CREATE INDEX IF NOT EXISTS cta_clicks_session_idx ON cta_clicks (session_id)`;
 }

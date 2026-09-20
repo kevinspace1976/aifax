@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Phone, PhoneForwarded, X } from "lucide-react";
+import { trackCta } from "@/lib/track-cta";
 import { newNumberUrl, portNumberUrl } from "@/lib/site";
 
 type SubscribeButtonProps = {
@@ -32,7 +33,17 @@ export function SubscribeButton({ planName, className, children }: SubscribeButt
 
   return (
     <>
-      <button type="button" className={className} onClick={() => setOpen(true)}>
+      <button
+        type="button"
+        className={className}
+        onClick={() => {
+          // Reaching for a plan is the first real buying signal on the site,
+          // and the modal is where most people stop, so both the open and
+          // the choice below are counted separately on /admin/traffic.
+          trackCta("plan_subscribe", planName);
+          setOpen(true);
+        }}
+      >
         {children}
       </button>
 
@@ -70,6 +81,7 @@ export function SubscribeButton({ planName, className, children }: SubscribeButt
                 ref={firstChoice}
                 href={portNumberUrl}
                 className="group flex items-center gap-4 rounded-xl border-2 border-orange-500 bg-orange-50 p-4 text-left transition hover:bg-orange-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
+                onClick={() => trackCta("plan_checkout_port", planName)}
               >
                 <PhoneForwarded className="h-6 w-6 flex-none text-orange-500" aria-hidden="true" />
                 <span className="flex-1">
@@ -81,6 +93,7 @@ export function SubscribeButton({ planName, className, children }: SubscribeButt
               <a
                 href={newNumberUrl}
                 className="group flex items-center gap-4 rounded-xl border border-slate-200 p-4 text-left transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
+                onClick={() => trackCta("plan_checkout_new", planName)}
               >
                 <Phone className="h-6 w-6 flex-none text-sky-500" aria-hidden="true" />
                 <span className="flex-1">
