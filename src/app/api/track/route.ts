@@ -2,6 +2,7 @@ import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { ensureSchema, sql } from "@/lib/db";
 import { ADMIN_SESSION_COOKIE, EXCLUDE_DEVICE_COOKIE, isExcludedDevice, isValidAdminSession } from "@/lib/admin-auth";
+import { CTA_NAMES } from "@/lib/cta";
 import {
   ATTRIBUTION_COOKIE,
   SESSION_COOKIE,
@@ -45,7 +46,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true, skipped: "excluded-ip" });
   }
 
-  let body: { url?: string; engage?: number } = {};
+  let body: { url?: string; engage?: number; cta?: string; plan?: string | null; path?: string; cid?: string } = {};
   try {
     body = await req.json();
   } catch {
@@ -65,6 +66,45 @@ export async function POST(req: NextRequest) {
       } catch (err) {
         console.error("[track] failed to mark engaged", err);
       }
+    }
+    return NextResponse.json({ ok: true });
+  }
+
+  // A click on one of the buy-path buttons (see lib/cta.ts). Arrives by
+  // sendBeacon as the browser is already navigating away, usually to the
+  // WHMCS portal, so there is nothing to return to the page. The name is
+  // checked against the known list rather than stored as sent, so a
+  // scripted client cannot fill the table with invented button names.
+  if (body.cta !== undefined) {
+    if (!CTA_NAMES.includes(body.cta)) {
+      return NextResponse.json({ ok: false }, { status: 400 });
+    }
+    const plan = typeof body.plan === "string" ? body.plan.slice(0, 64) : null;
+    const path = typeof body.path === "string" ? body.path.slice(0, 200) : null;
+    const cid = typeof body.cid === "string" ? body.cid.slice(0, 64) : null;
+    // The portal steps arrive from portal.aifax.net, which never sees this
+    // site's session cookie, so there is no sid on those. The click id we
+    // handed it in the outgoing URL is looked up instead, and the step
+    // inherits the session of the click that sent them there. A portal
+    // step with no matching click stays unattributed rather than lost.
+    const sid = req.cookies.get(SESSION_COOKIE)?.value || null;
+    try {
+      await ensureSchema();
+      await sql()`
+        INSERT INTO cta_clicks (session_id, cta, plan, path, user_agent, click_id)
+        VALUES (
+          COALESCE(
+            ${sid},
+            (SELECT c.session_id FROM cta_clicks c
+              WHERE c.click_id IS NOT NULL AND c.click_id = ${cid}
+              ORDER BY c.id LIMIT 1)
+          ),
+          ${body.cta}, ${plan}, ${path}, ${req.headers.get("user-agent")}, ${cid}
+        )
+      `;
+    } catch (err) {
+      // Same rule as the visit insert: analytics never takes the site down.
+      console.error("[track] failed to record cta click", err);
     }
     return NextResponse.json({ ok: true });
   }

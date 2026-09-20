@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { WorkflowReviewForm } from "@/components/workflow-review-form";
+import { CtaLink } from "@/components/cta-link";
 import { newNumberUrl, portNumberUrl, supportEmail } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -53,12 +54,12 @@ export default function EclinicalWorksPage() {
             a separate project, scoped in writing.
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
-            <a href={portNumberUrl} className="btn-primary">
+            <CtaLink href={portNumberUrl} cta="page_port_number" className="btn-primary">
               Port My Number
-            </a>
-            <a href={newNumberUrl} className="btn-secondary">
+            </CtaLink>
+            <CtaLink href={newNumberUrl} cta="page_new_number" className="btn-secondary">
               Get a New Number
-            </a>
+            </CtaLink>
           </div>
           <p className="mt-4 text-sm text-slate-500">
             Plans from $9.99 a month, no contract. Integration quoted separately.

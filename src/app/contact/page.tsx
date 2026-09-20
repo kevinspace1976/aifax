@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { CheckCircle2 } from "lucide-react";
 import { WorkflowReviewForm } from "@/components/workflow-review-form";
+import { CtaLink } from "@/components/cta-link";
 import { newNumberUrl, phone, portNumberUrl, supportEmail } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -26,12 +27,12 @@ export default function ContactPage() {
             first, send the form and we reply by email with a written plan. No calls unless you ask for one.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <a href={portNumberUrl} className="btn-accent">
+            <CtaLink href={portNumberUrl} cta="page_port_number" className="btn-accent">
               Port My Number
-            </a>
-            <a href={newNumberUrl} className="btn-primary">
+            </CtaLink>
+            <CtaLink href={newNumberUrl} cta="page_new_number" className="btn-primary">
               Get a New Number
-            </a>
+            </CtaLink>
           </div>
           <ul className="mt-8 flex flex-col gap-3">
             {points.map((line) => (

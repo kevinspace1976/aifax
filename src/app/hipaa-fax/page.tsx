@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, ShieldCheck } from "lucide-react";
+import { CtaLink } from "@/components/cta-link";
 import { newNumberUrl, portNumberUrl, supportEmail } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -71,12 +72,12 @@ export default function HipaaFaxPage() {
             audit trail you can produce if anyone asks.
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
-            <a href={newNumberUrl} className="btn-primary">
+            <CtaLink href={newNumberUrl} cta="page_new_number" className="btn-primary">
               Get a New Number
-            </a>
-            <a href={portNumberUrl} className="btn-secondary">
+            </CtaLink>
+            <CtaLink href={portNumberUrl} cta="page_port_number" className="btn-secondary">
               Port My Number
-            </a>
+            </CtaLink>
           </div>
           <p className="mt-4 text-sm text-slate-500">Plans from $9.99 a month. No contract, no setup fee.</p>
         </div>

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { CtaLink } from "@/components/cta-link";
 import { sharedCtas } from "@/lib/site";
 
 type PageHeroProps = {
@@ -28,12 +29,12 @@ export function PageHero({ title, description, kicker = "AI fax for medical prac
           <div className="mt-7">
             {actions ?? (
               <div className="flex flex-wrap gap-3">
-                <a href={sharedCtas.primary.href} className="btn-primary">
+                <CtaLink href={sharedCtas.primary.href} cta="page_port_number" className="btn-primary">
                   {sharedCtas.primary.label}
-                </a>
-                <a href={sharedCtas.secondary.href} className="btn-secondary">
+                </CtaLink>
+                <CtaLink href={sharedCtas.secondary.href} cta="page_new_number" className="btn-secondary">
                   {sharedCtas.secondary.label}
-                </a>
+                </CtaLink>
               </div>
             )}
           </div>

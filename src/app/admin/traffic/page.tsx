@@ -3,6 +3,7 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { DeleteForm } from "@/components/delete-form";
 import { EXCLUDE_DEVICE_COOKIE, isExcludedDevice } from "@/lib/admin-auth";
+import { CHECKOUT_CTAS, CTA_LABELS } from "@/lib/cta";
 import { ensureSchema, rows, sql } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -44,6 +45,15 @@ function isHostingIp(ip: string) {
 }
 
 type Count = { visits: number; visitors: number; engaged: number };
+type CtaRow = { cta: string; plan: string | null; clicks: number; visitors: number };
+type FunnelRow = {
+  pricing_visitors: number;
+  plan_visitors: number;
+  checkout_visitors: number;
+  order_now_visitors: number;
+  portal_checkout_visitors: number;
+  order_placed_visitors: number;
+};
 type CityRow = { city: string | null; region: string | null; country: string | null; visits: number; visitors: number };
 type PageRow = { path: string; visits: number };
 type SourceRow = { source: string; visits: number; visitors: number };
@@ -84,6 +94,13 @@ function StatCard({ label, value, hint }: { label: string; value: string | numbe
       {hint ? <p className="mt-1 text-xs text-slate-400">{hint}</p> : null}
     </div>
   );
+}
+
+// Share of a step's parent, shown under each buy-path number. A zero
+// denominator reads as a dash rather than 0% or NaN%.
+function pct(part: number, whole: number) {
+  if (!whole) return "-";
+  return `${Math.round((part / whole) * 100)}%`;
 }
 
 function place(row: { city: string | null; region: string | null; country: string | null }) {
@@ -151,7 +168,7 @@ export default async function TrafficPage() {
     .map((v) => v.trim())
     .filter(Boolean).length;
 
-  const [today, yesterday, week, month, cities, pages, sources, devices, recent] = await Promise.all([
+  const [today, yesterday, week, month, cities, pages, sources, devices, recent, ctas, funnel] = await Promise.all([
     rows<Count>(db`
       SELECT COUNT(*)::int AS visits, COUNT(DISTINCT session_id)::int AS visitors,
              COUNT(DISTINCT session_id) FILTER (WHERE engaged)::int AS engaged
@@ -244,6 +261,43 @@ export default async function TrafficPage() {
       WHERE (v.user_agent IS NULL OR v.user_agent !~* ${BOT_UA})
       ORDER BY created_at DESC
       LIMIT 150
+    `),
+    // Every buy-path button click in the last 30 days, by button and plan.
+    rows<CtaRow>(db`
+      SELECT cta, plan, COUNT(*)::int AS clicks, COUNT(DISTINCT session_id)::int AS visitors
+      FROM cta_clicks
+      WHERE created_at > now() - interval '30 days'
+        AND (user_agent IS NULL OR user_agent !~* ${BOT_UA})
+      GROUP BY cta, plan
+      ORDER BY clicks DESC
+    `),
+    // The three steps of the buy path, counted in people rather than
+    // clicks, so one visitor mashing a button is still one visitor.
+    rows<FunnelRow>(db`
+      SELECT
+        (SELECT COUNT(DISTINCT session_id)::int FROM visits
+          WHERE path = '/pricing' AND created_at > now() - interval '30 days'
+            AND (user_agent IS NULL OR user_agent !~* ${BOT_UA})) AS pricing_visitors,
+        (SELECT COUNT(DISTINCT session_id)::int FROM cta_clicks
+          WHERE cta = 'plan_subscribe' AND created_at > now() - interval '30 days'
+            AND (user_agent IS NULL OR user_agent !~* ${BOT_UA})) AS plan_visitors,
+        (SELECT COUNT(DISTINCT session_id)::int FROM cta_clicks
+          WHERE cta = ANY(string_to_array(${CHECKOUT_CTAS.join(",")}, ',')) AND created_at > now() - interval '30 days'
+            AND (user_agent IS NULL OR user_agent !~* ${BOT_UA})) AS checkout_visitors,
+        -- Someone who goes straight to the portal, from a bookmark or an
+        -- email, has no click id to resolve and so no session. They are
+        -- still a buyer, so they count as themselves rather than being
+        -- dropped: session first, then the portal's own click id, then
+        -- the row. The site steps above cannot have this case.
+        (SELECT COUNT(DISTINCT COALESCE(session_id, click_id, id::text))::int FROM cta_clicks
+          WHERE cta = 'portal_order_now' AND created_at > now() - interval '30 days'
+            AND (user_agent IS NULL OR user_agent !~* ${BOT_UA})) AS order_now_visitors,
+        (SELECT COUNT(DISTINCT COALESCE(session_id, click_id, id::text))::int FROM cta_clicks
+          WHERE cta = 'portal_checkout' AND created_at > now() - interval '30 days'
+            AND (user_agent IS NULL OR user_agent !~* ${BOT_UA})) AS portal_checkout_visitors,
+        (SELECT COUNT(DISTINCT COALESCE(session_id, click_id, id::text))::int FROM cta_clicks
+          WHERE cta = 'portal_order_complete' AND created_at > now() - interval '30 days'
+            AND (user_agent IS NULL OR user_agent !~* ${BOT_UA})) AS order_placed_visitors
     `)
   ]);
 
@@ -252,6 +306,24 @@ export default async function TrafficPage() {
   const w = week[0] ?? { visits: 0, visitors: 0 };
   const m = month[0] ?? { visits: 0, visitors: 0 };
   const monthVisits = Math.max(m.visits, 1);
+
+  const f = funnel[0] ?? {
+    pricing_visitors: 0,
+    plan_visitors: 0,
+    checkout_visitors: 0,
+    order_now_visitors: 0,
+    portal_checkout_visitors: 0,
+    order_placed_visitors: 0
+  };
+  const totalClicks = ctas.reduce((sum, row) => sum + row.clicks, 0);
+  // Plan rows carry a plan name; the header and in-page buttons do not.
+  const planRows = ctas.filter((row) => row.plan);
+  const buttonRows = Object.keys(CTA_LABELS)
+    .map((name) => ({
+      cta: name,
+      clicks: ctas.filter((row) => row.cta === name).reduce((sum, row) => sum + row.clicks, 0)
+    }))
+    .filter((row) => row.clicks > 0);
 
   return (
     <main className="section-shell py-10">
@@ -400,6 +472,108 @@ export default async function TrafficPage() {
           </table>
         </section>
       </div>
+
+      <section className="card-surface mt-8 p-6">
+        <h2 className="text-lg font-semibold text-white">Buy path, 30 days</h2>
+        <p className="mt-1 text-xs text-slate-400">
+          How far people get before they drop out, from the first page to a placed order. Counted in people, not
+          clicks: one visitor is one visitor however many times they press a button. The last three steps happen on
+          the billing portal and are reported back by it, tied to the click that sent the person there.
+        </p>
+        <p className="mt-3 text-[11px] font-semibold uppercase tracking-wide text-slate-500">On aifax.net</p>
+        <div className="mt-2 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <StatCard label="Visitors" value={m.visitors} hint="30 days" />
+          <StatCard
+            label="Opened Pricing"
+            value={f.pricing_visitors}
+            hint={`${pct(f.pricing_visitors, m.visitors)} of visitors`}
+          />
+          <StatCard
+            label="Pressed a plan"
+            value={f.plan_visitors}
+            hint={`${pct(f.plan_visitors, f.pricing_visitors)} of pricing visitors`}
+          />
+          <StatCard
+            label="Left for the portal"
+            value={f.checkout_visitors}
+            hint={`${pct(f.checkout_visitors, m.visitors)} of visitors`}
+          />
+        </div>
+        <p className="mt-5 text-[11px] font-semibold uppercase tracking-wide text-slate-500">On portal.aifax.net</p>
+        <div className="mt-2 grid gap-4 sm:grid-cols-3">
+          <StatCard
+            label="Pressed Order Now"
+            value={f.order_now_visitors}
+            hint={`${pct(f.order_now_visitors, f.checkout_visitors)} of those who left`}
+          />
+          <StatCard
+            label="Reached checkout"
+            value={f.portal_checkout_visitors}
+            hint={`${pct(f.portal_checkout_visitors, f.order_now_visitors)} of Order Now`}
+          />
+          <StatCard
+            label="Placed the order"
+            value={f.order_placed_visitors}
+            hint={`${pct(f.order_placed_visitors, m.visitors)} of visitors`}
+          />
+        </div>
+
+        {buttonRows.length === 0 ? (
+          <p className="mt-6 text-sm text-slate-400">No buy-path clicks recorded yet.</p>
+        ) : (
+          <div className="mt-6 grid gap-6 lg:grid-cols-2">
+            <div>
+              <h3 className="text-sm font-semibold text-white">Every button, by clicks</h3>
+              <table className="mt-3 w-full text-sm">
+                <thead className="text-left text-xs uppercase tracking-wide text-slate-400">
+                  <tr>
+                    <th className="pb-2 pr-4">Button</th>
+                    <th className="pb-2 text-right">Clicks</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {buttonRows.map((row) => (
+                    <tr key={row.cta} className="border-t border-white/5">
+                      <td className="py-2 text-slate-200">{CTA_LABELS[row.cta]}</td>
+                      <td className="py-2 text-right text-white">{row.clicks}</td>
+                    </tr>
+                  ))}
+                  <tr className="border-t border-white/10">
+                    <td className="py-2 font-semibold text-slate-200">Total</td>
+                    <td className="py-2 text-right font-semibold text-white">{totalClicks}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-semibold text-white">Which plan they reached for</h3>
+              {planRows.length === 0 ? (
+                <p className="mt-3 text-sm text-slate-400">No plan buttons pressed yet.</p>
+              ) : (
+                <table className="mt-3 w-full text-sm">
+                  <thead className="text-left text-xs uppercase tracking-wide text-slate-400">
+                    <tr>
+                      <th className="pb-2 pr-4">Plan</th>
+                      <th className="pb-2 pr-4">Step</th>
+                      <th className="pb-2 text-right">Clicks</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {planRows.map((row) => (
+                      <tr key={`${row.cta}-${row.plan}`} className="border-t border-white/5">
+                        <td className="py-2 text-slate-200">{row.plan}</td>
+                        <td className="py-2 text-slate-400">{CTA_LABELS[row.cta]}</td>
+                        <td className="py-2 text-right text-white">{row.clicks}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          </div>
+        )}
+      </section>
 
       <section className="card-surface mt-8 p-6">
         <h2 className="text-lg font-semibold text-white">Recent visits</h2>

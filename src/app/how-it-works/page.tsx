@@ -3,6 +3,7 @@ import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import { FaxSummaryPreview } from "@/components/diagrams/fax-summary-preview";
 import { PageHero } from "@/components/page-hero";
+import { CtaLink } from "@/components/cta-link";
 import { newNumberUrl, portNumberUrl } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -52,12 +53,12 @@ export default function HowItWorksPage() {
         description="Pick a number or port yours, tell the AI what to look for, and every fax from then on arrives read, matched, and summarized."
         actions={
           <div className="flex flex-wrap gap-3">
-            <a href={newNumberUrl} className="btn-primary">
+            <CtaLink href={newNumberUrl} cta="page_new_number" className="btn-primary">
               Get a New Number
-            </a>
-            <a href={portNumberUrl} className="btn-secondary">
+            </CtaLink>
+            <CtaLink href={portNumberUrl} cta="page_port_number" className="btn-secondary">
               Port My Number
-            </a>
+            </CtaLink>
           </div>
         }
         note="Your fax line stays live on your current provider until the port completes."
@@ -104,9 +105,9 @@ export default function HowItWorksPage() {
 
       <section className="section-shell pb-20">
         <div className="flex flex-wrap gap-3">
-          <a href={newNumberUrl} className="btn-primary">
+          <CtaLink href={newNumberUrl} cta="page_new_number" className="btn-primary">
             Get a New Number
-          </a>
+          </CtaLink>
           <Link href="/pricing" className="btn-secondary">
             See plans
           </Link>

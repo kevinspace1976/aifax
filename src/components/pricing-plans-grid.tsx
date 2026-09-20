@@ -1,6 +1,7 @@
 "use client";
 
 import { CheckCircle2 } from "lucide-react";
+import { CtaLink } from "@/components/cta-link";
 import { SubscribeButton } from "@/components/subscribe-button";
 import type { Plan } from "@/lib/plans";
 
@@ -45,9 +46,9 @@ export function PricingPlansGrid({ plans }: PricingPlansGridProps) {
             </ul>
 
             {plan.href ? (
-              <a href={plan.href} className={buttonClass}>
+              <CtaLink href={plan.href} cta="plan_contact_sales" plan={plan.name} className={buttonClass}>
                 {plan.cta}
-              </a>
+              </CtaLink>
             ) : (
               <SubscribeButton planName={plan.name} className={buttonClass}>
                 {plan.cta}
