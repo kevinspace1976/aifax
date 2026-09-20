@@ -52,7 +52,11 @@ export default function PricingPage() {
         </p>
       </section>
 
-      <section className="section-shell pt-2 pb-4">
+      <section className="section-shell pt-2 pb-8">
+        <PricingPlansGrid plans={plans} />
+      </section>
+
+      <section className="section-shell py-4">
         <div className="rounded-2xl border border-orange-200 bg-orange-50 p-7">
           <p className="text-xs font-bold uppercase tracking-[0.14em] text-orange-700">Included with Plus and above</p>
           <h2 className="mt-2 max-w-2xl text-2xl text-slate-900 sm:text-3xl">
@@ -88,10 +92,6 @@ export default function PricingPage() {
             </aside>
           </div>
         </div>
-      </section>
-
-      <section className="section-shell py-8">
-        <PricingPlansGrid plans={plans} />
       </section>
 
       <section className="section-shell pb-20">
