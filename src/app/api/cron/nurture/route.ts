@@ -87,9 +87,16 @@ export async function GET(req: NextRequest) {
 
     sent++;
     const nextStep = lead.sequence_step + 1;
-    const nextDelay = DELAYS_DAYS[nextStep];
-    const createdAt = new Date(lead.created_at);
-    const nextDue = nextDelay != null ? new Date(createdAt.getTime() + nextDelay * 24 * 60 * 60 * 1000) : null;
+    // Space the next email from the one just sent, not from the signup date.
+    // DELAYS_DAYS is written as days-since-signup, so the gap between two
+    // steps is the difference between their entries. Anchoring on created_at
+    // instead means any lead whose sequence was paused, resumed, or started
+    // mid-way has already-past due dates for every remaining step, and the
+    // cron fires the rest of the sequence on consecutive days. A lead who
+    // gets four marketing emails in four days unsubscribes.
+    const gapDays =
+      DELAYS_DAYS[nextStep] != null ? DELAYS_DAYS[nextStep] - DELAYS_DAYS[lead.sequence_step] : null;
+    const nextDue = gapDays != null ? new Date(Date.now() + gapDays * 24 * 60 * 60 * 1000) : null;
 
     await db`
       UPDATE leads
