@@ -46,7 +46,14 @@ function isHostingIp(ip: string) {
 
 type Count = { visits: number; visitors: number; engaged: number };
 type CtaRow = { cta: string; plan: string | null; clicks: number; visitors: number };
-type FunnelRow = { pricing_visitors: number; plan_visitors: number; checkout_visitors: number };
+type FunnelRow = {
+  pricing_visitors: number;
+  plan_visitors: number;
+  checkout_visitors: number;
+  order_now_visitors: number;
+  portal_checkout_visitors: number;
+  order_placed_visitors: number;
+};
 type CityRow = { city: string | null; region: string | null; country: string | null; visits: number; visitors: number };
 type PageRow = { path: string; visits: number };
 type SourceRow = { source: string; visits: number; visitors: number };
@@ -276,7 +283,21 @@ export default async function TrafficPage() {
             AND (user_agent IS NULL OR user_agent !~* ${BOT_UA})) AS plan_visitors,
         (SELECT COUNT(DISTINCT session_id)::int FROM cta_clicks
           WHERE cta = ANY(string_to_array(${CHECKOUT_CTAS.join(",")}, ',')) AND created_at > now() - interval '30 days'
-            AND (user_agent IS NULL OR user_agent !~* ${BOT_UA})) AS checkout_visitors
+            AND (user_agent IS NULL OR user_agent !~* ${BOT_UA})) AS checkout_visitors,
+        -- Someone who goes straight to the portal, from a bookmark or an
+        -- email, has no click id to resolve and so no session. They are
+        -- still a buyer, so they count as themselves rather than being
+        -- dropped: session first, then the portal's own click id, then
+        -- the row. The site steps above cannot have this case.
+        (SELECT COUNT(DISTINCT COALESCE(session_id, click_id, id::text))::int FROM cta_clicks
+          WHERE cta = 'portal_order_now' AND created_at > now() - interval '30 days'
+            AND (user_agent IS NULL OR user_agent !~* ${BOT_UA})) AS order_now_visitors,
+        (SELECT COUNT(DISTINCT COALESCE(session_id, click_id, id::text))::int FROM cta_clicks
+          WHERE cta = 'portal_checkout' AND created_at > now() - interval '30 days'
+            AND (user_agent IS NULL OR user_agent !~* ${BOT_UA})) AS portal_checkout_visitors,
+        (SELECT COUNT(DISTINCT COALESCE(session_id, click_id, id::text))::int FROM cta_clicks
+          WHERE cta = 'portal_order_complete' AND created_at > now() - interval '30 days'
+            AND (user_agent IS NULL OR user_agent !~* ${BOT_UA})) AS order_placed_visitors
     `)
   ]);
 
@@ -286,7 +307,14 @@ export default async function TrafficPage() {
   const m = month[0] ?? { visits: 0, visitors: 0 };
   const monthVisits = Math.max(m.visits, 1);
 
-  const f = funnel[0] ?? { pricing_visitors: 0, plan_visitors: 0, checkout_visitors: 0 };
+  const f = funnel[0] ?? {
+    pricing_visitors: 0,
+    plan_visitors: 0,
+    checkout_visitors: 0,
+    order_now_visitors: 0,
+    portal_checkout_visitors: 0,
+    order_placed_visitors: 0
+  };
   const totalClicks = ctas.reduce((sum, row) => sum + row.clicks, 0);
   // Plan rows carry a plan name; the header and in-page buttons do not.
   const planRows = ctas.filter((row) => row.plan);
@@ -448,11 +476,12 @@ export default async function TrafficPage() {
       <section className="card-surface mt-8 p-6">
         <h2 className="text-lg font-semibold text-white">Buy path, 30 days</h2>
         <p className="mt-1 text-xs text-slate-400">
-          How far people get before they drop out. Counted in people, not clicks: one visitor is one visitor however
-          many times they press a button. The last step is where this site stops seeing them, because every one of
-          those buttons hands off to the billing portal on another domain.
+          How far people get before they drop out, from the first page to a placed order. Counted in people, not
+          clicks: one visitor is one visitor however many times they press a button. The last three steps happen on
+          the billing portal and are reported back by it, tied to the click that sent the person there.
         </p>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <p className="mt-3 text-[11px] font-semibold uppercase tracking-wide text-slate-500">On aifax.net</p>
+        <div className="mt-2 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard label="Visitors" value={m.visitors} hint="30 days" />
           <StatCard
             label="Opened Pricing"
@@ -465,9 +494,27 @@ export default async function TrafficPage() {
             hint={`${pct(f.plan_visitors, f.pricing_visitors)} of pricing visitors`}
           />
           <StatCard
-            label="Went to checkout"
+            label="Left for the portal"
             value={f.checkout_visitors}
             hint={`${pct(f.checkout_visitors, m.visitors)} of visitors`}
+          />
+        </div>
+        <p className="mt-5 text-[11px] font-semibold uppercase tracking-wide text-slate-500">On portal.aifax.net</p>
+        <div className="mt-2 grid gap-4 sm:grid-cols-3">
+          <StatCard
+            label="Pressed Order Now"
+            value={f.order_now_visitors}
+            hint={`${pct(f.order_now_visitors, f.checkout_visitors)} of those who left`}
+          />
+          <StatCard
+            label="Reached checkout"
+            value={f.portal_checkout_visitors}
+            hint={`${pct(f.portal_checkout_visitors, f.order_now_visitors)} of Order Now`}
+          />
+          <StatCard
+            label="Placed the order"
+            value={f.order_placed_visitors}
+            hint={`${pct(f.order_placed_visitors, m.visitors)} of visitors`}
           />
         </div>
 

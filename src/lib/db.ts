@@ -188,4 +188,11 @@ async function runMigrations() {
   `;
   await db`CREATE INDEX IF NOT EXISTS cta_clicks_created_at_idx ON cta_clicks (created_at)`;
   await db`CREATE INDEX IF NOT EXISTS cta_clicks_session_idx ON cta_clicks (session_id)`;
+  // The id handed to the billing portal in the outgoing URL. The portal
+  // sends it back with each step it sees (Order Now, checkout, order
+  // placed), which is the only thing tying the two domains together: the
+  // visit session cookie is host-only for www.aifax.net and never reaches
+  // portal.aifax.net.
+  await db`ALTER TABLE cta_clicks ADD COLUMN IF NOT EXISTS click_id TEXT`;
+  await db`CREATE INDEX IF NOT EXISTS cta_clicks_click_id_idx ON cta_clicks (click_id)`;
 }

@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true, skipped: "excluded-ip" });
   }
 
-  let body: { url?: string; engage?: number; cta?: string; plan?: string | null; path?: string } = {};
+  let body: { url?: string; engage?: number; cta?: string; plan?: string | null; path?: string; cid?: string } = {};
   try {
     body = await req.json();
   } catch {
@@ -81,12 +81,26 @@ export async function POST(req: NextRequest) {
     }
     const plan = typeof body.plan === "string" ? body.plan.slice(0, 64) : null;
     const path = typeof body.path === "string" ? body.path.slice(0, 200) : null;
+    const cid = typeof body.cid === "string" ? body.cid.slice(0, 64) : null;
+    // The portal steps arrive from portal.aifax.net, which never sees this
+    // site's session cookie, so there is no sid on those. The click id we
+    // handed it in the outgoing URL is looked up instead, and the step
+    // inherits the session of the click that sent them there. A portal
+    // step with no matching click stays unattributed rather than lost.
     const sid = req.cookies.get(SESSION_COOKIE)?.value || null;
     try {
       await ensureSchema();
       await sql()`
-        INSERT INTO cta_clicks (session_id, cta, plan, path, user_agent)
-        VALUES (${sid}, ${body.cta}, ${plan}, ${path}, ${req.headers.get("user-agent")})
+        INSERT INTO cta_clicks (session_id, cta, plan, path, user_agent, click_id)
+        VALUES (
+          COALESCE(
+            ${sid},
+            (SELECT c.session_id FROM cta_clicks c
+              WHERE c.click_id IS NOT NULL AND c.click_id = ${cid}
+              ORDER BY c.id LIMIT 1)
+          ),
+          ${body.cta}, ${plan}, ${path}, ${req.headers.get("user-agent")}, ${cid}
+        )
       `;
     } catch (err) {
       // Same rule as the visit insert: analytics never takes the site down.
