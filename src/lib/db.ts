@@ -136,6 +136,32 @@ async function runMigrations() {
   await db`ALTER TABLE leads ADD COLUMN IF NOT EXISTS nurture_paused BOOLEAN NOT NULL DEFAULT FALSE`;
   await db`ALTER TABLE leads ADD COLUMN IF NOT EXISTS unsubscribed_at TIMESTAMPTZ`;
 
+  // Where the lead submitted from, same city-level geo the visits table
+  // already records from Vercel's edge headers, so the Leads table shows a
+  // practice's location and time zone without opening the lead. Covered by
+  // section 2 of the privacy policy ("IP address and the approximate
+  // location derived from it").
+  await db`ALTER TABLE leads ADD COLUMN IF NOT EXISTS city TEXT`;
+  await db`ALTER TABLE leads ADD COLUMN IF NOT EXISTS region TEXT`;
+  await db`ALTER TABLE leads ADD COLUMN IF NOT EXISTS country TEXT`;
+  await db`ALTER TABLE leads ADD COLUMN IF NOT EXISTS ip TEXT`;
+  // Leads submitted before those columns existed still have their geo in
+  // visits, recorded during the same session from the same address.
+  // ip_hash is salted per UTC day, so this only matches a visit logged the
+  // same day the lead was submitted, which is exactly the visit the form
+  // was filled on. Idempotent: once a lead has a city it is skipped.
+  await db`
+    UPDATE leads l
+    SET city = v.city, region = v.region, country = v.country, ip = v.ip
+    FROM (
+      SELECT DISTINCT ON (ip_hash) ip_hash, city, region, country, ip
+      FROM visits
+      WHERE ip_hash IS NOT NULL AND city IS NOT NULL
+      ORDER BY ip_hash, created_at DESC
+    ) v
+    WHERE l.ip_hash = v.ip_hash AND l.city IS NULL
+  `;
+
   await db`
     CREATE TABLE IF NOT EXISTS email_events (
       id BIGSERIAL PRIMARY KEY,

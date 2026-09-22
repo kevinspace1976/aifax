@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { ensureSchema, sql } from "@/lib/db";
-import { hashIp, readStoredAttribution, requestIp } from "@/lib/attribution";
+import { clientGeo, hashIp, readStoredAttribution, requestIp } from "@/lib/attribution";
 import { sendEmail } from "@/lib/resend";
 import { notifyAdmin } from "@/lib/notify";
 import { fireMetaLeadEvent } from "@/lib/meta-capi";
@@ -129,6 +129,7 @@ export async function POST(req: NextRequest) {
 
   const attribution = await readStoredAttribution();
   const ip = await requestIp();
+  const geo = clientGeo(req.headers);
   const userAgent = req.headers.get("user-agent");
 
   await ensureSchema();
@@ -142,7 +143,7 @@ export async function POST(req: NextRequest) {
       name, email, phone, practice_name, ehr_platform, fax_provider, fax_number,
       monthly_volume, call_window, notes,
       source_path, referrer, utm_source, utm_medium, utm_campaign, utm_content, utm_term,
-      fbclid, gclid, ip_hash, sequence_step, next_email_due_at
+      fbclid, gclid, ip_hash, ip, city, region, country, sequence_step, next_email_due_at
     ) VALUES (
       ${name}, ${email}, ${body.phone || null}, ${body.practice || null}, ${body.ehr || null},
       ${body.faxProvider || null}, ${body.faxNumber || null}, ${body.volume || null}, ${body.callWindow || null},
@@ -150,7 +151,7 @@ export async function POST(req: NextRequest) {
       ${attribution?.sourcePath || null}, ${attribution?.referrer || null}, ${attribution?.utmSource || null},
       ${attribution?.utmMedium || null}, ${attribution?.utmCampaign || null}, ${attribution?.utmContent || null},
       ${attribution?.utmTerm || null}, ${attribution?.fbclid || null}, ${attribution?.gclid || null},
-      ${hashIp(ip)}, 1, ${nextEmailDueAt.toISOString()}
+      ${hashIp(ip)}, ${ip}, ${geo.city}, ${geo.region}, ${geo.country}, 1, ${nextEmailDueAt.toISOString()}
     )
     RETURNING id
   `;

@@ -16,6 +16,16 @@ type Lead = {
   email: string;
   phone: string | null;
   practice_name: string | null;
+  ehr_platform: string | null;
+  fax_provider: string | null;
+  fax_number: string | null;
+  monthly_volume: string | null;
+  call_window: string | null;
+  notes: string | null;
+  city: string | null;
+  region: string | null;
+  country: string | null;
+  ip: string | null;
   utm_source: string | null;
   utm_campaign: string | null;
   fbclid: string | null;
@@ -49,6 +59,18 @@ function StatCard({ label, value, hint }: { label: string; value: string | numbe
       {hint ? <p className="mt-1 text-xs text-slate-400">{hint}</p> : null}
     </div>
   );
+}
+
+/**
+ * City-level location from the edge geo headers, kept short enough to stay
+ * on one line in the Leads row: "Miami, FL" for US visitors, with the
+ * country appended only when it isn't the US so it can't be mistaken for a
+ * US state.
+ */
+function locationLabel(row: { city: string | null; region: string | null; country: string | null }) {
+  const parts = [row.city, row.region].filter(Boolean);
+  if (row.country && row.country !== "US") parts.push(row.country);
+  return parts.length > 0 ? parts.join(", ") : "-";
 }
 
 function sourceLabel(row: {
@@ -112,7 +134,9 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
     ),
     rows<VisitTotals>(db`SELECT COUNT(*)::int AS total FROM leads WHERE created_at > now() - interval '30 days'`),
     rows<Lead>(db`
-      SELECT id, name, email, phone, practice_name, utm_source, utm_campaign, fbclid, gclid, referrer,
+      SELECT id, name, email, phone, practice_name, ehr_platform, fax_provider, fax_number,
+             monthly_volume, call_window, notes, city, region, country, ip,
+             utm_source, utm_campaign, fbclid, gclid, referrer,
              sequence_step, unsubscribed, created_at
       FROM leads
       ORDER BY created_at DESC
@@ -271,7 +295,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
           confirmText="Delete the selected leads? Their emails and activity are removed too. This cannot be undone."
           className="mt-4 overflow-x-auto"
         >
-          <table className="w-full min-w-[900px] text-left text-sm">
+          <table className="w-full min-w-[2100px] text-left text-sm">
             <thead>
               <tr className="border-b border-white/10 text-slate-400">
                 <th className="pb-2 pr-3">
@@ -279,17 +303,26 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                 </th>
                 <th className="pb-2 pr-4 font-medium">Date (ET)</th>
                 <th className="pb-2 pr-4 font-medium">Name</th>
-                <th className="pb-2 pr-4 font-medium">Email</th>
                 <th className="pb-2 pr-4 font-medium">Practice</th>
+                <th className="pb-2 pr-4 font-medium">Location</th>
+                <th className="pb-2 pr-4 font-medium">IP</th>
+                <th className="pb-2 pr-4 font-medium">Email</th>
+                <th className="pb-2 pr-4 font-medium">Phone</th>
+                <th className="pb-2 pr-4 font-medium">EHR</th>
+                <th className="pb-2 pr-4 font-medium">Pages/mo</th>
+                <th className="pb-2 pr-4 font-medium">Fax provider</th>
+                <th className="pb-2 pr-4 font-medium">Fax no.</th>
+                <th className="pb-2 pr-4 font-medium">Best time</th>
+                <th className="pb-2 pr-4 font-medium">Notes</th>
                 <th className="pb-2 pr-4 font-medium">Source</th>
-                <th className="pb-2 pr-4 font-medium">Nurture step</th>
+                <th className="pb-2 pr-4 font-medium">Step</th>
                 <th className="pb-2 pr-4 font-medium">Opened</th>
               </tr>
             </thead>
             <tbody>
               {leadsRecent.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-4 text-slate-400">
+                  <td colSpan={17} className="py-4 text-slate-400">
                     No leads yet.
                   </td>
                 </tr>
@@ -304,22 +337,55 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                       <td className="py-2 pr-4 whitespace-nowrap text-slate-300">
                         {easternDateTime(lead.created_at)}
                       </td>
-                      <td className="py-2 pr-4 text-slate-200">
+                      <td className="py-2 pr-4 whitespace-nowrap text-slate-200">
                         <Link href={`/admin/leads/${lead.id}`} className="text-cyan-300 underline-offset-4 hover:underline">
                           {lead.name}
                         </Link>
                       </td>
-                      <td className="py-2 pr-4 text-slate-200">
+                      <td className="py-2 pr-4 text-slate-300">
+                        <div className="max-w-[180px] truncate" title={lead.practice_name || undefined}>
+                          {lead.practice_name || "-"}
+                        </div>
+                      </td>
+                      <td className="py-2 pr-4 whitespace-nowrap text-slate-300">{locationLabel(lead)}</td>
+                      <td className="py-2 pr-4 text-slate-400">
+                        <div className="max-w-[130px] truncate" title={lead.ip || undefined}>
+                          {lead.ip || "-"}
+                        </div>
+                      </td>
+                      <td className="py-2 pr-4 whitespace-nowrap text-slate-200">
                         <a href={`mailto:${lead.email}`} className="text-cyan-300 underline-offset-4 hover:underline">
                           {lead.email}
                         </a>
                       </td>
-                      <td className="py-2 pr-4 text-slate-300">{lead.practice_name || "-"}</td>
-                      <td className="py-2 pr-4 text-slate-300">{sourceLabel(lead)}</td>
+                      <td className="py-2 pr-4 whitespace-nowrap text-slate-300">{lead.phone || "-"}</td>
                       <td className="py-2 pr-4 text-slate-300">
-                        {lead.unsubscribed ? "unsubscribed" : `${lead.sequence_step} / 6 sent`}
+                        <div className="max-w-[140px] truncate" title={lead.ehr_platform || undefined}>
+                          {lead.ehr_platform || "-"}
+                        </div>
+                      </td>
+                      <td className="py-2 pr-4 whitespace-nowrap text-slate-300">{lead.monthly_volume || "-"}</td>
+                      <td className="py-2 pr-4 text-slate-300">
+                        <div className="max-w-[130px] truncate" title={lead.fax_provider || undefined}>
+                          {lead.fax_provider || "-"}
+                        </div>
+                      </td>
+                      <td className="py-2 pr-4 whitespace-nowrap text-slate-300">{lead.fax_number || "-"}</td>
+                      <td className="py-2 pr-4 text-slate-300">
+                        <div className="max-w-[130px] truncate" title={lead.call_window || undefined}>
+                          {lead.call_window || "-"}
+                        </div>
                       </td>
                       <td className="py-2 pr-4 text-slate-300">
+                        <div className="max-w-[260px] truncate" title={lead.notes || undefined}>
+                          {lead.notes || "-"}
+                        </div>
+                      </td>
+                      <td className="py-2 pr-4 whitespace-nowrap text-slate-300">{sourceLabel(lead)}</td>
+                      <td className="py-2 pr-4 whitespace-nowrap text-slate-300">
+                        {lead.unsubscribed ? "unsub" : `${lead.sequence_step} / 6`}
+                      </td>
+                      <td className="py-2 pr-4 whitespace-nowrap text-slate-300">
                         {!stats || stats.opens === 0
                           ? "-"
                           : `${stats.opens}x, last ${easternDate(stats.last_opened_at)}${
