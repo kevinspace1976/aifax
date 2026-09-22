@@ -34,7 +34,7 @@ const filing = [
   },
   {
     t: "File into the chart",
-    b: "Writing the fax into the patient chart uses the eClinicalWorks create APIs, which require a separate written agreement with eClinicalWorks and a participating practice. We will tell you exactly where that stands before you commit to anything.",
+    b: "Writing the fax into the patient chart uses the eClinicalWorks create APIs, which require a separate written agreement with eClinicalWorks and a participating practice. eClinicalWorks lists this API as version 12.0.2 and above, so an older build needs an upgrade request on their side first. We will tell you exactly where that stands before you commit to anything.",
     state: "Requires agreement"
   }
 ];
@@ -67,7 +67,7 @@ export default function EclinicalWorksPage() {
         </div>
       </section>
 
-      <section className="section-alt py-16 sm:py-20">
+      <section id="live-today" className="section-alt scroll-mt-24 py-16 sm:py-20">
         <div className="section-shell">
           <h2 className="text-3xl text-slate-900 sm:text-4xl">What works the day you sign up</h2>
           <p className="mt-4 max-w-2xl text-lg text-slate-700">
@@ -84,7 +84,7 @@ export default function EclinicalWorksPage() {
         </div>
       </section>
 
-      <section className="py-16 sm:py-20">
+      <section id="chart-filing" className="scroll-mt-24 py-16 sm:py-20">
         <div className="section-shell">
           <h2 className="text-3xl text-slate-900 sm:text-4xl">Where the chart integration actually stands</h2>
           <p className="mt-4 max-w-3xl text-lg text-slate-700">
@@ -111,7 +111,7 @@ export default function EclinicalWorksPage() {
         </div>
       </section>
 
-      <section className="section-alt py-16 sm:py-20">
+      <section id="pilot" className="section-alt scroll-mt-24 py-16 sm:py-20">
         <div className="section-shell grid gap-12 lg:grid-cols-[5fr_7fr] lg:items-start lg:gap-16">
           <div>
             <p className="kicker">Pilot practices</p>
@@ -124,6 +124,11 @@ export default function EclinicalWorksPage() {
             <p className="mt-4 text-slate-700">
               You can start on the fax service today regardless. The integration is added later and quoted
               separately.
+            </p>
+            <p className="mt-4 text-slate-700">
+              One thing worth checking early: chart filing needs eClinicalWorks version 12.0.2 or newer. In
+              eClinicalWorks it is under Help, then About. An older build is a free upgrade request on their
+              side, so it is better to know now than later.
             </p>
             <p className="mt-4 text-slate-700">
               Or email{" "}
