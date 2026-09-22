@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { DeleteForm } from "@/components/delete-form";
 import { ensureSchema, rows, sql } from "@/lib/db";
+import { easternDate, easternDateTime } from "@/lib/eastern";
 import { STATUS_OPTIONS } from "./status/route";
 
 export const dynamic = "force-dynamic";
@@ -59,9 +60,9 @@ const FIELD =
   "focus:border-cyan-300 focus:outline-none focus:ring-1 focus:ring-cyan-300";
 const LABEL = "block text-xs font-medium uppercase tracking-wide text-slate-400";
 
-function fmt(iso: string | null) {
-  return iso ? new Date(iso).toLocaleString() : "-";
-}
+// Same Eastern clock the leads table uses, so a lead detail page and the
+// row it was opened from never disagree about what day something happened.
+const fmt = easternDateTime;
 
 export default async function LeadDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -247,7 +248,7 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
                 {a.body ? <p className="mt-1 text-sm text-slate-300">{a.body}</p> : null}
                 <div className="mt-1 flex flex-wrap gap-3 text-xs text-slate-400">
                   {a.ticket_number ? <span>Ticket: {a.ticket_number}</span> : null}
-                  {a.follow_up_at ? <span>Follow up: {new Date(a.follow_up_at).toLocaleDateString()}</span> : null}
+                  {a.follow_up_at ? <span>Follow up: {easternDate(a.follow_up_at)}</span> : null}
                 </div>
               </div>
             ))

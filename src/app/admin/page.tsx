@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { DeleteForm, SelectAll } from "@/components/delete-form";
 import { ensureSchema, rows, sql } from "@/lib/db";
+import { easternDate, easternDateTime } from "@/lib/eastern";
 import { adminNotificationAddress } from "@/lib/resend";
 
 export const dynamic = "force-dynamic";
@@ -204,7 +205,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
               >
                 <span className="font-medium text-white">{f.name}</span>
                 <span className="ml-2 text-orange-300">
-                  due {new Date(f.follow_up_at).toLocaleDateString()}
+                  due {easternDate(f.follow_up_at)}
                 </span>
                 {f.ticket_number ? <span className="ml-2 text-slate-400">Ticket: {f.ticket_number}</span> : null}
                 {f.body ? <p className="mt-1 text-slate-300">{f.body}</p> : null}
@@ -276,7 +277,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                 <th className="pb-2 pr-3">
                   <SelectAll name="id" label="Select all leads" />
                 </th>
-                <th className="pb-2 pr-4 font-medium">Date</th>
+                <th className="pb-2 pr-4 font-medium">Date (ET)</th>
                 <th className="pb-2 pr-4 font-medium">Name</th>
                 <th className="pb-2 pr-4 font-medium">Email</th>
                 <th className="pb-2 pr-4 font-medium">Practice</th>
@@ -301,7 +302,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                         <input type="checkbox" name="id" value={lead.id} aria-label={`Select ${lead.name}`} />
                       </td>
                       <td className="py-2 pr-4 whitespace-nowrap text-slate-300">
-                        {new Date(lead.created_at).toLocaleDateString()}
+                        {easternDateTime(lead.created_at)}
                       </td>
                       <td className="py-2 pr-4 text-slate-200">
                         <Link href={`/admin/leads/${lead.id}`} className="text-cyan-300 underline-offset-4 hover:underline">
@@ -321,7 +322,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                       <td className="py-2 pr-4 text-slate-300">
                         {!stats || stats.opens === 0
                           ? "-"
-                          : `${stats.opens}x, last ${new Date(stats.last_opened_at!).toLocaleDateString()}${
+                          : `${stats.opens}x, last ${easternDate(stats.last_opened_at)}${
                               stats.clicks > 0 ? ` (${stats.clicks} click${stats.clicks === 1 ? "" : "s"})` : ""
                             }`}
                       </td>
@@ -372,7 +373,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                     <td className="py-2 pr-4 text-slate-300">{lead.email}</td>
                     <td className="py-2 pr-4 text-slate-300">{lead.practice_name || "-"}</td>
                     <td className="py-2 pr-4 whitespace-nowrap text-slate-300">
-                      {lead.unsubscribed_at ? new Date(lead.unsubscribed_at).toLocaleDateString() : "-"}
+                      {easternDate(lead.unsubscribed_at)}
                     </td>
                   </tr>
                 ))
