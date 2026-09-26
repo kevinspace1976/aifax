@@ -13,6 +13,7 @@ export const CTA_LABELS: Record<string, string> = {
   plan_checkout_new: "Plan chose: new number",
   plan_checkout_port: "Plan chose: port number",
   plan_contact_sales: "Pricing: Contact sales",
+  keep_plan_order: "Keep your provider: plan Order",
   // Recorded by the portal, not by this site: a hook on portal.aifax.net
   // beacons these back carrying the click id we handed it in the URL.
   portal_order_now: "Portal: Order Now",
@@ -33,7 +34,8 @@ export const CHECKOUT_CTAS = [
   "page_new_number",
   "page_port_number",
   "plan_checkout_new",
-  "plan_checkout_port"
+  "plan_checkout_port",
+  "keep_plan_order"
 ];
 
 /** Steps the portal reports back, in the order a buyer meets them. */

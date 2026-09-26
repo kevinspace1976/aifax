@@ -23,6 +23,11 @@ export const socialItems = [
 export const newNumberUrl = "https://portal.aifax.net/index.php?rp=/store/cloud-faxing&path=new";
 export const portNumberUrl = "https://portal.aifax.net/index.php?rp=/store/cloud-faxing&path=port";
 
+/** Order link for a keep-your-provider plan (a hidden WHMCS product, by pid). */
+export function keepPlanUrl(pid: number) {
+  return `https://portal.aifax.net/cart.php?a=add&pid=${pid}&skipconfig=1&billingcycle=monthly`;
+}
+
 // Short, clean stand-ins for the two URLs above, used as the visible link
 // text in the AI-drafted reply (see ai-draft.ts / api/contact/route.ts).
 // Not real subdomains, just display labels: every anchor built from these
