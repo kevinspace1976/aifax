@@ -140,45 +140,44 @@ export default function Home() {
           </p>
         </div>
         <div className="flex min-w-0 flex-col gap-4">
-          <SummaryCard />
-          <DemoVideo />
-        </div>
-      </section>
-
-      {/* Choose how to start */}
-      <section className="section-shell pb-14 sm:pb-16">
-        <div className="max-w-2xl">
           <p className="kicker text-lg!">Choose how you start</p>
-          <h2 className="mt-3 text-3xl text-slate-900 sm:text-4xl">Replace your fax company, or keep it.</h2>
-        </div>
-        <div className="mt-8 grid gap-6 lg:grid-cols-2">
-          <div className="card-surface flex flex-col p-7 sm:p-8">
-            <p className="kicker text-lg!">Fax + AI &middot; from $9.99/month</p>
-            <h3 className="mt-3 text-2xl text-slate-900">Make AiFax your fax provider, with the AI built in.</h3>
-            <p className="mt-2 flex-1 text-slate-700">
+          <div className="card-surface flex flex-col p-6">
+            <p className="kicker">Fax + AI &middot; from $9.99/month</p>
+            <h2 className="mt-2 text-2xl text-slate-900">Make AiFax your fax provider, with the AI built in.</h2>
+            <p className="mt-2 text-slate-700">
               Port your number or get a new one. Send and receive with AiFax, and every incoming fax is read and
               summarized.
             </p>
-            <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-4">
               <Link href="/pricing" className="btn-primary">
                 See fax plans
               </Link>
             </div>
           </div>
-          <div className="card-surface flex flex-col p-7 sm:p-8">
-            <p className="kicker text-lg!">AI only &middot; from $29.99/month</p>
-            <h3 className="mt-3 text-2xl text-slate-900">Keep your current fax provider and add AiFax AI.</h3>
-            <p className="mt-2 flex-1 text-slate-700">
+          <div className="card-surface flex flex-col p-6">
+            <p className="kicker">AI only &middot; from $29.99/month</p>
+            <h2 className="mt-2 text-2xl text-slate-900">Keep your current fax provider and add AiFax AI.</h2>
+            <p className="mt-2 text-slate-700">
               Keep your fax company and your number. Forward your incoming faxes to AiFax and get a summary of every
               one, plus search and chat.
             </p>
-            <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-4">
               <Link href="/keep-your-provider" className="btn-secondary">
                 Keep my provider
                 <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
               </Link>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* What arrives for every fax */}
+      <section className="section-shell pb-14 sm:pb-16">
+        <p className="kicker text-lg!">What your office receives</p>
+        <h2 className="mt-3 max-w-2xl text-3xl text-slate-900 sm:text-4xl">Every fax, read and summarized in seconds.</h2>
+        <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,480px)] lg:items-start">
+          <SummaryCard />
+          <DemoVideo />
         </div>
       </section>
 
