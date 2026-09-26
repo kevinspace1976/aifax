@@ -94,3 +94,58 @@ export const plans: Plan[] = [
 ];
 
 export const ADDITIONAL_PAGE_RATE = "$0.05";
+
+/**
+ * Keep-your-provider plans: the practice keeps its current fax company and
+ * number and forwards incoming faxes to AiFax by email for the AI. Receive
+ * only, no sending. These mirror the hidden WHMCS products in the "Keep Your
+ * Fax Provider" group (module aifaxkeep): do not change a price, page count,
+ * or pid here without changing it there.
+ */
+export type KeepPlan = {
+  name: string;
+  pid: number;
+  price: string;
+  pages: string;
+  featured?: boolean;
+  features: string[];
+};
+
+export const keepPlans: KeepPlan[] = [
+  {
+    name: "Plus",
+    pid: 5,
+    price: "$29.99",
+    pages: "500 received pages a month",
+    features: [
+      "Keep your fax company and your fax number",
+      "AI summary of every fax you forward",
+      "Chat with every fax, unlimited",
+      "Search every fax in your dashboard",
+      "Reference library: 10 documents, 10 MB per file, 250 questions a month"
+    ]
+  },
+  {
+    name: "Pro",
+    pid: 6,
+    price: "$44.99",
+    pages: "1,000 received pages a month",
+    featured: true,
+    features: [
+      "Everything in Plus",
+      "Double the page allowance for busier practices",
+      "Reference library: 50 documents, 50 MB per file, 500 questions a month"
+    ]
+  },
+  {
+    name: "Enterprise",
+    pid: 7,
+    price: "$69.99",
+    pages: "1,500 received pages a month",
+    features: [
+      "Everything in Pro",
+      "Highest page allowance for multi-provider groups",
+      "Reference library: 100 documents, 100 MB per file, 1,000 questions a month"
+    ]
+  }
+];

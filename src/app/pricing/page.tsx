@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { PricingPlansGrid } from "@/components/pricing-plans-grid";
 import { ADDITIONAL_PAGE_RATE, plans } from "@/lib/plans";
 
@@ -54,6 +55,16 @@ export default function PricingPage() {
 
       <section className="section-shell pt-2 pb-8">
         <PricingPlansGrid plans={plans} />
+      </section>
+
+      <section className="section-shell pb-6">
+        <p className="text-slate-700">
+          Want to keep your current fax company and add only the AI?{" "}
+          <Link href="/keep-your-provider" className="font-semibold text-orange-600 underline">
+            See keep-your-provider plans
+          </Link>
+          .
+        </p>
       </section>
 
       <section className="section-shell py-4">
