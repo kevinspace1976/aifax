@@ -7,6 +7,7 @@ export const brand = {
 
 export const navItems = [
   { href: "/how-it-works", label: "How It Works" },
+  { href: "/keep-your-provider", label: "Keep Your Provider" },
   { href: "/ehr-integration", label: "EHR Integration" },
   { href: "/pricing", label: "Pricing" },
   { href: "/contact", label: "Contact" }

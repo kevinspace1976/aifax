@@ -31,7 +31,8 @@ const routes = [
 const straight = [
   "Every EHR is different. What an integration can do depends on the interfaces your EHR exposes. Discovery tells us which applies to you.",
   "We scope first and promise after. We will not claim a live integration with your EHR until discovery and the build prove it.",
-  "EHR integration is a separate, quoted project. Fax plans are month to month and work fully on their own.",
+  "Integration is scoped and quoted per practice. EHR vendors set their own API access terms and fees and may change them; our scope and pricing follow those terms.",
+  "Fax plans are month to month and work fully on their own.",
   "Where your EHR vendor's cooperation or credentials are required, that step is outside our direct control. We manage it and keep you updated in writing."
 ];
 
@@ -68,6 +69,10 @@ export default function EhrIntegrationPage() {
           <div className="max-w-2xl">
             <h2 className="text-3xl text-slate-900 sm:text-4xl">Three ways a fax reaches the chart.</h2>
             <p className="mt-4 text-lg text-slate-700">Which one applies depends on what your EHR supports. We tell you which before you commit.</p>
+            <p className="mt-3 text-slate-700">
+              We work with the major EHR platforms, including NextGen, eClinicalWorks, Office Ally and ModMed. If yours
+              is not listed, ask.
+            </p>
           </div>
           <div className="mt-9 grid gap-5 md:grid-cols-3">
             {routes.map((route) => (
