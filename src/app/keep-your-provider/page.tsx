@@ -50,6 +50,10 @@ const faqs = [
   {
     q: "Is there a contract?",
     a: "No. Month to month, no setup fee, cancel any time."
+  },
+  {
+    q: "Can our faxes still go into our EHR?",
+    a: "Yes. Keeping your fax company does not limit EHR integration. Same written discovery, same options."
   }
 ];
 

@@ -15,7 +15,7 @@ const notes = [
   },
   {
     title: "EHR integration",
-    body: "A separate project, quoted after a written discovery with your EHR vendor. Founding-customer rates available."
+    body: "Quoted per practice after a short written discovery with your EHR. EHR vendors set their own API access terms and fees; our scope and pricing follow them."
   },
   {
     title: "Not sure which plan?",

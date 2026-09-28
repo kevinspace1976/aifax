@@ -168,6 +168,12 @@ export default function Home() {
               </Link>
             </div>
           </div>
+          <p className="text-sm text-slate-600">
+            Either way, works with your EHR.{" "}
+            <Link href="/ehr-integration" className="font-semibold text-orange-600 underline">
+              See how
+            </Link>
+          </p>
         </div>
       </section>
 
