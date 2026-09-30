@@ -45,7 +45,11 @@ export function Header() {
                 key={item.href}
                 href={item.href}
                 className={`inline-flex min-h-11 items-center whitespace-nowrap text-xs font-bold uppercase tracking-[0.1em] transition lg:text-sm lg:tracking-[0.08em] ${
-                  active ? "text-orange-500" : "text-slate-700 hover:text-slate-900"
+                  "highlight" in item && item.highlight
+                    ? `rounded-full px-4 text-white ${active ? "bg-emerald-700" : "bg-emerald-600 hover:bg-emerald-500"}`
+                    : active
+                      ? "text-orange-500"
+                      : "text-slate-700 hover:text-slate-900"
                 }`}
               >
                 {item.label}
@@ -83,7 +87,11 @@ export function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="inline-flex min-h-11 items-center rounded-lg border border-slate-200 px-3 text-sm font-semibold text-slate-800"
+                className={`inline-flex min-h-11 items-center rounded-lg border px-3 text-sm font-semibold ${
+                  "highlight" in item && item.highlight
+                    ? "border-emerald-600 bg-emerald-600 text-white"
+                    : "border-slate-200 text-slate-800"
+                }`}
                 onClick={() => setOpen(false)}
               >
                 {item.label}
