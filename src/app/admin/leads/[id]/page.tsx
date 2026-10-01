@@ -18,6 +18,7 @@ type Lead = {
   fax_number: string | null;
   monthly_volume: string | null;
   call_window: string | null;
+  heard_from: string | null;
   notes: string | null;
   status: string;
   nurture_paused: boolean;
@@ -189,6 +190,10 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
           <p className="text-slate-300">
             <span className="text-slate-400">Monthly volume: </span>
             {lead.monthly_volume || "-"}
+          </p>
+          <p className="text-slate-300">
+            <span className="text-slate-400">Heard about us: </span>
+            {lead.heard_from || "-"}
           </p>
           <p className="text-slate-300">
             <span className="text-slate-400">Best time to call: </span>

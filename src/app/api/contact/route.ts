@@ -25,6 +25,7 @@ type ContactBody = {
   faxNumber?: string;
   volume?: string;
   callWindow?: string;
+  heardFrom?: string;
   notes?: string;
   // honeypot: real visitors never see or fill this field (hidden via CSS).
   // A filled-in value means it was a bot filling every input it found.
@@ -141,13 +142,13 @@ export async function POST(req: NextRequest) {
   const rows = await db`
     INSERT INTO leads (
       name, email, phone, practice_name, ehr_platform, fax_provider, fax_number,
-      monthly_volume, call_window, notes,
+      monthly_volume, call_window, heard_from, notes,
       source_path, referrer, utm_source, utm_medium, utm_campaign, utm_content, utm_term,
       fbclid, gclid, ip_hash, ip, city, region, country, sequence_step, next_email_due_at
     ) VALUES (
       ${name}, ${email}, ${body.phone || null}, ${body.practice || null}, ${body.ehr || null},
       ${body.faxProvider || null}, ${body.faxNumber || null}, ${body.volume || null}, ${body.callWindow || null},
-      ${body.notes || null},
+      ${body.heardFrom ? body.heardFrom.slice(0, 100) : null}, ${body.notes || null},
       ${attribution?.sourcePath || null}, ${attribution?.referrer || null}, ${attribution?.utmSource || null},
       ${attribution?.utmMedium || null}, ${attribution?.utmCampaign || null}, ${attribution?.utmContent || null},
       ${attribution?.utmTerm || null}, ${attribution?.fbclid || null}, ${attribution?.gclid || null},
@@ -167,6 +168,7 @@ export async function POST(req: NextRequest) {
       <tr><td>Current fax number</td><td>${body.faxNumber || "-"}</td></tr>
       <tr><td>Monthly volume</td><td>${body.volume || "-"}</td></tr>
       <tr><td>Preferred contact</td><td>${body.callWindow || "-"}</td></tr>
+      <tr><td>Heard about us</td><td>${body.heardFrom ? escapeHtml(body.heardFrom) : "-"}</td></tr>
       <tr><td>Source</td><td>${attribution?.utmSource || attribution?.referrer || "direct"}${
         attribution?.utmCampaign ? ` / campaign: ${attribution.utmCampaign}` : ""
       }${attribution?.fbclid ? " / from a Facebook ad click" : ""}</td></tr>
@@ -178,7 +180,7 @@ export async function POST(req: NextRequest) {
     body.practice ? ` - ${body.practice}` : ""
   }\nPhone: ${body.phone || "-"}\nEHR: ${body.ehr || "-"}\nCurrent fax provider: ${
     body.faxProvider || "-"
-  }\nMonthly volume: ${body.volume || "-"}\nPreferred contact: ${body.callWindow || "-"}\nSource: ${
+  }\nMonthly volume: ${body.volume || "-"}\nPreferred contact: ${body.callWindow || "-"}\nHeard about us: ${body.heardFrom || "-"}\nSource: ${
     attribution?.utmSource || attribution?.referrer || "direct"
   }${attribution?.utmCampaign ? ` / campaign: ${attribution.utmCampaign}` : ""}${
     attribution?.fbclid ? " / from a Facebook ad click" : ""

@@ -145,6 +145,8 @@ async function runMigrations() {
   await db`ALTER TABLE leads ADD COLUMN IF NOT EXISTS region TEXT`;
   await db`ALTER TABLE leads ADD COLUMN IF NOT EXISTS country TEXT`;
   await db`ALTER TABLE leads ADD COLUMN IF NOT EXISTS ip TEXT`;
+  // "How did you hear about us?" from the contact form.
+  await db`ALTER TABLE leads ADD COLUMN IF NOT EXISTS heard_from TEXT`;
   // Leads submitted before those columns existed still have their geo in
   // visits, recorded during the same session from the same address.
   // ip_hash is salted per UTC day, so this only matches a visit logged the
