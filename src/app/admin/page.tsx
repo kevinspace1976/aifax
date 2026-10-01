@@ -21,6 +21,7 @@ type Lead = {
   fax_number: string | null;
   monthly_volume: string | null;
   call_window: string | null;
+  heard_from: string | null;
   notes: string | null;
   city: string | null;
   region: string | null;
@@ -135,7 +136,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
     rows<VisitTotals>(db`SELECT COUNT(*)::int AS total FROM leads WHERE created_at > now() - interval '30 days'`),
     rows<Lead>(db`
       SELECT id, name, email, phone, practice_name, ehr_platform, fax_provider, fax_number,
-             monthly_volume, call_window, notes, city, region, country, ip,
+             monthly_volume, call_window, heard_from, notes, city, region, country, ip,
              utm_source, utm_campaign, fbclid, gclid, referrer,
              sequence_step, unsubscribed, created_at
       FROM leads
@@ -310,6 +311,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                 <th className="pb-2 pr-4 font-medium">Phone</th>
                 <th className="pb-2 pr-4 font-medium">EHR</th>
                 <th className="pb-2 pr-4 font-medium">Pages/mo</th>
+                <th className="pb-2 pr-4 font-medium">Heard from</th>
                 <th className="pb-2 pr-4 font-medium">Fax provider</th>
                 <th className="pb-2 pr-4 font-medium">Fax no.</th>
                 <th className="pb-2 pr-4 font-medium">Best time</th>
@@ -365,6 +367,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                         </div>
                       </td>
                       <td className="py-2 pr-4 whitespace-nowrap text-slate-300">{lead.monthly_volume || "-"}</td>
+                      <td className="py-2 pr-4 whitespace-nowrap text-slate-300">{lead.heard_from || "-"}</td>
                       <td className="py-2 pr-4 text-slate-300">
                         <div className="max-w-[130px] truncate" title={lead.fax_provider || undefined}>
                           {lead.fax_provider || "-"}

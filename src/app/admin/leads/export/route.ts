@@ -13,7 +13,7 @@ export async function GET() {
   const db = sql();
   const rows = await db`
     SELECT created_at, name, email, phone, practice_name, ehr_platform, fax_provider,
-           monthly_volume, utm_source, utm_medium, utm_campaign, fbclid, referrer,
+           monthly_volume, heard_from, utm_source, utm_medium, utm_campaign, fbclid, referrer,
            sequence_step, unsubscribed, notes
     FROM leads
     ORDER BY created_at DESC
@@ -21,7 +21,7 @@ export async function GET() {
 
   const header = [
     "created_at", "name", "email", "phone", "practice_name", "ehr_platform", "fax_provider",
-    "monthly_volume", "utm_source", "utm_medium", "utm_campaign", "fbclid", "referrer",
+    "monthly_volume", "heard_from", "utm_source", "utm_medium", "utm_campaign", "fbclid", "referrer",
     "sequence_step", "unsubscribed", "notes"
   ];
   const lines = [header.join(",")];

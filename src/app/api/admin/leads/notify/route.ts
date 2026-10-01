@@ -15,6 +15,7 @@ type LeadRow = {
   fax_number: string | null;
   monthly_volume: string | null;
   call_window: string | null;
+  heard_from: string | null;
   notes: string | null;
   utm_source: string | null;
   utm_campaign: string | null;
@@ -52,7 +53,7 @@ export async function POST(req: NextRequest) {
   const db = sql();
   const leads = await rows<LeadRow>(db`
     SELECT id, name, email, phone, practice_name, ehr_platform, fax_provider, fax_number, monthly_volume,
-           call_window, notes, utm_source, utm_campaign, fbclid, referrer, last_email_sent_at, created_at
+           call_window, heard_from, notes, utm_source, utm_campaign, fbclid, referrer, last_email_sent_at, created_at
     FROM leads
     WHERE created_at > now() - (${hours} * interval '1 hour')
     ORDER BY created_at DESC
@@ -83,6 +84,7 @@ export async function POST(req: NextRequest) {
           <tr><td>Current fax number</td><td>${esc(l.fax_number)}</td></tr>
           <tr><td>Monthly volume</td><td>${esc(l.monthly_volume)}</td></tr>
           <tr><td>Preferred contact</td><td>${esc(l.call_window)}</td></tr>
+          <tr><td>Heard about us</td><td>${esc(l.heard_from)}</td></tr>
           <tr><td>Confirmation email to them</td><td>${l.last_email_sent_at ? "sent" : "not sent"}</td></tr>
         </table>
         <p style="margin:6px 0 0"><strong>What they want to solve:</strong><br />${esc(l.notes).replace(/\n/g, "<br />")}</p>
@@ -96,7 +98,7 @@ export async function POST(req: NextRequest) {
       (l) =>
         `${l.name} (${l.email})${l.practice_name ? ` - ${l.practice_name}` : ""}\n${when(l.created_at)} Eastern, source: ${source(l)}\n` +
         `Phone: ${l.phone || "-"}\nEHR: ${l.ehr_platform || "-"}\nCurrent fax provider: ${l.fax_provider || "-"}\n` +
-        `Current fax number: ${l.fax_number || "-"}\nMonthly volume: ${l.monthly_volume || "-"}\nPreferred contact: ${l.call_window || "-"}\n` +
+        `Current fax number: ${l.fax_number || "-"}\nMonthly volume: ${l.monthly_volume || "-"}\nPreferred contact: ${l.call_window || "-"}\nHeard about us: ${l.heard_from || "-"}\n` +
         `Confirmation email to them: ${l.last_email_sent_at ? "sent" : "not sent"}\nWhat they want to solve: ${l.notes || "-"}\n` +
         `https://www.aifax.net/admin/leads/${l.id}`
     )

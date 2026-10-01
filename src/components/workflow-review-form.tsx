@@ -38,6 +38,19 @@ const VOLUME_OPTIONS = [
 
 const CONTACT_PREFERENCES = ["Email", "Phone"];
 
+const HEARD_FROM_OPTIONS = [
+  "Google search",
+  "Google ad",
+  "Facebook or Instagram",
+  "LinkedIn",
+  "Email or fax from AiFax",
+  "Referral from a colleague or coworker",
+  "Friend or family",
+  "Conference or event",
+  "ChatGPT or another AI assistant",
+  "Other"
+];
+
 const GOAL_OPTIONS = [
   "Routing faxes automatically into our EHR",
   "Lowering our monthly fax costs",
@@ -165,6 +178,7 @@ export function WorkflowReviewForm() {
           faxNumber: value("faxNumber"),
           volume: value("volume"),
           callWindow: value("callWindow"),
+          heardFrom: value("heardFrom"),
           notes: combinedNotes,
           // honeypot - real visitors never see this field, see the hidden
           // input below. A bot filling every field trips it.
@@ -297,6 +311,15 @@ export function WorkflowReviewForm() {
           <select id="callWindow" name="callWindow" className={FIELD} defaultValue="">
             <option value="" disabled>Email (default) or phone</option>
             {CONTACT_PREFERENCES.map((option) => (
+              <option key={option} value={option}>{option}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className={LABEL} htmlFor="heardFrom">How did you hear about us?</label>
+          <select id="heardFrom" name="heardFrom" required className={FIELD} defaultValue="">
+            <option value="" disabled>Select one</option>
+            {HEARD_FROM_OPTIONS.map((option) => (
               <option key={option} value={option}>{option}</option>
             ))}
           </select>
