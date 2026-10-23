@@ -58,7 +58,7 @@ export function EhrInfo() {
           <span className="font-medium text-slate-900">Built or in progress:</span> Elation Health, Tebra, ModMed,
           Office Ally
         </span>
-        <span className="mt-2 block">Don&apos;t see yours? We build for it.</span>
+        <span className="mt-2 block">Don&apos;t see yours? We Build It.</span>
         <span className="mt-2 block text-xs text-slate-500">
           What each connection does depends on what the EHR vendor allows. Names belong to their owners and do not
           mean they endorse AiFax.
