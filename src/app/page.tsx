@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, X } from "lucide-react";
+import { ArrowRight, CheckCircle2, ShieldCheck, X } from "lucide-react";
 import { DemoVideo } from "@/components/demo-video";
+import { EhrInfo } from "@/components/ehr-info";
 import { SubscribeButton } from "@/components/subscribe-button";
 import { SummaryCard } from "@/components/summary-card";
 import { plans } from "@/lib/plans";
@@ -110,12 +111,16 @@ export default function Home() {
         <div className="min-w-0">
           <div className="mb-9 max-w-xl border-b border-slate-200 pb-7">
             <p className="text-2xl text-slate-900 sm:text-[26px]" style={{ fontFamily: "var(--font-display)", fontWeight: 700, letterSpacing: "-0.02em" }}>
-              Fax to EHR. EHR to fax. AI in the middle.
+              AiFax is a fax provider, with AI and EHR integration built in.
             </p>
-            <p className="mt-2 text-slate-600">
-              AiFax is a HIPAA-compliant fax service with AI built in. Inbound faxes read, matched to the patient, and
-              filed toward the chart. Outbound faxes sent from your inbox or your email. Built for physician practices
-              and businesses that depend on fax for critical workflows: legal, insurance, and back-office operations.
+            <p className="relative mt-2 text-slate-600">
+              We handle your practice&apos;s faxes on a HIPAA-compliant service. Send faxes from your secure AiFax
+              dashboard or straight from your email, and every fax you receive arrives in both. But AiFax does more
+              than send and receive. Our AI reads each incoming fax in about a minute, summarizes it, and matches it to
+              the right patient. We have built and tested integrations with EHR vendors of every size, and we work with
+              any EHR, using everything its system allows. If your EHR supports it, we can build it. Less manual work
+              saves your practice time and money, and keeps you ahead of the paperwork.
+              <EhrInfo />
             </p>
           </div>
           <p className="kicker text-lg!">AI fax for medical practices</p>
@@ -134,6 +139,12 @@ export default function Home() {
               {sharedCtas.secondary.label}
             </CtaLink>
           </div>
+          <p className="mt-5 flex items-start gap-2 text-sm font-medium text-slate-800">
+            <ShieldCheck className="mt-0.5 h-5 w-5 flex-none text-emerald-600" aria-hidden="true" />
+            <span>
+              Our AI runs on HIPAA-eligible services under a signed Business Associate Agreement with our AI provider.
+            </span>
+          </p>
           <p className="mt-4 text-sm text-slate-500">
             From $9.99/month &middot; HIPAA-compliant, BAA signed at signup &middot; No contract &middot; Live within a day
             while your number ports
