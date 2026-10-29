@@ -43,7 +43,7 @@ const steps = [
 const faqs = [
   {
     q: "What do I need?",
-    a: "A Windows 11 PC on version 24H2 or newer (Settings, System, About), Intel, AMD or Arm. No driver and no administrator rights."
+    a: "A Windows 11 PC on version 24H2 or newer (Settings, System, About), Intel, AMD or Arm. No driver and no administrator rights. Your AiFax login cannot use two-step verification yet; those accounts send from app.aifax.net."
   },
   {
     q: "Which AiFax plans include it?",
@@ -131,11 +131,11 @@ export default function PrintPage() {
       <section className="py-16 sm:py-20">
         <div className="section-shell">
           <p className="kicker">Not an AiFax customer yet</p>
-          <h2 className="mt-4 text-3xl text-slate-900 sm:text-4xl">Two ways to start, with the same service either way</h2>
+          <h2 className="mt-4 text-3xl text-slate-900 sm:text-4xl">Two ways to start</h2>
           <p className="mt-5 max-w-2xl text-lg text-slate-700">
-            Switch to AiFax and keep your fax number: we port it, and AiFax Print comes with every fax plan. Or keep
-            your current provider and forward your faxes to AiFax for the AI summaries; that plan receives only, so it
-            does not include AiFax Print.
+            Switch to AiFax and keep your fax number: we port it, AiFax Print comes with every fax plan, and AI
+            summaries come with Plus and above. Or keep your current provider and forward your faxes to AiFax for the
+            same AI summaries; that plan receives only, so it does not include AiFax Print.
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
             <CtaLink href={portNumberUrl} cta="page_port_number" className="btn-primary">
