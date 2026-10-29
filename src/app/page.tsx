@@ -129,7 +129,12 @@ export default function Home() {
           </h1>
           <p className="mt-6 max-w-xl text-lg text-slate-700 sm:text-xl">
             AiFax reads each incoming fax the moment it arrives, pulls the patient name and date of birth, summarizes
-            what is inside, and routes it into your EHR workflow. Keep your fax number.
+            what is inside, and routes it into your EHR workflow. Keep your fax number. Fax from any Windows program
+            with{" "}
+            <Link href="/print" className="font-semibold text-orange-600 underline">
+              AiFax Print
+            </Link>
+            .
           </p>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
             <CtaLink href={sharedCtas.primary.href} cta="page_port_number" className="btn-primary">
