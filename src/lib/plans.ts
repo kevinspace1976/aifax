@@ -26,6 +26,7 @@ export const plans: Plan[] = [
     features: [
       "Secure, HIPAA-compliant fax with a BAA at signup",
       "Port your existing fax number or get a new one",
+      "AiFax Print: fax from any Windows program",
       "Setup, fax routing, user access, and configuration included",
       "Instant access after signup",
       "No contract, cancel anytime",

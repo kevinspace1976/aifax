@@ -15,6 +15,7 @@ const routes: { path: string; priority: number; changeFrequency: MetadataRoute.S
   { path: "/how-it-works", priority: 0.8, changeFrequency: "monthly" },
   { path: "/ehr-integration", priority: 0.8, changeFrequency: "monthly" },
   { path: "/ehr/eclinicalworks", priority: 0.7, changeFrequency: "monthly" },
+  { path: "/print", priority: 0.7, changeFrequency: "monthly" },
   { path: "/contact", priority: 0.7, changeFrequency: "monthly" },
   { path: "/privacy", priority: 0.3, changeFrequency: "yearly" },
   { path: "/terms", priority: 0.3, changeFrequency: "yearly" }
