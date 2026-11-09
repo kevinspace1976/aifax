@@ -39,6 +39,11 @@ export const portNumberDisplay = "www.port.aifax.net";
 export const phone = { display: "954-872-1918", href: "tel:+19548721918" };
 export const supportEmail = "info@aifax.net";
 
+/** AiFax's public listing in the Hint Marketplace (Hint integration partner).
+ * The slug is fixed when the live product is created in the Hint partner
+ * portal; keep this in step with it. */
+export const hintMarketplaceUrl = "https://www.hint.com/marketplace/aifax";
+
 /** Public demo video. Env can override; the default keeps the embed live. */
 export const demoVideoLink = process.env.YOUTUBE_VIDEO_LINK || "https://www.youtube.com/watch?v=Qba6EBhzKyI";
 

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" role="img" aria-label="AiFax">
+  <rect width="800" height="800" rx="176" fill="#0f172a"/>
+  <path d="M232 168h236l108 108v352a24 24 0 0 1-24 24H232a24 24 0 0 1-24-24V192a24 24 0 0 1 24-24z" fill="#ffffff"/>
+  <path d="M468 168v84a24 24 0 0 0 24 24h84z" fill="#cbd5e1"/>
+  <rect x="268" y="344" width="232" height="30" rx="15" fill="#cbd5e1"/>
+  <rect x="268" y="420" width="260" height="30" rx="15" fill="#cbd5e1"/>
+  <rect x="268" y="496" width="176" height="30" rx="15" fill="#f97316"/>
+  <rect x="268" y="572" width="208" height="30" rx="15" fill="#cbd5e1"/>
+  <path d="M612 100c9 62 31 84 93 93-62 9-84 31-93 93-9-62-31-84-93-93 62-9 84-31 93-93z" fill="#f97316"/>
+</svg>
