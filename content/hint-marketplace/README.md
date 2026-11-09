@@ -5,8 +5,10 @@ Everything for the AiFax listing in the Hint Marketplace. The copy is in
 applied to the sandbox product "AiFax" (sbx-ppro-TkV3zAqrupdE) through the
 partner API, so it can be previewed in the sandbox Marketplace.
 
-The live listing is entered in the live partner portal (app.hint.com/partner,
-Live). The live view has no API Keys page, so there is no API route to the
+The live listing is entered in the live partner portal. The bare
+app.hint.com/partner address shows a 404; open
+https://app.hint.com/partner/sandboxes, confirm the top right reads Live, and
+use the left sidebar. The live view has no API Keys page, so there is no API route to the
 live listing yet.
 
 | Portal field | Value |
