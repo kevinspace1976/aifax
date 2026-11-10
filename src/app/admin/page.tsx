@@ -187,6 +187,9 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
           <Link href="/admin/traffic" className="btn-secondary min-h-0 px-4 py-1.5 text-sm">
             Traffic
           </Link>
+          <Link href="/admin/unsubscribes" className="btn-secondary min-h-0 px-4 py-1.5 text-sm">
+            Unsubscribes
+          </Link>
           <form action="/api/admin/logout" method="post">
           <button
             type="submit"

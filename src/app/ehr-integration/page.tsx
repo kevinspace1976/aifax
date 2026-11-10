@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import { EhrRoutes } from "@/components/diagrams/ehr-routes";
+import { HintMarketplaceBadge } from "@/components/hint-marketplace-badge";
 import { PageHero } from "@/components/page-hero";
 import { supportEmail } from "@/lib/site";
 
@@ -82,6 +83,23 @@ export default function EhrIntegrationPage() {
                 <p className="mt-2 text-slate-700">{route.body}</p>
               </article>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="hint" className="section-shell py-16 sm:py-20">
+        <div className="card-surface flex flex-col gap-6 p-8 md:flex-row md:items-center md:justify-between md:p-10">
+          <div className="max-w-2xl">
+            <p className="kicker">Hint Marketplace partner</p>
+            <h2 className="mt-2 text-2xl text-slate-900 sm:text-3xl">On Hint? Connect AiFax from the Hint Marketplace.</h2>
+            <p className="mt-3 text-slate-700">
+              AiFax is a Hint integration partner. Each fax is matched to the patient by name and date of birth and filed
+              into the patient&apos;s chart in Hint as a document, within what Hint allows. Switch to AiFax and keep your
+              fax number, or keep your current fax provider and forward your faxes to AiFax. Same service either way.
+            </p>
+          </div>
+          <div className="flex-none">
+            <HintMarketplaceBadge />
           </div>
         </div>
       </section>

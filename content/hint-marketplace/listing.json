@@ -1,0 +1,27 @@
+{
+  "partner_email": "info@aifax.net",
+  "name": "AiFax",
+  "type": "integration",
+  "slug_for_live": "aifax",
+  "summary": "HIPAA fax with AI summaries, patient matching and filing to the Hint chart",
+  "built_by_name": "AiFax",
+  "built_by_url": "https://www.aifax.net",
+  "overview": "AiFax is HIPAA-compliant cloud fax with AI built in. Every incoming fax is summarized in about a minute, matched to the right patient by name and date of birth, and filed into that patient's chart in Hint as a document, within what Hint allows. Unsure matches go to staff review, never to a guess. Two ways to start, with the same service either way: switch to AiFax and keep your fax number, or keep your current fax provider and forward your faxes to AiFax. HIPAA compliant with a signed BAA.",
+  "overview_images": [
+    {"file": "overview-1-flow.png", "alt": "How a fax goes from the fax line to the patient's chart in Hint"},
+    {"file": "overview-2-summary.png", "alt": "Sample AI fax summary matched to a patient"}
+  ],
+  "highlights": [
+    {"title": "AI fax summaries", "description": "Every incoming fax summarized in about a minute, set up the way your practice wants.", "file": "highlight-summary.png"},
+    {"title": "Matched to the patient", "description": "Name and date of birth checked against your Hint patients. Unsure matches go to staff review.", "file": "highlight-match.png"},
+    {"title": "Filed to the chart", "description": "The fax and its summary filed to the patient's chart in Hint, within what Hint allows.", "file": "highlight-chart.png"},
+    {"title": "Keep your number", "description": "Switch to AiFax and keep your fax number, or keep your provider and forward faxes.", "file": "highlight-number.png"}
+  ],
+  "links": [
+    {"link_type": "url", "value": "https://www.aifax.net/ehr-integration", "title": "How AiFax files into your EHR"},
+    {"link_type": "url", "value": "https://www.aifax.net/pricing", "title": "AiFax plans and pricing"},
+    {"link_type": "email", "value": "info@aifax.net", "title": "Email AiFax support"}
+  ],
+  "categories": ["Medical Records & Data Exchange", "Workflow Automation"],
+  "precondition": {"type": "external_account", "url": "https://www.aifax.net/pricing"}
+}
