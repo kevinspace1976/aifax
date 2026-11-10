@@ -2,7 +2,7 @@
   "partner_email": "info@aifax.net",
   "name": "AiFax",
   "type": "integration",
-  "slug_for_live": "aifax",
+  "slug_for_live": "ai-fax",
   "summary": "HIPAA fax with AI summaries, patient matching and filing to the Hint chart",
   "built_by_name": "AiFax",
   "built_by_url": "https://www.aifax.net",

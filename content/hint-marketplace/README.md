@@ -5,18 +5,17 @@ Everything for the AiFax listing in the Hint Marketplace. The copy is in
 applied to the sandbox product "AiFax" (sbx-ppro-TkV3zAqrupdE) through the
 partner API, so it can be previewed in the sandbox Marketplace.
 
-The live listing is entered in the live partner portal. The bare
-app.hint.com/partner address shows a 404; open
-https://app.hint.com/partner/sandboxes, confirm the top right reads Live, and
-use the left sidebar. The live view has no API Keys page, so there is no API route to the
-live listing yet.
+The same content is applied to the LIVE product "AiFax" (ppro-UYCHrW1uvpgR,
+slug ai-fax) through the partner API (2026-11-10, read back OK). It is not
+submitted for review; submit from the portal Dashboard once the agreements
+are signed.
 
 | Portal field | Value |
 |---|---|
 | Company details: email | info@aifax.net (fills the blank in "Please email them at") |
 | Product name | AiFax |
 | Product type | Integration |
-| Slug (set once, on create) | aifax (aifax.net links to https://www.hint.com/marketplace/aifax) |
+| Slug (fixed by Hint) | ai-fax (aifax.net links to https://www.hint.com/marketplace/ai-fax) |
 | Summary (80 max) | `summary` in listing.json |
 | Built by | AiFax, https://www.aifax.net |
 | Icon (square, no text) | aifax-hint-icon.svg, or aifax-hint-icon-800.png |
