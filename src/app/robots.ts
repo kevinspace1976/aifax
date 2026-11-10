@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/admin", "/api", "/unsubscribed"]
+        disallow: ["/admin", "/api", "/unsubscribed", "/unsubscribe"]
       }
     ],
     sitemap: "https://www.aifax.net/sitemap.xml"

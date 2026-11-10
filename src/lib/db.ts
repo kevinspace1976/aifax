@@ -223,4 +223,16 @@ async function runMigrations() {
   // portal.aifax.net.
   await db`ALTER TABLE cta_clicks ADD COLUMN IF NOT EXISTS click_id TEXT`;
   await db`CREATE INDEX IF NOT EXISTS cta_clicks_click_id_idx ON cta_clicks (click_id)`;
+  // Opt-outs from the cold practice outreach emails (sent from Gmail by the
+  // Apps Script, not from this site). One row per address, so a practice
+  // that unsubscribes with three addresses on the email gets three rows.
+  // The outreach script reads this list and skips these addresses.
+  await db`
+    CREATE TABLE IF NOT EXISTS outreach_unsubscribes (
+      email TEXT PRIMARY KEY,
+      practice TEXT,
+      source TEXT NOT NULL,
+      unsubscribed_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    )
+  `;
 }
